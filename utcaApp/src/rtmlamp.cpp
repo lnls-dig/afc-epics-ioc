@@ -142,6 +142,14 @@ class RtmLamp: public asynPortDriver {
             return asynPortDriver::writeInt32(pasynUser, value);
         }
 
+        /* general parameters should have addr=0 */
+        if (addr != 0 && function <= last_general_parameter) {
+            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
+                "writeInt32: %s: general parameter with addr=%d (should be =0)", param_name, addr);
+
+            return asynError;
+        }
+
         setIntegerParam(addr, function, value);
         callParamCallbacks(addr);
 
