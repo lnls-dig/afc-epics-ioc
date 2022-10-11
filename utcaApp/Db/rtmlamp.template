@@ -1,6 +1,6 @@
 # RTM LAMP parameters
 
-record(longin,"$(P)$(R)ScanTask"){
+record(longin,"$(P)$(R)RtmLampScanTask"){
     field(DTYP,"asynInt32")
     field(DESC,"trigger scans")
     field(SCAN,".1 second")
