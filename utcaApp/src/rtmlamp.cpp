@@ -151,7 +151,6 @@ class RtmLamp: public asynPortDriver {
         }
 
         setIntegerParam(addr, function, value);
-        callParamCallbacks(addr);
 
         ctl.channel = addr;
 
