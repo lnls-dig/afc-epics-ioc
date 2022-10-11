@@ -1,6 +1,10 @@
 #include <tuple>
 #include <vector>
 
+#include <cantProceed.h>
+#include <epicsExport.h>
+#include <iocsh.h>
+
 #include <asynPortDriver.h>
 
 #include "decoders.h"
@@ -84,5 +88,23 @@ class UDriver: public asynPortDriver {
         *value = 0;
         if (function == p_scan_task) return read_parameters();
         else return asynPortDriver::readInt32(pasynUser, value);
+    }
+};
+
+/* singleton helper for creating iocsh functions for each driver */
+template <class T, const char *name>
+class UDriverFn {
+  public:
+    static constexpr iocshArg init_arg0 {"portNumber", iocshArgInt};
+    static constexpr iocshArg const *init_args[1] = {&init_arg0};
+    static constexpr iocshFuncDef init_func_def {name, 1, init_args};
+
+    static void init_call_func(const iocshArgBuf *args)
+    {
+        try {
+            new T(args[0].ival);
+        } catch (std::exception &e) {
+            cantProceed("error creating %s: %s\n", name, e.what());
+        }
     }
 };

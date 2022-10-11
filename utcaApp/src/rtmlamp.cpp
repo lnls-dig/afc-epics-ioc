@@ -2,10 +2,6 @@
 #include <string>
 #include <tuple>
 
-#include <iocsh.h>
-#include <epicsExport.h>
-#include <cantProceed.h>
-
 #include <asynPortDriver.h>
 
 #include "lamp.h"
@@ -131,24 +127,13 @@ class RtmLamp: public UDriver {
     }
 };
 
-/* Configuration routine.  Called directly, or from the iocsh function below */
-extern "C" {
-    /* EPICS iocsh shell commands */
-    static const iocshArg initArg0 = {"portNumber", iocshArgInt};
-    static const iocshArg *initArgs[] = {&initArg0};
-    static const iocshFuncDef initFuncDef = {"RtmLamp", 1, initArgs};
-    static void initCallFunc(const iocshArgBuf *args)
-    {
-        try {
-            new RtmLamp(args[0].ival);
-        } catch (std::exception &e) {
-            cantProceed("error creating rtmlamp: %s\n", e.what());
-        }
-    }
+constexpr char name[] = "RtmLamp";
+UDriverFn<RtmLamp, name> iocsh_init;
 
-    static void registerRtmLamp(void)
+extern "C" {
+    static void registerRtmLamp()
     {
-        iocshRegister(&initFuncDef, initCallFunc);
+        iocshRegister(&iocsh_init.init_func_def, iocsh_init.init_call_func);
     }
 
     epicsExportRegistrar(registerRtmLamp);
