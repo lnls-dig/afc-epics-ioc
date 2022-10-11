@@ -133,7 +133,10 @@ class RtmLamp: public asynPortDriver {
     {
         const int function = pasynUser->reason;
         int addr;
+        const char *param_name;
+
         getAddress(pasynUser, &addr);
+        getParamName(function, &param_name);
 
         if (function < first_parameter || function > last_parameter) {
             return asynPortDriver::writeInt32(pasynUser, value);
@@ -169,9 +172,6 @@ class RtmLamp: public asynPortDriver {
         try {
             ctl.write_params();
         } catch (std::runtime_error &e) {
-            const char *param_name;
-
-            getParamName(function, &param_name);
             epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
                 "writeInt32: %s: %s", param_name, e.what());
 
