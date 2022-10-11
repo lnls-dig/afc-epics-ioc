@@ -104,7 +104,7 @@ record(mbbi,"$(S)$(RTM_CHAN)PwrState-Sts"){
     field(ONST,"enabled")
 }
 
-record(mbbo,"$(S)$(RTM_CHAN)OpMode-Sel"){
+record(mbbo,"$(S)$(RTM_CHAN)CurrLoopMode-Sel"){
     field(DTYP,"asynInt32")
     field(DESC,"set power supply mode")
     field(SCAN,"Passive")
@@ -122,7 +122,7 @@ record(mbbo,"$(S)$(RTM_CHAN)OpMode-Sel"){
     field(THST,"closed_loop_test_sqr")
     field(FRST,"closed_loop_fofb")
 }
-record(mbbi,"$(S)$(RTM_CHAN)OpMode-Sts"){
+record(mbbi,"$(S)$(RTM_CHAN)CurrLoopMode-Sts"){
     field(DTYP,"asynInt32")
     field(DESC,"get power supply mode")
     field(SCAN,"I/O Intr")
@@ -140,7 +140,7 @@ record(mbbi,"$(S)$(RTM_CHAN)OpMode-Sts"){
     field(FRST,"closed_loop_fofb")
 }
 
-record(longout,"$(S)$(RTM_CHAN)CtrlLoopKp-SP"){
+record(longout,"$(S)$(RTM_CHAN)CurrLoopKp-SP"){
     field(DTYP,"asynInt32")
     field(DESC,"set PI Kp parameter")
     field(SCAN,"Passive")
@@ -149,14 +149,14 @@ record(longout,"$(S)$(RTM_CHAN)CtrlLoopKp-SP"){
     field(DRVH,"67108863")
     field(DRVL,"0")
 }
-record(longin,"$(S)$(RTM_CHAN)CtrlLoopKp-RB"){
+record(longin,"$(S)$(RTM_CHAN)CurrLoopKp-RB"){
     field(DTYP,"asynInt32")
     field(DESC,"get PI Kp parameter")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))PI_KP")
 }
 
-record(longout,"$(S)$(RTM_CHAN)CtrlLoopTi-SP"){
+record(longout,"$(S)$(RTM_CHAN)CurrLoopTi-SP"){
     field(DTYP,"asynInt32")
     field(DESC,"set PI Ti parameter")
     field(SCAN,"Passive")
@@ -165,7 +165,7 @@ record(longout,"$(S)$(RTM_CHAN)CtrlLoopTi-SP"){
     field(DRVH,"67108863")
     field(DRVL,"0")
 }
-record(longin,"$(S)$(RTM_CHAN)CtrlLoopTi-RB"){
+record(longin,"$(S)$(RTM_CHAN)CurrLoopTi-RB"){
     field(DTYP,"asynInt32")
     field(DESC,"get PI Ti parameter")
     field(SCAN,"I/O Intr")
