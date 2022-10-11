@@ -162,8 +162,8 @@ class RtmLamp: public asynPortDriver {
         write_param(p_testlim_b, ctl.limit_b);
         write_param(p_pi_sp, ctl.pi_sp);
         write_param(p_dac, ctl.dac);
-        /* FIXME: if someone writes into trigen, we'll error out continuously until
-         * being restarted */
+        /* XXX: if someone writes 1 into trigen and it's not supported by the hardware,
+         * we'll error out continuously until zeroed-out again */
         write_param(p_trigen, ctl.trigger_enable);
 
         try {
