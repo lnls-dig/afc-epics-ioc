@@ -19,13 +19,14 @@ class RtmLamp: public asynPortDriver {
     lamp::ControllerV2 ctl;
 
     int p_psstatus;
+    const int &first_general_parameter = p_psstatus, &last_general_parameter = p_psstatus;
 
     int p_overcurr_l, p_overtemp_l, p_overcurr_r, p_overtemp_r,
         p_pwrstate, p_opmode, p_trigen, p_loopkp, p_loopti,
         p_testwaveperiod, p_testlim_a, p_testlim_b,
         p_pi_sp, p_dac, p_eff_adc, p_eff_dac, p_eff_sp;
     /* XXX: update these when new p_* variables are added */
-    const int &first_parameter = p_overcurr_l, &last_parameter = p_eff_sp;
+    const int &first_channel_parameter = p_overcurr_l, &last_channel_parameter = p_eff_sp;
 
     int p_scan_task;
 
@@ -100,22 +101,20 @@ class RtmLamp: public asynPortDriver {
     {
         dec.read();
 
-        const char *param_name;
-        for (unsigned addr = 0; addr < number_of_channels; addr++) {
-            for (int p = first_parameter; p <= last_parameter; p++)
-            {
-                /* FIXME: replace with indexing into name_and_index_channel */
-                getParamName(p, &param_name);
+        for (int p = first_general_parameter; p <= last_channel_parameter; p++) {
+            const char *param_name;
+            getParamName(p, &param_name);
 
-                setIntegerParam(addr, p, dec.get_channel_data(param_name, addr));
+            if (p <= last_general_parameter) {
+                setIntegerParam(0, p, dec.get_general_data(param_name));
+            } else {
+                for (unsigned addr = 0; addr < number_of_channels; addr++)
+                    setIntegerParam(addr, p, dec.get_channel_data(param_name, addr));
             }
-
-            callParamCallbacks(addr);
         }
 
-        getParamName(p_psstatus, &param_name);
-        setIntegerParam(p_psstatus, dec.get_general_data(param_name));
-        callParamCallbacks(0);
+        for (unsigned addr = 0; addr < number_of_channels; addr++)
+            callParamCallbacks(addr);
 
         return asynSuccess;
     }
@@ -138,7 +137,8 @@ class RtmLamp: public asynPortDriver {
         getAddress(pasynUser, &addr);
         getParamName(function, &param_name);
 
-        if (function < first_parameter || function > last_parameter) {
+        /* general + channel cover our whole range */
+        if (function < first_general_parameter || function > last_channel_parameter) {
             return asynPortDriver::writeInt32(pasynUser, value);
         }
 
