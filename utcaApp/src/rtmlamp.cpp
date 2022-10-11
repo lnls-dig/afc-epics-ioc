@@ -173,7 +173,7 @@ class RtmLamp: public asynPortDriver {
 
             getParamName(function, &param_name);
             epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32:%s: %s", param_name, e.what());
+                "writeInt32: %s: %s", param_name, e.what());
 
             return asynError;
         }
