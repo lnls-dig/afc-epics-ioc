@@ -219,27 +219,45 @@ record(longin,"$(S)$(RTM_CHAN)TestLimB-RB"){
     field(DESC,"get square wave test limit B")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))LIMIT_B")
-    field(FLNK,"$(S)$(RTM_CHAN)CurrentConv2-SP CPP NMS")
+}
+
+record(ao, "$(S)$(RTM_CHAN)CurrGain-SP"){
+    field(DESC, "Current gain")
+    field(SCAN, "Passive")
+    field(VAL, "1")
+}
+record(longout, "$(S)$(RTM_CHAN)CurrOffset-SP"){
+    field(DESC, "Current offset")
+    field(SCAN, "Passive")
+    field(VAL, "0")
+}
+record(ao, "$(S)$(RTM_CHAN)VoltGain-SP"){
+    field(DESC, "Voltage gain")
+    field(SCAN, "Passive")
+    field(VAL, "1")
+}
+record(longout, "$(S)$(RTM_CHAN)VoltOffset-SP"){
+    field(DESC, "Voltage offset")
+    field(SCAN, "Passive")
+    field(VAL, "0")
 }
 
 record(ao,"$(S)$(RTM_CHAN)Current-SP"){
-    field(DESC,"set manual current control (in ampers)")
+    field(DESC,"set manual current control")
+    field(EGU, "A")
     field(PINI,"YES")
     field(SCAN,"Passive")
-    field(PREC,"15")
     field(DRVH,"0.95")
     field(DRVL,"-0.95")
-    field(FLNK,"$(S)$(RTM_CHAN)CurrentConv-SP CPP NMS")
 }
 
-record(calcout,"$(S)$(RTM_CHAN)CurrentConv-SP"){
+record(calcout,"$(S)$(RTM_CHAN)CurrentConvSP"){
     field(SCAN,"Passive")
-    field(INPA,"$(S)$(RTM_CHAN)Current-SP")
-    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
-    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(INPA,"$(S)$(RTM_CHAN)Current-SP CP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP CP")
     field(CALC,"A/B+C")
-    field(OOPT,"Every Time")
-    field(OUT,"$(S)$(RTM_CHAN)CurrentRaw-SP CA NMS")
+    field(OUT,"$(S)$(RTM_CHAN)CurrentRaw-SP CA")
 }
 
 record(longout,"$(S)$(RTM_CHAN)CurrentRaw-SP"){
@@ -251,48 +269,46 @@ record(longout,"$(S)$(RTM_CHAN)CurrentRaw-SP"){
     field(OUT,"@asyn($(PORT),$(ADDR))PI_SP")
     field(PINI,"YES")
 }
-
 record(longin,"$(S)$(RTM_CHAN)CurrentRaw-RB"){
     field(DTYP,"asynInt32")
     field(DESC,"get manual current control (raw)")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))PI_SP")
-    field(FLNK,"$(S)$(RTM_CHAN)CurrentConv2-SP CPP NMS")
 }
 
-record(calcout,"$(S)$(RTM_CHAN)CurrentConv2-SP"){
+record(calcout,"$(S)$(RTM_CHAN)CurrentRawPropagateSP"){
     field(SCAN,"Passive")
-    field(PREC,"15")
-    field(INPA,"$(S)$(RTM_CHAN)CurrentRaw-SP")
+    field(INPA,"$(S)$(RTM_CHAN)CurrentRaw-SP CP")
     field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
     field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
     field(CALC,"B*(A-C)")
-    field(OOPT,"On Change")
-    field(OUT,"$(S)$(RTM_CHAN)Current-RB CA NMS")
+    field(OUT,"$(S)$(RTM_CHAN)Current-SP NPP")
 }
 
-record(ai,"$(S)$(RTM_CHAN)Current-RB"){
-    field(DESC,"get manual current control (in ampers)")
+record(calc,"$(S)$(RTM_CHAN)Current-RB"){
+    field(DESC,"get manual current control")
+    field(EGU, "A")
     field(SCAN,"Passive")
-    field(PREC,"15")
+    field(INPA,"$(S)$(RTM_CHAN)CurrentRaw-RB CP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP CP")
+    field(CALC,"B*(A-C)")
 }
 
 record(ao,"$(S)$(RTM_CHAN)Voltage-SP"){
-    field(DESC,"set manual voltage control (in volts)")
+    field(DESC,"set manual voltage control")
+    field(EGU, "V")
     field(PINI,"YES")
     field(SCAN,"Passive")
-    field(PREC,"15")
-    field(FLNK,"$(S)$(RTM_CHAN)VoltageConv-SP CPP NMS")
 }
 
-record(calcout,"$(S)$(RTM_CHAN)VoltageConv-SP"){
+record(calcout,"$(S)$(RTM_CHAN)VoltageConvSP"){
     field(SCAN,"Passive")
-    field(INPA,"$(S)$(RTM_CHAN)Voltage-SP")
-    field(INPB,"$(S)$(RTM_CHAN)VoltGain-SP")
-    field(INPC,"$(S)$(RTM_CHAN)VoltOffset-SP")
+    field(INPA,"$(S)$(RTM_CHAN)Voltage-SP CP")
+    field(INPB,"$(S)$(RTM_CHAN)VoltGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)VoltOffset-SP CP")
     field(CALC,"A/B+C")
-    field(OOPT,"Every Time")
-    field(OUT,"$(S)$(RTM_CHAN)VoltageRaw-SP CA NMS")
+    field(OUT,"$(S)$(RTM_CHAN)VoltageRaw-SP CA")
 }
 
 record(longout,"$(S)$(RTM_CHAN)VoltageRaw-SP"){
@@ -304,30 +320,31 @@ record(longout,"$(S)$(RTM_CHAN)VoltageRaw-SP"){
     field(DRVH,"32767")
     field(DRVL,"-32768")
 }
-
 record(longin,"$(S)$(RTM_CHAN)VoltageRaw-RB"){
     field(DTYP,"asynInt32")
     field(DESC,"get manual voltage control (raw)")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))DAC")
-    field(FLNK,"$(S)$(RTM_CHAN)VoltageConv2-SP CPP NMS")
 }
 
-record(calcout,"$(S)$(RTM_CHAN)VoltageConv2-SP"){
+record(calcout,"$(S)$(RTM_CHAN)VoltageRawPropagateSP"){
     field(SCAN,"Passive")
-    field(PREC,"15")
-    field(INPA,"$(S)$(RTM_CHAN)VoltageRaw-SP")
+    field(INPA,"$(S)$(RTM_CHAN)VoltageRaw-SP CP")
     field(INPB,"$(S)$(RTM_CHAN)VoltGain-SP")
     field(INPC,"$(S)$(RTM_CHAN)VoltOffset-SP")
     field(CALC,"B*(A-C)")
-    field(OOPT,"On Change")
-    field(OUT,"$(S)$(RTM_CHAN)Voltage-RB CA NMS")
+    field(OUT,"$(S)$(RTM_CHAN)Voltage-SP NPP")
 }
 
-record(ai,"$(S)$(RTM_CHAN)Voltage-RB"){
-    field(DESC,"get manual voltage control (in volts)")
+
+record(calc,"$(S)$(RTM_CHAN)Voltage-RB"){
+    field(DESC,"get manual voltage control")
+    field(EGU, "V")
     field(SCAN,"Passive")
-    field(PREC,"15")
+    field(INPA,"$(S)$(RTM_CHAN)VoltageRaw-RB CP")
+    field(INPB,"$(S)$(RTM_CHAN)VoltGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)VoltOffset-SP CP")
+    field(CALC,"B*(A-C)")
 }
 
 record(longin,"$(S)$(RTM_CHAN)CurrentRaw-Mon"){
@@ -335,24 +352,16 @@ record(longin,"$(S)$(RTM_CHAN)CurrentRaw-Mon"){
     field(DESC,"get current monitor (raw)")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))ADC_INST")
-    field(FLNK,"$(S)$(RTM_CHAN)CurrentRawConv-SP CPP NMS")
 }
 
-record(calcout,"$(S)$(RTM_CHAN)CurrentRawConv-SP"){
+record(calc,"$(S)$(RTM_CHAN)Current-Mon"){
+    field(DESC,"monitor current")
+    field(EGU, "A")
     field(SCAN,"Passive")
-    field(PREC,"15")
-    field(INPA,"$(S)$(RTM_CHAN)CurrentRaw-Mon")
-    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
-    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(INPA,"$(S)$(RTM_CHAN)CurrentRaw-Mon CP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP CP")
     field(CALC,"B*(A-C)")
-    field(OOPT,"On Change")
-    field(OUT,"$(S)$(RTM_CHAN)Current-Mon CA NMS")
-}
-
-record(ai,"$(S)$(RTM_CHAN)Current-Mon"){
-    field(DESC,"get current monitor (in ampers)")
-    field(SCAN,"Passive")
-    field(PREC,"15")
 }
 
 record(longin,"$(S)$(RTM_CHAN)VoltageRaw-Mon"){
@@ -360,24 +369,16 @@ record(longin,"$(S)$(RTM_CHAN)VoltageRaw-Mon"){
     field(DESC,"get voltage monitor (raw)")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))DAC_EFF")
-    field(FLNK,"$(S)$(RTM_CHAN)VoltageRawConv-SP CPP NMS")
 }
 
-record(calcout,"$(S)$(RTM_CHAN)VoltageRawConv-SP"){
+record(calc,"$(S)$(RTM_CHAN)Voltage-Mon"){
+    field(DESC,"get voltage monitor")
+    field(EGU, "V")
     field(SCAN,"Passive")
-    field(PREC,"15")
-    field(INPA,"$(S)$(RTM_CHAN)VoltageRaw-Mon")
-    field(INPB,"$(S)$(RTM_CHAN)VoltGain-SP")
-    field(INPC,"$(S)$(RTM_CHAN)VoltOffset-SP")
+    field(INPA,"$(S)$(RTM_CHAN)VoltageRaw-Mon CP")
+    field(INPB,"$(S)$(RTM_CHAN)VoltGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)VoltOffset-SP CP")
     field(CALC,"B*(A-C)")
-    field(OOPT,"On Change")
-    field(OUT,"$(S)$(RTM_CHAN)Voltage-Mon CA NMS")
-}
-
-record(ai,"$(S)$(RTM_CHAN)Voltage-Mon"){
-    field(DESC,"get voltage monitor (in volts)")
-    field(SCAN,"Passive")
-    field(PREC,"15")
 }
 
 record(longin,"$(S)$(RTM_CHAN)CurrentRawRef-Mon"){
@@ -385,24 +386,16 @@ record(longin,"$(S)$(RTM_CHAN)CurrentRawRef-Mon"){
     field(DESC,"get current reference monitor (raw)")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))SP_EFF")
-    field(FLNK,"$(S)$(RTM_CHAN)CurrentRawRefConv-SP CPP NMS")
 }
 
-record(calcout,"$(S)$(RTM_CHAN)CurrentRawRefConv-SP"){
+record(calc,"$(S)$(RTM_CHAN)CurrentRef-Mon"){
+    field(DESC,"get current monitor")
+    field(EGU, "A")
     field(SCAN,"Passive")
-    field(PREC,"15")
-    field(INPA,"$(S)$(RTM_CHAN)CurrentRawRef-Mon")
-    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
-    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(INPA,"$(S)$(RTM_CHAN)CurrentRawRef-Mon CP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP CP")
     field(CALC,"B*(A-C)")
-    field(OOPT,"On Change")
-    field(OUT,"$(S)$(RTM_CHAN)CurrentRef-Mon CA NMS")
-}
-
-record(ai,"$(S)$(RTM_CHAN)CurrentRef-Mon"){
-    field(DESC,"get current monitor (in ampers)")
-    field(SCAN,"Passive")
-    field(PREC,"15")
 }
 
 record(mbbo,"$(S)$(RTM_CHAN)TrigEn-Sel"){
