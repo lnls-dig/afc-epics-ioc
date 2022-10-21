@@ -1,12 +1,5 @@
 # RTM LAMP parameters
 
-record(longin,"$(P)$(R)RtmLampScanTask"){
-    field(DTYP,"asynInt32")
-    field(DESC,"trigger scans")
-    field(SCAN,".1 second")
-    field(INP,"@asyn($(PORT))SCAN_TASK")
-}
-
 record(bi,"$(P)$(R)PSStatus-Mon"){
     field(DTYP,"asynInt32")
     field(DESC,"get rtm lamp status register")

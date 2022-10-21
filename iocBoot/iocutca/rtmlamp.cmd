@@ -1,4 +1,6 @@
 RtmLamp(0)
+dbLoadRecords("db/scan_task.template", "PORT=RTMLAMP-0")
+
 dbLoadRecords("db/rtmlamp.template", "P=${P}, R=${R}, S=${S}, RTM_CHAN=M1:PS-FCH:,  PORT=RTMLAMP-0, ADDR=0")
 dbLoadRecords("db/rtmlamp.template", "P=${P}, R=${R}, S=${S}, RTM_CHAN=M1:PS-FCV:,  PORT=RTMLAMP-0, ADDR=1")
 dbLoadRecords("db/rtmlamp.template", "P=${P}, R=${R}, S=${S}, RTM_CHAN=M2:PS-FCH:,  PORT=RTMLAMP-0, ADDR=2")
