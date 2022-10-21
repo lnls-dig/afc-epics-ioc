@@ -2,3 +2,4 @@
 
 registrar("registerPcie")
 registrar("registerRtmLamp")
+registrar("registerFofbCc")
