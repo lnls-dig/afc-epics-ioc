@@ -4,6 +4,7 @@
 ## everywhere it appears in this file
 
 < envPaths
+< set_env.cmd
 
 cd "${TOP}"
 
