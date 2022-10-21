@@ -1,3 +1,4 @@
+#include <unordered_set>
 #include <tuple>
 #include <vector>
 
@@ -21,6 +22,8 @@ class UDriver: public asynPortDriver {
 
     std::vector<std::tuple<const char *, int &>> name_and_index;
     std::vector<std::tuple<const char *, int &>> name_and_index_channel;
+
+    std::unordered_set<int> write_only;
 
     virtual asynStatus writeInt32(asynUser *, epicsInt32) = 0;
 
@@ -64,6 +67,8 @@ class UDriver: public asynPortDriver {
         generic_decoder->read();
 
         for (int p = first_general_parameter; p <= last_channel_parameter; p++) {
+            if (write_only.count(p)) continue;
+
             const char *param_name;
             getParamName(p, &param_name);
 
