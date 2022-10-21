@@ -18,6 +18,7 @@ utca_registerRecordDeviceDriver pdbbase
 pcie("2")
 
 < "iocBoot/${IOC}/rtmlamp.cmd"
+< "iocBoot/${IOC}/fofb_cc.cmd"
 
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
