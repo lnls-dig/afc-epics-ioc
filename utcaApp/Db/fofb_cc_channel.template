@@ -1,0 +1,43 @@
+# Channel specific FOFB CC values
+
+record(longin,"$(P)$(R)$(FOFB_CC)LinkPartner$(FOFB_CHAN)-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get link partner")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))LINK_PARTNER")
+}
+
+record(longin,"$(P)$(R)$(FOFB_CC)HardErrCnt$(FOFB_CHAN)-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get hard errors count")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))HARD_ERR_CNT")
+}
+
+record(longin,"$(P)$(R)$(FOFB_CC)SoftErrCnt$(FOFB_CHAN)-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get soft errors count")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))SOFT_ERR_CNT")
+}
+
+record(longin,"$(P)$(R)$(FOFB_CC)FrameErrCnt$(FOFB_CHAN)-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get frame errors count")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))FRAME_ERR_CNT")
+}
+
+record(longin,"$(P)$(R)$(FOFB_CC)RxPckCnt$(FOFB_CHAN)-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get rx packet count")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))RX_PCK_CNT")
+}
+
+record(longin,"$(P)$(R)$(FOFB_CC)TxPckCnt$(FOFB_CHAN)-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get tx packet count")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))TX_PCK_CNT")
+}
