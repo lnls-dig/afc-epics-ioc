@@ -97,7 +97,14 @@ class UDriverFn {
   public:
     static constexpr iocshArg init_arg0 {"portNumber", iocshArgInt};
     static constexpr iocshArg const *init_args[1] = {&init_arg0};
-    static constexpr iocshFuncDef init_func_def {name, 1, init_args};
+    static constexpr iocshFuncDef init_func_def {
+        name,
+        1,
+        init_args
+#ifdef IOCSHFUNCDEF_HAS_USAGE
+        ,"Create a new port with portNumber index\n"
+#endif
+    };
 
     static void init_call_func(const iocshArgBuf *args)
     {
