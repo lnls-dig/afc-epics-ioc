@@ -16,13 +16,8 @@ utca_registerRecordDeviceDriver pdbbase
 #traceIocInit
 
 pcie("2")
-RtmLamp(0)
 
-dbLoadRecords("db/rtmlamp.template", "P=p:, R=r:, S=s:, RTM_CHAN=chan0:, PORT=RTMLAMP-0, ADDR=0")
-dbLoadRecords("db/rtmlamp.template", "P=p:, R=r:, S=s:, RTM_CHAN=chan1:, PORT=RTMLAMP-0, ADDR=1")
-dbLoadRecords("db/rtmlamp.template", "P=p:, R=r:, S=s:, RTM_CHAN=chan2:, PORT=RTMLAMP-0, ADDR=2")
-dbLoadRecords("db/rtmlamp.template", "P=p:, R=r:, S=s:, RTM_CHAN=chan3:, PORT=RTMLAMP-0, ADDR=3")
-dbLoadRecords("db/rtmlamp.template", "P=p:, R=r:, S=s:, RTM_CHAN=chan4:, PORT=RTMLAMP-0, ADDR=4")
+< "iocBoot/${IOC}/rtmlamp.cmd"
 
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
