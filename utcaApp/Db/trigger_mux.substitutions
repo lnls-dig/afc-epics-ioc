@@ -1,0 +1,55 @@
+file db/scan_task.template {
+    {}
+}
+
+file db/trigger_mux.template {
+    pattern {TRIGGER_CHAN, ADDR, TRIGGER_DIR, TRIGGER_DIR_ASYN, TRIGGER_DIR_SEL, TRIGGER_DIR_SEL_ASYN}
+    {0, 0, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {0, 0, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {1, 1, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {1, 1, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {2, 2, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {2, 2, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {3, 3, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {3, 3, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {4, 4, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {4, 4, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {5, 5, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {5, 5, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {6, 6, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {6, 6, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {7, 7, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {7, 7, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {8, 8, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {8, 8, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {9, 9, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {9, 9, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {10, 10, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {10, 10, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {11, 11, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {11, 11, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {12, 12, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {12, 12, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {13, 13, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {13, 13, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {14, 14, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {14, 14, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {15, 15, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {15, 15, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {16, 16, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {16, 16, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {17, 17, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {17, 17, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {18, 18, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {18, 18, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {19, 19, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {19, 19, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {20, 20, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {20, 20, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {21, 21, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {21, 21, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {22, 22, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {22, 22, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+    {23, 23, "Rcv", "RCV", "RcvIn", "RCV_IN"}
+    {23, 23, "Trn", "TRANSM", "TrnOut", "TRANSM_OUT"}
+}
