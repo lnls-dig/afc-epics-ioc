@@ -1,0 +1,41 @@
+# TRIGGER MUX records
+
+record(mbbo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)$(TRIGGER_DIR)Src-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set trigger receive source")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"ext")
+    field(ONST,"int")
+    field(OUT,"@asyn($(PORT),$(ADDR))$(TRIGGER_DIR_ASYN)_SRC")
+}
+
+record(mbbi,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)$(TRIGGER_DIR)Src-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get trigger receive source")
+    field(SCAN,"I/O Intr")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"ext")
+    field(ONST,"int")
+    field(INP,"@asyn($(PORT),$(ADDR))$(TRIGGER_DIR_ASYN)_SRC")
+}
+
+record(longout,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)$(TRIGGER_DIR_SEL)Sel-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set trigger receive selection mux")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT),$(ADDR))$(TRIGGER_DIR_SEL_ASYN)_SEL")
+}
+
+record(longin,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)$(TRIGGER_DIR_SEL)Sel-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get trigger receive selection mux")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))$(TRIGGER_DIR_SEL_ASYN)_SEL")
+}
