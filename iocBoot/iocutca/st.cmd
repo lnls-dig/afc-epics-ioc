@@ -19,6 +19,7 @@ pcie("2")
 
 < "iocBoot/${IOC}/rtmlamp.cmd"
 < "iocBoot/${IOC}/fofb_cc.cmd"
+< "iocBoot/${IOC}/triggers.cmd"
 
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
