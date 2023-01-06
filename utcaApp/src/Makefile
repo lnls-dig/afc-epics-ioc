@@ -19,7 +19,7 @@ utca_DBD += base.dbd
 utca_LIBS += asyn
 utca_DBD += asyn.dbd
 
-utca_SRCS += pcie-single.cpp fofb_cc.cpp rtmlamp.cpp trigger_iface.cpp
+utca_SRCS += pcie-single.cpp fofb_cc.cpp rtmlamp.cpp trigger_iface.cpp trigger_mux.cpp
 utca_DBD += drivers.dbd
 
 UHAL = $(EPICS_BASE)/../uhal
