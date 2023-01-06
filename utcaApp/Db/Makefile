@@ -5,7 +5,9 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += scan_task.template
-DB += fofb_cc.template fofb_cc_channel.template rtmlamp.template
+DB += fofb_cc.template fofb_cc_channel.template
+DB += rtmlamp.template
+DB += trigger_iface.template trigger_iface.substitutions
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

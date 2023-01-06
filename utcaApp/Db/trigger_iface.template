@@ -1,0 +1,119 @@
+# TRIGGER IFACE records
+
+record(mbbo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)Dir-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set trigger direction")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"trn")
+    field(ONST,"rcv")
+    field(OUT,"@asyn($(PORT),$(ADDR))DIR")
+}
+
+record(mbbi,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)Dir-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get trigger direction")
+    field(SCAN,"I/O Intr")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"trn")
+    field(ONST,"rcv")
+    field(INP,"@asyn($(PORT),$(ADDR))DIR")
+}
+
+record(mbbo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)DirPol-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set trigger direction polarity")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"same")
+    field(ONST,"rev")
+    field(OUT,"@asyn($(PORT),$(ADDR))DIR_POL")
+}
+
+record(mbbi,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)DirPol-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get trigger direction polarity")
+    field(SCAN,"I/O Intr")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"same")
+    field(ONST,"rev")
+    field(INP,"@asyn($(PORT),$(ADDR))DIR_POL")
+}
+
+record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvCntRst-Cmd"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Reset trigger receive counter")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(MASK, "1")
+    field(HIGH, "1")
+    field(ZNAM, "nothing")
+    field(ONAM, "reset_counter")
+    field(OUT,"@asyn($(PORT),$(ADDR))RCV_COUNT_RST")
+}
+
+record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnCntRst-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Reset trigger transmit counter")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(MASK, "1")
+    field(HIGH, "1")
+    field(ZNAM, "nothing")
+    field(ONAM, "reset_counter")
+    field(OUT,"@asyn($(PORT),$(ADDR))TRANSM_COUNT_RST")
+}
+
+record(longout,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvLen-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set trigger receive debounce length")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT),$(ADDR))RCV_LEN")
+}
+
+record(longin,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvLen-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get trigger receive debounce length")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))RCV_LEN")
+}
+
+record(longout,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnLen-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set trigger transmit extension length")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT),$(ADDR))TRANSM_LEN")
+}
+
+record(longin,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnLen-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get trigger transmit extension length")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))TRANSM_LEN")
+}
+
+record(longin,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvCnt-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get trigger receive counter")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))RCV_COUNT")
+}
+
+record(longin,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnCnt-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get trigger transmit counter")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))TRANSM_COUNT")
+}
