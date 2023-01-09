@@ -30,7 +30,7 @@
 #SNCSEQ = $(MODULES)/seq-ver
 
 # EPICS_BASE should appear last so earlier modules can override stuff:
-EPICS_BASE = /home/ABTLUS/erico.rolim/epics/epics-base
+EPICS_BASE = $(TOP)/../epics-7
 ASYN = $(EPICS_BASE)/../asyn
 
 # Set RULES here if you want to use build rules from somewhere
