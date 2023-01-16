@@ -2,8 +2,6 @@
 #include <string>
 #include <tuple>
 
-#include <asynPortDriver.h>
-
 #include "lamp.h"
 
 #include "pcie-single.h"
@@ -27,7 +25,7 @@ class RtmLamp: public UDriver {
     RtmLamp(int port_number):
       UDriver(
           "RTMLAMP", port_number, &dec,
-          ::number_of_channels, p_psstatus, p_psstatus, p_overcurr_l, p_eff_sp,
+          ::number_of_channels,
           {
               {"PS_STATUS", p_psstatus},
           },
@@ -66,28 +64,8 @@ class RtmLamp: public UDriver {
         }
     }
 
-    asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
     {
-        const int function = pasynUser->reason;
-        int addr;
-        const char *param_name;
-
-        getAddress(pasynUser, &addr);
-        getParamName(function, &param_name);
-
-        /* general + channel cover our whole range */
-        if (function < first_general_parameter || function > last_channel_parameter) {
-            return asynPortDriver::writeInt32(pasynUser, value);
-        }
-
-        /* general parameters should have addr=0 */
-        if (addr != 0 && function <= last_general_parameter) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: general parameter with addr=%d (should be =0)", param_name, addr);
-
-            return asynError;
-        }
-
         setIntegerParam(addr, function, value);
 
         ctl.channel = addr;
