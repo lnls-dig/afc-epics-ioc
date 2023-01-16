@@ -1,5 +1,5 @@
-#include <unordered_set>
 #include <tuple>
+#include <unordered_set>
 #include <vector>
 
 #include <cantProceed.h>
@@ -8,28 +8,28 @@
 
 #include <asynPortDriver.h>
 
+#include "enumerate.h"
 #include "decoders.h"
 
 class UDriver: public asynPortDriver {
-  protected:
     RegisterDecoder *generic_decoder;
 
-    unsigned number_of_channels;
-    const int &first_general_parameter, &last_general_parameter;
-    const int &first_channel_parameter, &last_channel_parameter;
-
     int p_scan_task;
+
+    int first_general_parameter = -1, last_general_parameter = -1,
+        first_channel_parameter = -1, last_channel_parameter = -1;
 
     std::vector<std::tuple<const char *, int &>> name_and_index;
     std::vector<std::tuple<const char *, int &>> name_and_index_channel;
 
-    std::unordered_set<int> write_only;
+  protected:
+    unsigned number_of_channels;
 
-    virtual asynStatus writeInt32(asynUser *, epicsInt32) = 0;
+    std::unordered_set<int> write_only;
 
     UDriver(
         const char *name, int port_number, RegisterDecoder *generic_decoder,
-        unsigned number_of_channels, int &fgp, int &lgp, int &fcp, int &lcp,
+        unsigned number_of_channels,
         std::vector<std::tuple<const char *, int &>> name_and_index,
         std::vector<std::tuple<const char *, int &>> name_and_index_channel):
       asynPortDriver(
@@ -39,10 +39,8 @@ class UDriver: public asynPortDriver {
           0, 1, 0, 0 /* no flags, auto connect, default priority and stack size */
       ),
       generic_decoder(generic_decoder),
-      number_of_channels(number_of_channels),
-      first_general_parameter(fgp), last_general_parameter(lgp),
-      first_channel_parameter(fcp), last_channel_parameter(lcp),
-      name_and_index(name_and_index), name_and_index_channel(name_and_index_channel)
+      name_and_index(name_and_index), name_and_index_channel(name_and_index_channel),
+      number_of_channels(number_of_channels)
     {
         /* here, we don't call setIntegerParam to initialize these parameters:
          * - readback ones are expected to be initialized soon via SCAN
@@ -51,34 +49,49 @@ class UDriver: public asynPortDriver {
          *   which aren't always supported, as long as the PVs haven't been written
          *   into */
 
-        for (auto &v: name_and_index) {
-            createParam(std::get<0>(v), asynParamInt32, &std::get<1>(v));
-        }
-
-        for (auto &v: name_and_index_channel) {
-            createParam(std::get<0>(v), asynParamInt32, &std::get<1>(v));
-        }
-
         createParam("SCAN_TASK", asynParamInt32, &p_scan_task);
+
+        auto create_params = [this](auto const &nai, auto &first_param, auto &last_param) {
+            for (auto &&[i, v]: enumerate(nai)) {
+                auto &&[str, p] = v;
+
+                createParam(str, asynParamInt32, &p);
+
+                if (i == 0) first_param = p;
+                else if (i == nai.size() - 1) last_param = p;
+            }
+        };
+
+        create_params(name_and_index, first_general_parameter, last_general_parameter);
+        create_params(name_and_index_channel, first_channel_parameter, last_channel_parameter);
     }
 
     virtual asynStatus read_parameters()
     {
         generic_decoder->read();
 
-        for (int p = first_general_parameter; p <= last_channel_parameter; p++) {
-            if (write_only.count(p)) continue;
+        auto get_params = [this](auto first_param, auto last_param, auto fn) {
+            if (first_param < 0) return;
 
-            const char *param_name;
-            getParamName(p, &param_name);
+            for (int p = first_param; p <= last_param; p++) {
+                if (write_only.count(p)) continue;
 
-            if (p <= last_general_parameter) {
-                setIntegerParam(0, p, generic_decoder->get_general_data(param_name));
-            } else {
+                const char *param_name;
+                getParamName(p, &param_name);
+
+                fn(p, param_name);
+            }
+        };
+
+        get_params(first_general_parameter, last_general_parameter,
+            [this](int p, const char *param_name)
+            { setIntegerParam(0, p, generic_decoder->get_general_data(param_name)); });
+        get_params(first_channel_parameter, last_channel_parameter,
+            [this](int p, const char *param_name)
+            {
                 for (unsigned addr = 0; addr < number_of_channels; addr++)
                     setIntegerParam(addr, p, generic_decoder->get_channel_data(param_name, addr));
-            }
-        }
+            });
 
         for (unsigned addr = 0; addr < number_of_channels; addr++)
             callParamCallbacks(addr);
@@ -93,6 +106,30 @@ class UDriver: public asynPortDriver {
         *value = 0;
         if (function == p_scan_task) return read_parameters();
         else return asynPortDriver::readInt32(pasynUser, value);
+    }
+
+    virtual asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value) = 0;
+    asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value) final
+    {
+        const int function = pasynUser->reason;
+        int addr;
+        const char *param_name;
+
+        getAddress(pasynUser, &addr);
+        getParamName(function, &param_name);
+
+        if (function < p_scan_task) {
+            return asynPortDriver::writeInt32(pasynUser, value);
+        }
+
+        if (first_general_parameter >= 0 && addr != 0 && function <= last_general_parameter) {
+            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
+                "writeInt32: %s: general parameter with addr=%d (should be 0)", param_name, addr);
+
+            return asynError;
+        }
+
+        return writeInt32Impl(pasynUser, function, addr, param_name, value);
     }
 };
 

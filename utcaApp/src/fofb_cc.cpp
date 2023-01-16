@@ -2,8 +2,6 @@
 #include <string>
 #include <tuple>
 
-#include <asynPortDriver.h>
-
 #include "fofb_cc.h"
 
 #include "pcie-single.h"
@@ -31,7 +29,7 @@ class FofbCc: public UDriver {
     FofbCc(int port_number):
       UDriver(
           "FOFB_CC", port_number, &dec,
-          ::number_of_channels, p_err_clr, p_bpm_cnt, p_link_partner, p_tx_pck_cnt,
+          ::number_of_channels,
           {
               {"ERR_CLR", p_err_clr},
               {"CC_ENABLE", p_cc_enable},
@@ -78,28 +76,8 @@ class FofbCc: public UDriver {
         write_only = {p_err_clr, p_toa_rd_str, p_rcb_rd_str};
     }
 
-    asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
     {
-        const int function = pasynUser->reason;
-        int addr;
-        const char *param_name;
-
-        getAddress(pasynUser, &addr);
-        getParamName(function, &param_name);
-
-        /* general + channel cover our whole range */
-        if (function < first_general_parameter || function > last_channel_parameter) {
-            return asynPortDriver::writeInt32(pasynUser, value);
-        }
-
-        /* general parameters should have addr=0 */
-        if (addr != 0 && function <= last_general_parameter) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: general parameter with addr=%d (should be =0)", param_name, addr);
-
-            return asynError;
-        }
-
         setIntegerParam(addr, function, value);
 
         auto write_param = [addr, this](auto fn, auto &ctl_value) {
