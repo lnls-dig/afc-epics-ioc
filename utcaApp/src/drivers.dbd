@@ -1,5 +1,6 @@
 # list all drive registrars here so they become available from iocsh
 
+registrar("registerAcq")
 registrar("registerPcie")
 registrar("registerRtmLamp")
 registrar("registerFofbCc")
