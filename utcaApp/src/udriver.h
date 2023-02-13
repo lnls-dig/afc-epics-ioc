@@ -24,6 +24,7 @@ class UDriver: public asynPortDriver {
 
   protected:
     unsigned number_of_channels;
+    int port_number;
 
     std::unordered_set<int> write_only;
 
@@ -40,7 +41,7 @@ class UDriver: public asynPortDriver {
       ),
       generic_decoder(generic_decoder),
       name_and_index(name_and_index), name_and_index_channel(name_and_index_channel),
-      number_of_channels(number_of_channels)
+      number_of_channels(number_of_channels), port_number(port_number)
     {
         /* here, we don't call setIntegerParam to initialize these parameters:
          * - readback ones are expected to be initialized soon via SCAN
