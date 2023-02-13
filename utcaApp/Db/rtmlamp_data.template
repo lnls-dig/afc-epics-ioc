@@ -1,0 +1,16 @@
+# RTMLAMP Data Records
+
+record(aai, "$(S)$(RTM_CHAN)CurrentRawData"){
+    field(DTYP, "asynInt16ArrayIn")
+    field(NELM, "$(NELM)")
+    field(FTVL, "SHORT")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))LAMP_I")
+}
+record(aai, "$(S)$(RTM_CHAN)VoltageRawData"){
+    field(DTYP, "asynInt16ArrayIn")
+    field(NELM, "$(NELM)")
+    field(FTVL, "SHORT")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))LAMP_V")
+}

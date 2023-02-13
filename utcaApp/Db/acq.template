@@ -1,0 +1,200 @@
+# ACQ records
+
+record (mbbo, "$(P)$(R)$(ACQ_NAME)DataType"){
+    field(DTYP, "asynInt32")
+    field(OUT, "@asyn($(PORT))TYPE")
+}
+
+record(longout,"$(P)$(R)$(ACQ_NAME)SamplesPre-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set number of pre samples for waveforms")
+    field(DRVH,"$(NELM)")
+    field(DRVL,"0")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))PRE_SAMPLES")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)SamplesPre-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get number of pre samples for waveforms")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))PRE_SAMPLES")
+}
+
+record(longout,"$(P)$(R)$(ACQ_NAME)SamplesPost-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set number of post samples for waveforms")
+    field(DRVH,"$(NELM)")
+    field(DRVL,"0")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))POST_SAMPLES")
+    field(VAL, "0")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)SamplesPost-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get number of post samples for waveforms")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))POST_SAMPLES")
+    field(VAL, "0")
+}
+
+record(longout,"$(P)$(R)$(ACQ_NAME)Shots-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set number of shots for waveforms")
+    field(DRVH,"100000")
+    field(DRVL,"1")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))NB")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)Shots-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get number of shots for waveforms")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))NB")
+}
+
+record(mbbo, "$(P)$(R)$(ACQ_NAME)Channel-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set acquisition's channel")
+    field(OUT,"@asyn($(PORT))WHICH")
+    field(SCAN,"Passive")
+}
+record(mbbi, "$(P)$(R)$(ACQ_NAME)Channel-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get acquisition's channel")
+    field(INP,"@asyn($(PORT))WHICH")
+    field(SCAN,"I/O Intr")
+}
+
+record(mbbo, "$(P)$(R)$(ACQ_NAME)Trigger-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set acquisition trigger")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))TRIGGER")
+}
+record(mbbi, "$(P)$(R)$(ACQ_NAME)Trigger-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get acquisition trigger")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))TRIGGER")
+}
+
+record(mbbo, "$(P)$(R)$(ACQ_NAME)TriggerEvent-Cmd"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Trigger acquisition event")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))EVENT")
+}
+
+record(mbbo, "$(P)$(R)$(ACQ_NAME)TriggerRep-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set repetitive acquisitions")
+    field(OUT,"@asyn($(PORT))REPETITIVE")
+    field(SCAN,"Passive")
+}
+record(mbbi, "$(P)$(R)$(ACQ_NAME)TriggerRep-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get repetitive acquisitions")
+    field(INP,"@asyn($(PORT))REPETITIVE")
+    field(SCAN,"I/O Intr")
+}
+
+record(ao, "$(P)$(R)$(ACQ_NAME)UpdateTime-SP"){
+    field(DTYP, "asynFloat64")
+    field(DESC, "Set repetitive mode update time")
+    field(EGU, "s")
+    field(DRVH,"100000")
+    field(DRVL,"0.001")
+    field(OUT,"@asyn($(PORT))UPDATE_TIME")
+    field(SCAN,"Passive")
+}
+record(ai, "$(P)$(R)$(ACQ_NAME)UpdateTime-RB"){
+    field(DTYP, "asynFloat64")
+    field(DESC, "Get repetitive mode update time")
+    field(EGU, "s")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))UPDATE_TIME")
+}
+
+record(longout,"$(P)$(R)$(ACQ_NAME)TriggerDataThres-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set data trigger threshold")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))TRIG_DATA_THRES")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)TriggerDataThres-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get data trigger threshold")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))TRIG_DATA_THRES")
+}
+
+record(bo,"$(P)$(R)$(ACQ_NAME)TriggerDataPol-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set data trigger polarity")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))HW_TRIG_POL")
+}
+record(bi,"$(P)$(R)$(ACQ_NAME)TriggerDataPol-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get data trigger polarity")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))HW_TRIG_POL")
+}
+
+record(longout,"$(P)$(R)$(ACQ_NAME)TriggerDataSel-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set data trigger selection")
+    field(DRVH,"31")
+    field(DRVL,"0")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))INT_TRIG_SEL")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)TriggerDataSel-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get data trigger selection")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))INT_TRIG_SEL")
+}
+
+record(longout,"$(P)$(R)$(ACQ_NAME)TriggerDataHyst-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set data trigger hysteresis")
+    field(DRVH,"255")
+    field(DRVL,"0")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))THRES_FILT")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)TriggerDataHyst-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get data trigger hysteresis")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))THRES_FILT")
+}
+
+record(longout,"$(P)$(R)$(ACQ_NAME)TriggerHwDly-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set trigger delay")
+    field(DRVH,"2147483647")
+    field(DRVL,"0")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))TRIG_DLY")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)TriggerHwDly-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get trigger delay")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))TRIG_DLY")
+}
+
+record(mbbo,"$(P)$(R)$(ACQ_NAME)DataTrigChan-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set data-driven trigger channel")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))DTRIG_WHICH")
+}
+record(mbbi,"$(P)$(R)$(ACQ_NAME)DataTrigChan-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get data-driven trigger channel")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))DTRIG_WHICH")
+}
