@@ -17,8 +17,10 @@ utca_registerRecordDeviceDriver pdbbase
 
 pcie("2")
 
-< "iocBoot/${IOC}/rtmlamp.cmd"
+< "iocBoot/${IOC}/acq.cmd"
 < "iocBoot/${IOC}/fofb_cc.cmd"
+# rtmlamp has to be after acq
+< "iocBoot/${IOC}/rtmlamp.cmd"
 < "iocBoot/${IOC}/triggers.cmd"
 
 cd "${TOP}/iocBoot/${IOC}"

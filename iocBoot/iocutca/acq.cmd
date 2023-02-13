@@ -1,0 +1,8 @@
+Acq(0)
+dbLoadRecords("db/acq.template", "P=${P}, R=${R}, ACQ_NAME=LAMP, NELM=${NELM}, PORT=ACQ-0")
+Acq(1)
+dbLoadRecords("db/acq.template", "P=${P}, R=${R}, ACQ_NAME=DCCFMC, NELM=${NELM}, PORT=ACQ-1")
+dbLoadRecords("db/raw_data.template", "P=${P}, R=${R}, ACQ_NAME=DCCFMC, NELM=${NELM}, PORT=ACQ-1")
+Acq(2)
+dbLoadRecords("db/acq.template", "P=${P}, R=${R}, ACQ_NAME=DCCP2P, NELM=${NELM}, PORT=ACQ-2")
+dbLoadRecords("db/raw_data.template", "P=${P}, R=${R}, ACQ_NAME=DCCP2P, NELM=${NELM}, PORT=ACQ-2")
