@@ -239,19 +239,35 @@ void AcqWorker::run()
          * Once that's fixed, the whole loop needs to be changed */
         queue.receive(&msg, sizeof msg);
 
+        /* helper functions to guarantee locking */
+        auto get_result = [this](auto &type) {
+            std::lock_guard g(acq.ctl_lock);
+            return acq.ctl.result<std::remove_reference_t<decltype(type)>>();
+        };
+
+        auto do_callbacks = [this](auto &vec, int parameter, int addr) -> asynStatus {
+            using vec_type = std::remove_reference_t<decltype(vec)>;
+            using value_type = typename vec_type::value_type;
+
+            std::lock_guard g(acq);
+
+            if constexpr (std::is_same_v<value_type, int32_t>)
+                return acq.doCallbacksInt32Array(vec.data(), vec.size(), parameter, addr);
+            else if constexpr (std::is_same_v<value_type, int16_t>)
+                return acq.doCallbacksInt16Array(vec.data(), vec.size(), parameter, addr);
+            else
+                static_assert(!sizeof(value_type)); /* has to depend on template parameter */
+        };
+
         if (msg.command == acq_command::start) {
             if (msg.type == data_type::raw) {
-                acq.ctl_lock.lock();
-                auto rv = acq.ctl.result<int32_t>();
-                acq.ctl_lock.unlock();
+                int32_t type;
+                auto rv = get_result(type);
 
-                acq.lock();
-                acq.doCallbacksInt32Array(rv.data(), rv.size(), acq.p_raw_data, 0);
-                acq.unlock();
+                do_callbacks(rv, acq.p_raw_data, 0);
             } else if (msg.type == data_type::lamp) {
-                acq.ctl_lock.lock();
-                auto rv = acq.ctl.result<int16_t>();
-                acq.ctl_lock.unlock();
+                int16_t type;
+                auto rv = get_result(type);
 
                 auto len = rv.size() / 32;
                 std::vector<int16_t> scratch(len);
@@ -259,16 +275,12 @@ void AcqWorker::run()
                     for (size_t i = 0; i < len; i++) {
                         scratch[i] = rv[addr + i * 32];
                     }
-                    acq.lock();
-                    acq.doCallbacksInt16Array(scratch.data(), scratch.size(), acq.p_lamp_current_data, addr);
-                    acq.unlock();
+                    do_callbacks(scratch, acq.p_lamp_current_data, addr);
 
                     for (size_t i = 0; i < len; i++) {
                         scratch[i] = rv[addr + 12 + i * 32];
                     }
-                    acq.lock();
-                    acq.doCallbacksInt16Array(scratch.data(), scratch.size(), acq.p_lamp_voltage_data, addr);
-                    acq.unlock();
+                    do_callbacks(scratch, acq.p_lamp_voltage_data, addr);
                 }
             }
 
