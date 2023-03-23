@@ -49,6 +49,9 @@ namespace {
 class AcqWorker: public epicsThreadRunable {
     class Acq &acq;
 
+    /* scratch vectors to avoid repeated allocations */
+    std::vector<int16_t> i16scratch;
+
   public:
     AcqWorker(Acq &acq): acq(acq) { }
 
@@ -275,17 +278,17 @@ void AcqWorker::run()
                 auto rv = acq.ctl.get_result<int16_t>();
 
                 auto len = rv.size() / 32;
-                std::vector<int16_t> scratch(len);
+                i16scratch.resize(len);
                 for (int addr = 0; addr < 12; addr++) {
                     for (size_t i = 0; i < len; i++) {
-                        scratch[i] = rv[addr + i * 32];
+                        i16scratch[i] = rv[addr + i * 32];
                     }
-                    do_callbacks(scratch, acq.p_lamp_current_data, addr);
+                    do_callbacks(i16scratch, acq.p_lamp_current_data, addr);
 
                     for (size_t i = 0; i < len; i++) {
-                        scratch[i] = rv[addr + 12 + i * 32];
+                        i16scratch[i] = rv[addr + 12 + i * 32];
                     }
-                    do_callbacks(scratch, acq.p_lamp_voltage_data, addr);
+                    do_callbacks(i16scratch, acq.p_lamp_voltage_data, addr);
                 }
             }
 
