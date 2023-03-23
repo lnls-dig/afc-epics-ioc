@@ -12,6 +12,8 @@ cd "${TOP}"
 dbLoadDatabase "dbd/utca.dbd"
 utca_registerRecordDeviceDriver pdbbase
 
+var dbRecordsOnceOnly 1
+
 ## Run this to trace the stages of iocInit
 #traceIocInit
 
