@@ -1,0 +1,8 @@
+# RTM LAMP parameters
+
+record(longin,"$(P)$(R)PSStatus-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get rtm lamp status register")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))PS_STATUS")
+}
