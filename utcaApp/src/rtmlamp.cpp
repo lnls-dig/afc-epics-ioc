@@ -16,7 +16,7 @@ class RtmLamp: public UDriver {
     lamp::ControllerV2 ctl;
 
     int p_psstatus;
-    int p_overcurr_l, p_overtemp_l, p_overcurr_r, p_overtemp_r,
+    int p_ampstatus,
         p_pwrstate, p_opmode, p_trigen, p_loopkp, p_loopti,
         p_testwaveperiod, p_testlim_a, p_testlim_b,
         p_pi_sp, p_dac, p_eff_adc, p_eff_dac, p_eff_sp;
@@ -30,10 +30,7 @@ class RtmLamp: public UDriver {
               {"PS_STATUS", p_psstatus},
           },
           {
-              {"AMP_IFLAG_L", p_overcurr_l},
-              {"AMP_TFLAG_L", p_overtemp_l},
-              {"AMP_IFLAG_R", p_overcurr_r},
-              {"AMP_TFLAG_R", p_overtemp_r},
+              {"AMP_STATUS", p_ampstatus},
               {"AMP_EN", p_pwrstate},
               {"MODE", p_opmode},
               {"TRIG_EN", p_trigen},
