@@ -15,7 +15,7 @@ utca_registerRecordDeviceDriver pdbbase
 ## Run this to trace the stages of iocInit
 #traceIocInit
 
-pcie("2")
+pcie(6)
 
 < "iocBoot/${IOC}/acq.cmd"
 < "iocBoot/${IOC}/fofb_cc.cmd"
