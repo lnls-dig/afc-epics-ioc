@@ -1,11 +1,4 @@
-# RTM LAMP parameters
-
-record(bi,"$(P)$(R)PSStatus-Mon"){
-    field(DTYP,"asynInt32")
-    field(DESC,"get rtm lamp status register")
-    field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT),0)PS_STATUS")
-}
+# RTM LAMP per-channel parameters
 
 record(mbbi,"$(S)$(RTM_CHAN)PSAmpOverCurrFlagL-Mon"){
     field(DTYP,"asynInt32")

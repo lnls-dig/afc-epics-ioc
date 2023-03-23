@@ -2,7 +2,7 @@ file db/scan_task.template {
     {}
 }
 
-file db/rtmlamp.template {
+file db/rtmlamp_channel.template {
     pattern {RTM_CHAN, ADDR}
     {"M1:PS-FCH:", "0"}
     {"M1:PS-FCV:", "1"}
