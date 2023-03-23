@@ -232,18 +232,23 @@ class Acq: public UDriver {
 
 void AcqWorker::run()
 {
+    bool ongoing = false;
+
     while (1) {
         AcqMessage msg;
-        /* TODO: this receive() call is blocking, which is fine for now because
-         * the acquisition itself is blocking as well.
-         * Once that's fixed, the whole loop needs to be changed */
-        queue.receive(&msg, sizeof msg);
-
-        /* helper functions to guarantee locking */
-        auto get_result = [this](auto &type) {
-            std::lock_guard g(acq.ctl_lock);
-            return acq.ctl.result<std::remove_reference_t<decltype(type)>>();
-        };
+        /* block in queue if there is no acquisition happening */
+        if ((ongoing && queue.tryReceive(&msg, sizeof msg) != -1) ||
+            (!ongoing && queue.receive(&msg, sizeof msg) != -1)) {
+            if (msg.command == acq_command::start && !ongoing) {
+                std::lock_guard g(acq.ctl_lock);
+                acq.ctl.start_acquisition();
+                ongoing = true;
+            }
+            if (msg.command == acq_command::stop) {
+                acq.ctl.stop_acquisition();
+                ongoing = false;
+            }
+        }
 
         auto do_callbacks = [this](auto &vec, int parameter, int addr) -> asynStatus {
             using vec_type = std::remove_reference_t<decltype(vec)>;
@@ -259,15 +264,15 @@ void AcqWorker::run()
                 static_assert(!sizeof(value_type)); /* has to depend on template parameter */
         };
 
-        if (msg.command == acq_command::start) {
+        if (ongoing && acq.ctl.result_async() == acq::acq_status::success) {
+            ongoing = false;
+
             if (msg.type == data_type::raw) {
-                int32_t type;
-                auto rv = get_result(type);
+                auto rv = acq.ctl.get_result<int32_t>();
 
                 do_callbacks(rv, acq.p_raw_data, 0);
             } else if (msg.type == data_type::lamp) {
-                int16_t type;
-                auto rv = get_result(type);
+                auto rv = acq.ctl.get_result<int16_t>();
 
                 auto len = rv.size() / 32;
                 std::vector<int16_t> scratch(len);
