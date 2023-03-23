@@ -14,7 +14,7 @@
 class UDriver: public asynPortDriver {
     RegisterDecoder *generic_decoder;
 
-    int p_scan_task;
+    int p_scan_task, p_counter;
 
     int first_general_parameter = -1, last_general_parameter = -1,
         first_channel_parameter = -1, last_channel_parameter = -1;
@@ -51,6 +51,9 @@ class UDriver: public asynPortDriver {
          *   into */
 
         createParam("SCAN_TASK", asynParamInt32, &p_scan_task);
+
+        createParam("COUNTER", asynParamInt32, &p_counter);
+        setIntegerParam(p_counter, 0);
 
         auto create_params = [this](auto const &nai, auto &first_param, auto &last_param) {
             for (auto &&[i, v]: enumerate(nai)) {
@@ -93,6 +96,10 @@ class UDriver: public asynPortDriver {
                 for (unsigned addr = 0; addr < number_of_channels; addr++)
                     setIntegerParam(addr, p, generic_decoder->get_channel_data(param_name, addr));
             });
+
+        epicsInt32 counter;
+        getIntegerParam(0, p_counter, &counter);
+        setIntegerParam(0, p_counter, counter++);
 
         for (unsigned addr = 0; addr < number_of_channels; addr++)
             callParamCallbacks(addr);

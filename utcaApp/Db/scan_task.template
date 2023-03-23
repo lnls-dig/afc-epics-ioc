@@ -6,3 +6,9 @@ record(longin,"$(PORT)ScanTask"){
     field(SCAN,".1 second")
     field(INP,"@asyn($(PORT))SCAN_TASK")
 }
+
+record(longin,"$(PORT)Counter"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))COUNTER")
+}
