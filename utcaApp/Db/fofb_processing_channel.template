@@ -1,0 +1,275 @@
+# FOFB Processing database file (per-channel records)
+
+record(mbbo, "$(S)$(RTM_CHAN)OpMode-Sel"){
+    field(DESC, "FOFB operation mode")
+    field(SCAN, "Passive")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(ZRST, "manual")
+    field(ONST, "fofb")
+    field(FLNK, "$(S)$(RTM_CHAN)OpModeHelperChooseOperation PP")
+}
+record(mbbi, "$(S)$(RTM_CHAN)OpMode-Sts"){
+    field(DESC, "FOFB operation mode")
+    field(SCAN, "Passive")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(ZRST, "manual")
+    field(ONST, "fofb")
+    field(TWST, "unknown")
+}
+
+# OpMode starts here, by choosing which operation we are going to run
+record(calcout, "$(S)$(RTM_CHAN)OpModeHelperChooseOperation"){
+    field(SCAN, "Passive")
+    field(INPA, "$(S)$(RTM_CHAN)OpMode-Sel")
+    field(CALC, "(A=1) ? 2 : 1")
+    field(OUT, "$(S)$(RTM_CHAN)OpModeHelperTriggerOperation.SELN PP")
+}
+record(fanout, "$(S)$(RTM_CHAN)OpModeHelperTriggerOperation"){
+    field(SCAN, "Passive")
+    field(SELM, "Specified")
+    field(SELL, "0")
+    field(LNK1, "$(S)$(RTM_CHAN)OpModeHelperManualFanout PP")
+    field(LNK2, "$(S)$(RTM_CHAN)OpModeHelperSetPSMode PP")
+}
+
+# pause accumulator + copy current happens only for MANUAL
+record(fanout, "$(S)$(RTM_CHAN)OpModeHelperManualFanout") {
+    field(SCAN, "Passive")
+    field(SELM, "All")
+    field(LNK0, "$(S)$(RTM_CHAN)OpModeHelperPauseAccumulator PP")
+    field(LNK1, "$(LAMP_PORT):ScanTaskPassive PP")
+    field(LNK2, "$(S)$(RTM_CHAN)OpModeHelperCopyCurrent PP")
+    field(LNK3, "$(S)$(RTM_CHAN)OpModeHelperSetPSMode PP")
+}
+record(longout, "$(S)$(RTM_CHAN)OpModeHelperPauseAccumulator"){
+    field(SCAN, "Passive")
+    field(VAL, "1")
+    field(OUT, "$(S)$(RTM_CHAN)FOFBAccFreeze-Sel PP")
+}
+record(longin, "$(S)$(RTM_CHAN)CurrentRawRefPassive"){
+    field(SCAN, "Passive")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(LAMP_PORT),$(ADDR))SP_EFF")
+}
+record(calcout, "$(S)$(RTM_CHAN)OpModeHelperCopyCurrent"){
+    field(SCAN, "Passive")
+    field(INPA, "$(S)$(RTM_CHAN)CurrentRawRefPassive PP")
+    field(CALC, "A")
+    field(OUT, "$(S)$(RTM_CHAN)CurrentRaw-SP PP")
+}
+
+# set ps mode + (possibly) resume accumulator happens for both!
+record(calcout, "$(S)$(RTM_CHAN)OpModeHelperSetPSMode"){
+    field(SCAN, "Passive")
+    field(INPA, "$(S)$(RTM_CHAN)OpMode-Sel")
+    field(CALC, "(A=1) ? 4 : 2")
+    field(OUT, "$(S)$(RTM_CHAN)CurrLoopMode-Sel PP")
+    field(FLNK, "$(S)$(RTM_CHAN)OpModeHelperResumeAccumulator PP")
+}
+record(calcout, "$(S)$(RTM_CHAN)OpModeHelperResumeAccumulator"){
+    field(SCAN, "Passive")
+    field(INPA, "$(S)$(RTM_CHAN)OpMode-Sel")
+    # if in fofb mode, resume accumulator
+    field(CALC, "(A=1) ? 0 : 1")
+    field(OUT, "$(S)$(RTM_CHAN)FOFBAccFreeze-Sel PP")
+}
+
+# propagate CurrLoopMode-Sts back to OpMode-Sts
+record(calcout, "$(S)$(RTM_CHAN)OpModeHelperSetOpMode"){
+    field(SCAN, "Passive")
+    field(INPA, "$(S)$(RTM_CHAN)CurrLoopMode-Sts CP")
+    field(CALC, "(A=2) ? 0 : ((A=4) ? 1 : 2)")
+    field(OUT, "$(S)$(RTM_CHAN)OpMode-Sts PP")
+}
+
+record(longout, "$(S)$(RTM_CHAN)FOFBAccDecimation-SP"){
+    field(DESC, "FOFBAcc-Mon decimation ration")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))CH_SP_DECIM_RATIO")
+    field(VAL, 1)
+    field(DRVL, 1)
+    field(PINI, 1)
+}
+record(longin, "$(S)$(RTM_CHAN)FOFBAccDecimation-RB"){
+    field(DESC, "FOFBAcc-Mon decimation ration")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))CH_SP_DECIM_RATIO")
+}
+
+record(longin, "$(S)$(RTM_CHAN)FOFBAccRaw-Mon"){
+    field(DESC, "FOFB accumulator decimated value")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))CH_SP_DECIM_DATA")
+}
+record(calc, "$(S)$(RTM_CHAN)FOFBAcc-Mon"){
+    field(DESC, "FOFB accumulator decimated value")
+    field(INPA, "$(S)$(RTM_CHAN)FOFBAccRaw-Mon")
+    field(INPB, "$(S)$(RTM_CHAN)CurrGain-SP")
+    field(INPC, "$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(INPD, "$(S)$(RTM_CHAN)FOFBAccDecimation-RB")
+    field(CALC,"B*(A/D - C)")
+}
+
+record(ao, "$(S)$(RTM_CHAN)FOFBAccGain-SP"){
+    field(DESC, "Accumulator gain")
+    field(DTYP, "asynFloat64")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))CH_ACC_GAIN")
+    field(PINI, "YES")
+    field(VAL, "0.0")
+}
+record(ai, "$(S)$(RTM_CHAN)FOFBAccGain-RB"){
+    field(DESC, "Accumulator gain")
+    field(DTYP, "asynFloat64")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))CH_ACC_GAIN")
+}
+
+record(bo, "$(S)$(RTM_CHAN)FOFBAccFreeze-Sel"){
+    field(DESC, "Freeze accumulator")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))CH_ACC_CTL_FREEZE")
+    field(PINI, "YES")
+    field(ZNAM, "unfrozen")
+    field(ONAM, "frozen")
+}
+record(bi, "$(S)$(RTM_CHAN)FOFBAccFreeze-Sts"){
+    field(DESC, "Freeze accumulator")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))CH_ACC_CTL_FREEZE")
+    field(ZNAM, "unfrozen")
+    field(ONAM, "frozen")
+}
+
+record(bo, "$(S)$(RTM_CHAN)FOFBAccClear-Cmd"){
+    field(DESC, "Clear accumulator")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))CH_ACC_CTL_CLEAR")
+    field(PINI, "YES")
+    field(MASK, "1")
+    field(HIGH, "1")
+    field(ZNAM, "nothing")
+    field(ONAM, "clear_accumulator")
+}
+
+record(longout, "$(S)$(RTM_CHAN)FOFBAccSatMaxRaw-SP"){
+    field(DESC, "Set ctrl max current")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))CH_ACC_LIMITS_MAX")
+}
+record(longin, "$(S)$(RTM_CHAN)FOFBAccSatMaxRaw-RB"){
+    field(DESC, "Get ctrl max current")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))CH_ACC_LIMITS_MAX")
+}
+
+record(ao, "$(S)$(RTM_CHAN)FOFBAccSatMax-SP"){
+    field(DESC, "Set ctrl max current")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(EGU, "A")
+    field(DRVH,"0.95")
+    field(DRVL,"-0.95")
+    field(FLNK, "$(S)$(RTM_CHAN)FOFBAccSatMaxConv PP")
+}
+record(calcout, "$(S)$(RTM_CHAN)FOFBAccSatMaxConv"){
+    field(SCAN,"Passive")
+    field(INPA,"$(S)$(RTM_CHAN)FOFBAccSatMax-SP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(CALC,"A/B+C")
+    field(OUT,"$(S)$(RTM_CHAN)FOFBAccSatMaxRaw-SP PP")
+}
+record(calc, "$(S)$(RTM_CHAN)FOFBAccSatMax-RB"){
+    field(DESC, "Get ctrl max current")
+    field(EGU, "A")
+    field(INPA,"$(S)$(RTM_CHAN)FOFBAccSatMaxRaw-RB CP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(CALC,"B*(A-C)")
+}
+
+record(longout, "$(S)$(RTM_CHAN)FOFBAccSatMinRaw-SP"){
+    field(DESC, "Set ctrl min current")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))CH_ACC_LIMITS_MIN")
+}
+record(longin, "$(S)$(RTM_CHAN)FOFBAccSatMinRaw-RB"){
+    field(DESC, "Get ctrl min current")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))CH_ACC_LIMITS_MIN")
+}
+
+record(ao, "$(S)$(RTM_CHAN)FOFBAccSatMin-SP"){
+    field(DESC, "Set ctrl min current")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(EGU, "A")
+    field(DRVH,"0.95")
+    field(DRVL,"-0.95")
+    field(FLNK, "$(S)$(RTM_CHAN)FOFBAccSatMinConv PP")
+}
+record(calcout, "$(S)$(RTM_CHAN)FOFBAccSatMinConv"){
+    field(SCAN,"Passive")
+    field(INPA,"$(S)$(RTM_CHAN)FOFBAccSatMin-SP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(CALC,"A/B+C")
+    field(OUT,"$(S)$(RTM_CHAN)FOFBAccSatMinRaw-SP PP")
+}
+record(calc, "$(S)$(RTM_CHAN)FOFBAccSatMin-RB"){
+    field(DESC, "Get ctrl min current")
+    field(EGU, "A")
+    field(INPA,"$(S)$(RTM_CHAN)FOFBAccSatMinRaw-RB CP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(CALC,"B*(A-C)")
+}
+
+record(aao, "$(S)$(RTM_CHAN)InvRespMatRowX-SP"){
+    field(DESC, "Set FOFB X coefficients")
+    field(DTYP, "asynFloat64ArrayOut")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))CH_COEFFS_X")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(BPMS)")
+    field(PINI, "YES")
+}
+record(aai, "$(S)$(RTM_CHAN)InvRespMatRowX-RB"){
+    field(DESC, "Get FOFB X coefficients")
+    field(DTYP, "asynFloat64ArrayIn")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))CH_COEFFS_X")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(BPMS)")
+}
+record(aao, "$(S)$(RTM_CHAN)InvRespMatRowY-SP"){
+    field(DESC, "Set FOFB Y coefficients")
+    field(DTYP, "asynFloat64ArrayOut")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))CH_COEFFS_Y")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(BPMS)")
+    field(PINI, "YES")
+}
+record(aai, "$(S)$(RTM_CHAN)InvRespMatRowY-RB"){
+    field(DESC, "Get FOFB Y coefficients")
+    field(DTYP, "asynFloat64ArrayIn")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))CH_COEFFS_Y")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(BPMS)")
+}

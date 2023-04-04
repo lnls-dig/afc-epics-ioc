@@ -1,0 +1,25 @@
+file db/scan_task.template {
+    {}
+}
+
+global {BPMS=160}
+
+file db/fofb_processing.template {
+    {}
+}
+
+file db/fofb_processing_channel.template {
+    pattern {RTM_CHAN, ADDR}
+    {"M1:PS-FCH:", "0"}
+    {"M1:PS-FCV:", "1"}
+    {"M2:PS-FCH:", "2"}
+    {"M2:PS-FCV:", "3"}
+    {"C2:PS-FCH:", "4"}
+    {"C2:PS-FCV:", "5"}
+    {"C3:PS-FCH:", "6"}
+    {"C3:PS-FCV:", "7"}
+    {"XX:PS-FC08:", "8"}
+    {"XX:PS-FC09:", "9"}
+    {"XX:PS-FC10:", "10"}
+    {"XX:PS-FC11:", "11"}
+}
