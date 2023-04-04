@@ -90,12 +90,12 @@ class UDriver: public asynPortDriver {
 
         get_params(first_general_parameter, last_general_parameter,
             [this](int p, const char *param_name)
-            { setIntegerParam(0, p, generic_decoder->get_general_data(param_name)); });
+            { setIntegerParam(0, p, generic_decoder->get_general_data<int32_t>(param_name)); });
         get_params(first_channel_parameter, last_channel_parameter,
             [this](int p, const char *param_name)
             {
                 for (unsigned addr = 0; addr < number_of_channels; addr++)
-                    setIntegerParam(addr, p, generic_decoder->get_channel_data(param_name, addr));
+                    setIntegerParam(addr, p, generic_decoder->get_channel_data<int32_t>(param_name, addr));
             });
 
         epicsInt32 counter;
