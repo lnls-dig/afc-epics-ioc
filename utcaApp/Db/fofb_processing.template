@@ -1,0 +1,126 @@
+# Global FOFB Processing records
+
+record(bo, "$(P)$(R)MaxOrbDistortionEnbl-Sel"){
+    field(DESC, "Enable FOFB orbit interlock")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))INTLK_CTL_SRC_EN_ORB_DISTORT")
+    field(ZNAM, "disabled")
+    field(ONAM, "enabled")
+}
+record(bi, "$(P)$(R)MaxOrbDistortionEnbl-Sts"){
+    field(DESC, "Enable FOFB orbit interlock")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))INTLK_CTL_SRC_EN_ORB_DISTORT")
+    field(ZNAM, "disabled")
+    field(ONAM, "enabled")
+}
+
+record(bo, "$(P)$(R)MinBPMCntEnbl-Sel"){
+    field(DESC, "Enable FOFB packet loss interlock")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))INTLK_CTL_SRC_EN_PACKET_LOSS")
+    field(ZNAM, "disabled")
+    field(ONAM, "enabled")
+}
+record(bi, "$(P)$(R)MinBPMCntEnbl-Sts"){
+    field(DESC, "Enable FOFB packet loss interlock")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))INTLK_CTL_SRC_EN_PACKET_LOSS")
+    field(ZNAM, "disabled")
+    field(ONAM, "enabled")
+}
+
+record(bo, "$(P)$(R)LoopIntlkReset-Cmd"){
+    field(DESC, "Clear FOFB error flags")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))INTLK_CTL_CLR")
+    field(MASK, "1")
+    field(HIGH, "1")
+    field(ZNAM, "nothing")
+    field(ONAM, "clear_flags")
+}
+
+record(longin, "$(P)$(R)LoopIntlk-Mon"){
+    field(DESC, "Monitor FOFB interlock status")
+    field(DTYP, "asynInt32")
+    field(SCAN, ".1 second")
+    field(INP, "@asyn($(PORT))INTLK_STA")
+    field(HIHI, "1")
+}
+record(waveform, "$(P)$(R)LoopIntlkLabels-Cte"){
+    field(DESC, "Labels for each bit in LoopIntlk-Mon")
+    field(FTVL, "STRING")
+    field(NELM, "2")
+    field(INP,
+        ["orbit distortion flag", "packet loss flag"]
+    )
+    field(PINI, YES)
+}
+
+record(longout, "$(P)$(R)MaxOrbDistortion-SP"){
+    field(DESC, "Max orbit distortion for FOFB interlock")
+    field(EGU, "nm")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(OUT, "@asyn($(PORT))INTLK_ORB_DISTORT_LIMIT")
+}
+record(longin, "$(P)$(R)MaxOrbDistortion-RB"){
+    field(DESC, "Max orbit distortion for FOFB interlock")
+    field(EGU, "nm")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))INTLK_ORB_DISTORT_LIMIT")
+}
+
+record(longout, "$(P)$(R)MinBPMCnt-SP"){
+    field(DESC, "Min packets for for FOFB interlock")
+    field(DTYP, "asynInt32")
+    field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(OUT, "@asyn($(PORT))INTLK_MIN_NUM_PACKETS")
+}
+record(longin, "$(P)$(R)MinBPMCnt-RB"){
+    field(DESC, "Min packets for FOFB interlock")
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))INTLK_MIN_NUM_PACKETS")
+}
+
+record(aao, "$(P)$(R)RefOrbX-SP"){
+    field(DESC, "Set reference orbit")
+    field(DTYP, "asynInt32ArrayOut")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))REF_ORBIT_X")
+    field(FTVL, "LONG")
+    field(NELM, "$(BPMS)")
+}
+record(aai, "$(P)$(R)RefOrbX-RB"){
+    field(DESC, "Get reference orbit")
+    field(DTYP, "asynInt32ArrayIn")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))REF_ORBIT_X")
+    field(FTVL, "LONG")
+    field(NELM, "$(BPMS)")
+}
+record(aao, "$(P)$(R)RefOrbY-SP"){
+    field(DESC, "Set reference orbit")
+    field(DTYP, "asynInt32ArrayOut")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))REF_ORBIT_Y")
+    field(FTVL, "LONG")
+    field(NELM, "$(BPMS)")
+}
+record(aai, "$(P)$(R)RefOrbY-RB"){
+    field(DESC, "Get reference orbit")
+    field(DTYP, "asynInt32ArrayIn")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))REF_ORBIT_Y")
+    field(FTVL, "LONG")
+    field(NELM, "$(BPMS)")
+}
