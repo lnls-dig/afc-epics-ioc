@@ -1,6 +1,8 @@
+#include <chrono>
 #include <mutex>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <tuple>
 #include <unordered_set>
 
@@ -236,6 +238,7 @@ class Acq: public UDriver {
 void AcqWorker::run()
 {
     bool ongoing = false;
+    std::chrono::time_point<std::chrono::steady_clock> start_time;
 
     while (1) {
         AcqMessage msg;
@@ -246,6 +249,7 @@ void AcqWorker::run()
                 std::lock_guard g(acq.ctl_lock);
                 acq.ctl.start_acquisition();
                 ongoing = true;
+                start_time = std::chrono::steady_clock::now();
             }
             if (msg.command == acq_command::stop) {
                 acq.ctl.stop_acquisition();
@@ -300,7 +304,8 @@ void AcqWorker::run()
                 acq.getDoubleParam(acq.p_update_time, &update_time);
             }
             if (repetitive == (int)repetitive_trigger::repetitive) {
-                epicsThreadSleep(update_time);
+                using namespace std::chrono_literals;
+                std::this_thread::sleep_until(start_time + update_time * 1s);
                 queue.send(&msg, sizeof msg);
             }
         }
