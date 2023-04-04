@@ -9,7 +9,7 @@ record(longin, "$(S)$(RTM_CHAN)AlarmsAmp-Mon"){
     field(HHSV, "MAJOR")
 }
 
-record(waveform, "$(S)$(RTM_CHAN)AlarmsAmp-Cte"){
+record(waveform, "$(S)$(RTM_CHAN)AlarmsAmpLabels-Cte"){
     field(DESC, "Labels for each bit in AlarmsAmp-Mon")
     field(FTVL, "STRING")
     field(NELM, "4")
