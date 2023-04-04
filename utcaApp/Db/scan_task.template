@@ -3,7 +3,7 @@
 record(longin,"$(PORT):ScanTask"){
     field(DTYP,"asynInt32")
     field(DESC,"trigger scans")
-    field(SCAN,".1 second")
+    field(SCAN,"$(SCAN_PERIOD=.1) second")
     field(INP,"@asyn($(PORT))SCAN_TASK")
 }
 
