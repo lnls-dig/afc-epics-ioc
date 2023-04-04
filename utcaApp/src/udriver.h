@@ -15,6 +15,7 @@ class UDriver: public asynPortDriver {
     RegisterDecoder *generic_decoder;
 
     int p_scan_task, p_counter;
+    unsigned scan_counter = 0;
 
     int first_general_parameter = -1, last_general_parameter = -1,
         first_channel_parameter = -1, last_channel_parameter = -1;
@@ -99,7 +100,7 @@ class UDriver: public asynPortDriver {
 
         epicsInt32 counter;
         getIntegerParam(0, p_counter, &counter);
-        setIntegerParam(0, p_counter, counter++);
+        setIntegerParam(0, p_counter, counter+1);
 
         for (unsigned addr = 0; addr < number_of_channels; addr++)
             callParamCallbacks(addr);
@@ -111,8 +112,10 @@ class UDriver: public asynPortDriver {
     {
         const int function = pasynUser->reason;
 
-        *value = 0;
-        if (function == p_scan_task) return read_parameters();
+        if (function == p_scan_task) {
+            *value = scan_counter++;
+            return read_parameters();
+        }
         else return asynPortDriver::readInt32(pasynUser, value);
     }
 
