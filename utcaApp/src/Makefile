@@ -48,6 +48,9 @@ utca_SRCS += utca_registerRecordDeviceDriver.cpp
 utca_SRCS_DEFAULT += utcaMain.cpp
 utca_SRCS_vxWorks += -nil-
 
+utca_DBD += PVAServerRegister.dbd qsrv.dbd
+utca_LIBS += qsrv $(EPICS_BASE_PVA_CORE_LIBS)
+
 # Finally link IOC to the EPICS Base libraries
 utca_LIBS += $(EPICS_BASE_IOC_LIBS)
 
