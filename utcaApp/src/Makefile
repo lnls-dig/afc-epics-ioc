@@ -21,6 +21,7 @@ utca_DBD += asyn.dbd
 
 utca_SRCS += pcie-single.cpp acq.cpp fofb_cc.cpp rtmlamp.cpp trigger_iface.cpp trigger_mux.cpp
 utca_DBD += drivers.dbd
+utca_DBD += menuScan.dbd
 
 UHAL = $(EPICS_BASE)/../uhal
 UHAL_LIBS = $(UHAL)/lib/x86_64-linux-gnu
