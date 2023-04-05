@@ -17,7 +17,7 @@ var dbRecordsOnceOnly 1
 ## Run this to trace the stages of iocInit
 #traceIocInit
 
-pcie(6)
+pcie("${SLOT}")
 
 < "iocBoot/${IOC}/acq.cmd"
 < "iocBoot/${IOC}/fofb_cc.cmd"
