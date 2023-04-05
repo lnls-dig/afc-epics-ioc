@@ -62,7 +62,7 @@ record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvCntRst-Cmd"){
     field(OUT,"@asyn($(PORT),$(ADDR))RCV_COUNT_RST")
 }
 
-record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnCntRst-SP"){
+record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnCntRst-Cmd"){
     field(DTYP,"asynInt32")
     field(DESC,"Reset trigger transmit counter")
     field(PINI,"YES")
