@@ -12,18 +12,22 @@ record(bo,"$(P)$(R)$(FOFB_CC)ErrClr-Cmd"){
     field(OUT,"@asyn($(PORT))ERR_CLR")
 }
 
-record(longout,"$(P)$(R)$(FOFB_CC)CCEnable-SP"){
+record(bo,"$(P)$(R)$(FOFB_CC)CCEnable-Sel"){
     field(DTYP,"asynInt32")
     field(DESC,"set enables CC module")
     field(SCAN,"Passive")
     field(OUT,"@asyn($(PORT))CC_ENABLE")
     field(PINI,"YES")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
 }
-record(longin,"$(P)$(R)$(FOFB_CC)CCEnable-RB"){
+record(bi,"$(P)$(R)$(FOFB_CC)CCEnable-Sts"){
     field(DTYP,"asynInt32")
     field(DESC,"get enables CC module")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT))CC_ENABLE")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
 }
 
 record(longout,"$(P)$(R)$(FOFB_CC)TFSOverride-SP"){
