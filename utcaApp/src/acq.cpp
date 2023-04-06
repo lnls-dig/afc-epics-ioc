@@ -303,7 +303,8 @@ void AcqWorker::run()
                 acq.getIntegerParam(acq.p_repetitive, &repetitive);
                 acq.getDoubleParam(acq.p_update_time, &update_time);
             }
-            if (repetitive == (int)repetitive_trigger::repetitive) {
+            /* only start a new acquisition if there is no incoming command */
+            if (repetitive == (int)repetitive_trigger::repetitive && queue.pending() == 0) {
                 using namespace std::chrono_literals;
                 std::this_thread::sleep_until(start_time + update_time * 1s);
                 queue.send(&msg, sizeof msg);
