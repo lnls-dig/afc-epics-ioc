@@ -98,6 +98,8 @@ class RtmLamp: public UDriver {
             return asynError;
         }
 
+        read_parameters();
+
         return asynSuccess;
     }
 };
