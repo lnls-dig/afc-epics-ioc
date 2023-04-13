@@ -71,15 +71,8 @@ class FofbProcessing: public UDriver {
     {
         UDriver::read_parameters();
 
-        doCallbacksInt32Array(dec.ref_orb_x.data(), dec.ref_orb_x.size(), p_reforb_x, 0);
-        doCallbacksInt32Array(dec.ref_orb_y.data(), dec.ref_orb_y.size(), p_reforb_y, 0);
-
-        for (unsigned addr = 0; addr < ::number_of_channels; addr++) {
-            doCallbacksFloat64Array(dec.coefficients_x[addr].data(), dec.coefficients_x[addr].size(), p_coeffs_x, addr);
-            doCallbacksFloat64Array(dec.coefficients_y[addr].data(), dec.coefficients_y[addr].size(), p_coeffs_y, addr);
-
+        for (unsigned addr = 0; addr < ::number_of_channels; addr++)
             setDoubleParam(addr, p_acc_gain, dec.get_channel_data<double>("CH_ACC_GAIN", addr));
-        }
 
         return asynSuccess;
     }
@@ -150,6 +143,11 @@ class FofbProcessing: public UDriver {
         ctl.write_params();
         read_parameters();
 
+        if (function == p_reforb_x)
+            doCallbacksInt32Array(dec.ref_orb_x.data(), dec.ref_orb_x.size(), p_reforb_x, 0);
+        if (function == p_reforb_y)
+            doCallbacksInt32Array(dec.ref_orb_y.data(), dec.ref_orb_y.size(), p_reforb_y, 0);
+
         return asynSuccess;
     }
 
@@ -168,6 +166,11 @@ class FofbProcessing: public UDriver {
 
         ctl.write_params();
         read_parameters();
+
+        if (function == p_coeffs_x)
+            doCallbacksFloat64Array(dec.coefficients_x[addr].data(), dec.coefficients_x[addr].size(), p_coeffs_x, addr);
+        if (function == p_coeffs_y)
+            doCallbacksFloat64Array(dec.coefficients_y[addr].data(), dec.coefficients_y[addr].size(), p_coeffs_y, addr);
 
         return asynSuccess;
     }
