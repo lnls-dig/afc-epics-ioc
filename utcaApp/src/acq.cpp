@@ -18,16 +18,17 @@
 namespace {
     const unsigned number_of_channels = 24;
 
-    enum class data_type {raw, lamp, last};
-    const char *const data_type_strings[(int)data_type::last] = {"raw", "lamp"};
+    enum class data_type {raw, lamp, sysid, last};
+    const char *const data_type_strings[(int)data_type::last] = {"raw", "lamp", "sysid"};
 
     enum class polarity {positive, negative, last};
     const char *const polarity_strings[(int)polarity::last] = {"positive", "negative"};
 
-    enum class channel_organizations {lamp, dcc, last};
+    enum class channel_organizations {lamp, dcc, sysid, last};
     const char *const channel_strings[16][(int)channel_organizations::last] = {
-        {"lamp", "invalid"},
-        {"invalid", "fofb"},
+        {"lamp", "invalid", "invalid"},
+        {"invalid", "dcc", "invalid"},
+        {"invalid", "invalid", "sysid"},
     };
 
     enum class trigger {now, external, data, software, last};
@@ -53,6 +54,7 @@ class AcqWorker: public epicsThreadRunable {
 
     /* scratch vectors to avoid repeated allocations */
     std::vector<int16_t> i16scratch;
+    std::vector<int32_t> i32scratch;
 
   public:
     AcqWorker(Acq &acq): acq(acq) { }
@@ -77,7 +79,8 @@ class Acq: public UDriver {
     /* custom logic parameters */
     int p_event, p_repetitive, p_update_time, p_data_type;
     /* parameters for data storage */
-    int p_raw_data, p_lamp_current_data, p_lamp_voltage_data;
+    int p_raw_data, p_lamp_current_data, p_lamp_voltage_data,
+        p_pos_x, p_pos_y, p_setpoint, p_timeframe;
 
     /* contains the parameters which should be written to the parameter list */
     std::unordered_set<int> parameters_to_store;
@@ -131,6 +134,11 @@ class Acq: public UDriver {
         createParam("RAW", asynParamInt32Array, &p_raw_data);
         createParam("LAMP_I", asynParamInt16Array, &p_lamp_current_data);
         createParam("LAMP_V", asynParamInt16Array, &p_lamp_voltage_data);
+        createParam("POS_X", asynParamInt32Array, &p_pos_x);
+        createParam("POS_Y", asynParamInt32Array, &p_pos_y);
+        createParam("SETPOINT", asynParamInt16Array, &p_setpoint);
+        /* it's an unsigned 16-bit type, so we need signed 32-bit to store/display it */
+        createParam("TIMEFRAME", asynParamInt32Array, &p_timeframe);
 
         thread.start();
 
@@ -167,7 +175,8 @@ class Acq: public UDriver {
             /* TODO: make this more generic; perhaps take into account data_type,
              * using a callback from writeInt32Impl */
             if (port_number == 0) set_enum(channel_strings[(int)channel_organizations::lamp]);
-            else set_enum(channel_strings[(int)channel_organizations::dcc]);
+            else if (port_number < 3) set_enum(channel_strings[(int)channel_organizations::dcc]);
+            else set_enum(channel_strings[(int)channel_organizations::sysid]);
         } else if (function == p_trigger_type) {
             set_enum(trigger_strings);
         } else if (function == p_event) {
@@ -294,6 +303,37 @@ void AcqWorker::run()
                     }
                     do_callbacks(i16scratch, acq.p_lamp_voltage_data, addr);
                 }
+            } else if (msg.type == data_type::sysid) {
+                auto rv = acq.ctl.get_result<int32_t>();
+
+                const size_t atoms = 32, bpm_channels = 8, lamp_channels = 12;
+
+                auto len = rv.size() / atoms;
+                i16scratch.resize(len);
+                i32scratch.resize(len);
+
+                for (size_t addr = 0; addr < bpm_channels; addr++) {
+                    for (size_t i = 0; i < len; i++)
+                        i32scratch[i] = rv[addr + i * atoms];
+                    do_callbacks(i32scratch, acq.p_pos_x, addr);
+
+                    for (size_t i = 0; i < len; i++)
+                        i32scratch[i] = rv[addr + bpm_channels + i * atoms];
+                    do_callbacks(i32scratch, acq.p_pos_y, addr);
+                }
+
+                /* the setpoint samples are grouped two-by-two in 32-bit atoms */
+                for (size_t addr = 0; addr < lamp_channels; addr++) {
+                    for (size_t i = 0; i < len; i++) {
+                        auto v = (uint32_t)rv[addr/2 + 16 + i * atoms];
+                        i16scratch[i] = (uint16_t)(addr & 0x1 ? v & 0xffff : v >> 16);
+                    }
+                    do_callbacks(i16scratch, acq.p_setpoint, addr);
+                }
+
+                for (size_t i = 0; i < len; i++)
+                    i32scratch[i] = rv[22 + i * atoms] & 0xffff;
+                do_callbacks(i32scratch, acq.p_timeframe, 0);
             }
 
             epicsInt32 repetitive;
