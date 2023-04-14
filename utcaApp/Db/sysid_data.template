@@ -1,0 +1,9 @@
+# System Identification data records
+
+record(aai, "$(P)$(R)$(ACQ_NAME)TimeFrameData"){
+    field(DTYP, "asynInt32ArrayIn")
+    field(NELM, "$(NELM)")
+    field(FTVL, "LONG")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))TIMEFRAME")
+}
