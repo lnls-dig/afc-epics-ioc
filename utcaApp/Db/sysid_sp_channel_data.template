@@ -1,0 +1,9 @@
+# System Identification Setpoint data records
+
+record(aai, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentRefRawData"){
+    field(DTYP, "asynInt16ArrayIn")
+    field(NELM, "$(NELM)")
+    field(FTVL, "SHORT")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))SETPOINT")
+}

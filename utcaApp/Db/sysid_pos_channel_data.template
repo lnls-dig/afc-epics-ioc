@@ -1,0 +1,16 @@
+# System Identification Position data records
+
+record(aai, "$(P)$(R)$(ACQ_NAME)BPM$(ADDR)PosXData"){
+    field(DTYP, "asynInt32ArrayIn")
+    field(NELM, "$(NELM)")
+    field(FTVL, "LONG")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))POS_X")
+}
+record(aai, "$(P)$(R)$(ACQ_NAME)BPM$(ADDR)PosYData"){
+    field(DTYP, "asynInt32ArrayIn")
+    field(NELM, "$(NELM)")
+    field(FTVL, "LONG")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))POS_Y")
+}
