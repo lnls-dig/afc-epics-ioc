@@ -23,6 +23,7 @@ pcie(6)
 < "iocBoot/${IOC}/fofb_cc.cmd"
 # rtmlamp has to be after acq
 < "iocBoot/${IOC}/rtmlamp.cmd"
+< "iocBoot/${IOC}/sysid.cmd"
 # fofb_processing has to be after rtmlamp
 < "iocBoot/${IOC}/fofb_processing.cmd"
 < "iocBoot/${IOC}/triggers.cmd"

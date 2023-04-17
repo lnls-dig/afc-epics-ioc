@@ -6,3 +6,6 @@ dbLoadRecords("db/raw_data.template", "P=${P}, R=${R}, ACQ_NAME=DCCFMC, NELM=${N
 Acq(2)
 dbLoadRecords("db/acq.template", "P=${P}, R=${R}, ACQ_NAME=DCCP2P, NELM=${NELM}, PORT=ACQ-2")
 dbLoadRecords("db/raw_data.template", "P=${P}, R=${R}, ACQ_NAME=DCCP2P, NELM=${NELM}, PORT=ACQ-2")
+Acq(3)
+dbLoadRecords("db/acq.template", "P=${P}, R=${R}, ACQ_NAME=SYSID, NELM=${NELM}, PORT=ACQ-3")
+dbLoadRecords("db/raw_data.template", "P=${P}, R=${R}, ACQ_NAME=SYSID, NELM=${NELM}, PORT=ACQ-3")
