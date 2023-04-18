@@ -76,17 +76,11 @@ class FofbCc: public UDriver {
         write_only = {p_err_clr, p_toa_rd_str, p_rcb_rd_str};
     }
 
-    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function,
+        [[maybe_unused]] const int addr, const char *param_name, epicsInt32 value)
     {
-        setIntegerParam(addr, function, value);
-
-        auto write_param = [addr, this](auto fn, auto &ctl_value) {
-            epicsInt32 tmp;
-            /* we expect success, unless the parameter hasn't been initialized yet */
-            if (getIntegerParam(addr, fn, &tmp) == asynSuccess)
-                ctl_value = tmp;
-            else
-                ctl_value = std::nullopt;
+        auto write_param = [function, value](auto fn, auto &ctl_value) {
+            if (function == fn) ctl_value = value;
         };
 
         write_param(p_err_clr, ctl.err_clr);
