@@ -2,7 +2,8 @@
 #include <string>
 #include <tuple>
 
-#include "lamp.h"
+#include <modules/lamp.h>
+#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"

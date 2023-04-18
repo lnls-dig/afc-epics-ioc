@@ -2,7 +2,8 @@
 #include <string>
 #include <tuple>
 
-#include "trigger_iface.h"
+#include <modules/trigger_iface.h>
+#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"

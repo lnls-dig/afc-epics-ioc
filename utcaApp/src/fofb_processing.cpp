@@ -1,6 +1,7 @@
 #include <algorithm>
 
-#include "fofb_processing.h"
+#include <modules/fofb_processing.h>
+#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"

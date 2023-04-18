@@ -2,7 +2,8 @@
 #include <string>
 #include <tuple>
 
-#include "trigger_mux.h"
+#include <modules/trigger_mux.h>
+#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"

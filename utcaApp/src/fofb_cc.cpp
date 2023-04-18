@@ -2,7 +2,8 @@
 #include <string>
 #include <tuple>
 
-#include "fofb_cc.h"
+#include <modules/fofb_cc.h>
+#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"

@@ -10,7 +10,8 @@
 #include <epicsString.h>
 #include <epicsThread.h>
 
-#include "acq.h"
+#include <modules/acq.h>
+#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"
