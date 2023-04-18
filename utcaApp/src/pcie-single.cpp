@@ -3,7 +3,7 @@
 #include <iocsh.h>
 #include <epicsExport.h>
 
-#include "pcie-open.h"
+#include <pcie-open.h>
 
 #include "pcie-single.h"
 
