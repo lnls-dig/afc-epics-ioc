@@ -1,0 +1,1 @@
+SUBSYSTEM=="pci", ATTR{vendor}=="0x10ee", ATTR{subsystem_device}=="0x0007", RUN+="/bin/sh -c 'chmod 666 /sys/bus/pci/devices/%k/resource*'", RUN+="/opt/erics/service/erics-start.sh %k"

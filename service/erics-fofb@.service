@@ -1,0 +1,14 @@
+[Unit]
+Description=FOFB IOC %i
+
+[Service]
+User=bpm-epics-ioc
+Group=bpm-epics-ioc
+
+MemoryAccounting=yes
+MemoryLimit=1G
+
+PermissionsStartOnly=true
+WorkingDirectory=/opt/erics/iocBoot/iocutca
+
+ExecStart=/opt/erics/iocBoot/iocutca/runFOFB.sh %i
