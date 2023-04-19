@@ -19,7 +19,7 @@ utca_DBD += base.dbd
 utca_LIBS += asyn
 utca_DBD += asyn.dbd
 
-utca_SRCS += pcie-single.cpp acq.cpp fofb_cc.cpp fofb_processing.cpp rtmlamp.cpp trigger_iface.cpp trigger_mux.cpp
+utca_SRCS += pcie-single.cpp acq.cpp build_info.cpp fofb_cc.cpp fofb_processing.cpp rtmlamp.cpp trigger_iface.cpp trigger_mux.cpp
 utca_DBD += drivers.dbd
 utca_DBD += menuScan.dbd
 
