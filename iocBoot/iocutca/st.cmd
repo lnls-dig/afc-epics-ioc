@@ -19,6 +19,7 @@ var dbRecordsOnceOnly 1
 
 pcie("${SLOT}")
 
+< "iocBoot/$(IOC)/build_info.cmd"
 < "iocBoot/${IOC}/acq.cmd"
 < "iocBoot/${IOC}/fofb_cc.cmd"
 # rtmlamp has to be after acq
