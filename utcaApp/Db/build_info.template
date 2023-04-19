@@ -1,0 +1,37 @@
+# Build Information records
+
+record(stringin, "$(P)$(R)GwInfoName-Cte"){
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT))NAME")
+    field(PINI, "YES")
+}
+
+record(stringin, "$(P)$(R)GwInfoCommitID-Cte"){
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT))COMMIT")
+    field(PINI, "YES")
+}
+
+record(stringin, "$(P)$(R)GwInfoToolName-Cte"){
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT))TOOL_NAME")
+    field(PINI, "YES")
+}
+
+record(stringin, "$(P)$(R)GwInfoToolVersion-Cte"){
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT))TOOL_VERSION")
+    field(PINI, "YES")
+}
+
+record(stringin, "$(P)$(R)GwInfoDate-Cte"){
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT))DATE")
+    field(PINI, "YES")
+}
+
+record(stringin, "$(P)$(R)GwInfoUserName-Cte"){
+    field(DTYP, "asynOctetRead")
+    field(INP, "@asyn($(PORT))USER_NAME")
+    field(PINI, "YES")
+}
