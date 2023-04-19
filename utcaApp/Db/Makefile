@@ -4,6 +4,8 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS BELOW HERE
 
 # Install databases, templates & substitutions like this
+DB += build_info.template
+
 DB += scan_task.template
 DB += acq.template raw_data.template
 DB += fofb_cc.template fofb_cc_channel.template fofb_cc.substitutions
