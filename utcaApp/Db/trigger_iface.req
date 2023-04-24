@@ -1,0 +1,8 @@
+file "trigger_iface_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=0
+file "trigger_iface_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=1
+file "trigger_iface_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=2
+file "trigger_iface_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=3
+file "trigger_iface_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=4
+file "trigger_iface_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=5
+file "trigger_iface_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=6
+file "trigger_iface_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=7

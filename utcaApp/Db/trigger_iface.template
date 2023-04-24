@@ -3,7 +3,6 @@
 record(mbbo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)Dir-Sel"){
     field(DTYP,"asynInt32")
     field(DESC,"Set trigger direction")
-    field(PINI,"YES")
     field(SCAN,"Passive")
     field(NOBT,"1")
     field(ZRVL,"0")
@@ -11,6 +10,7 @@ record(mbbo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)Dir-Sel"){
     field(ZRST,"trn")
     field(ONST,"rcv")
     field(OUT,"@asyn($(PORT),$(ADDR))DIR")
+    field(PINI,"YES")
 }
 
 record(mbbi,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)Dir-Sts"){
@@ -28,7 +28,6 @@ record(mbbi,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)Dir-Sts"){
 record(mbbo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)DirPol-Sel"){
     field(DTYP,"asynInt32")
     field(DESC,"Set trigger direction polarity")
-    field(PINI,"YES")
     field(SCAN,"Passive")
     field(NOBT,"1")
     field(ZRVL,"0")
@@ -36,6 +35,7 @@ record(mbbo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)DirPol-Sel"){
     field(ZRST,"same")
     field(ONST,"rev")
     field(OUT,"@asyn($(PORT),$(ADDR))DIR_POL")
+    field(PINI,"YES")
 }
 
 record(mbbi,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)DirPol-Sts"){
@@ -53,7 +53,6 @@ record(mbbi,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)DirPol-Sts"){
 record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvCntRst-Cmd"){
     field(DTYP,"asynInt32")
     field(DESC,"Reset trigger receive counter")
-    field(PINI,"YES")
     field(SCAN,"Passive")
     field(MASK, "1")
     field(HIGH, "1")
@@ -65,7 +64,6 @@ record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvCntRst-Cmd"){
 record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnCntRst-Cmd"){
     field(DTYP,"asynInt32")
     field(DESC,"Reset trigger transmit counter")
-    field(PINI,"YES")
     field(SCAN,"Passive")
     field(MASK, "1")
     field(HIGH, "1")
@@ -77,9 +75,9 @@ record(bo,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnCntRst-Cmd"){
 record(longout,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvLen-SP"){
     field(DTYP,"asynInt32")
     field(DESC,"Set trigger receive debounce length")
-    field(PINI,"YES")
     field(SCAN,"Passive")
     field(OUT,"@asyn($(PORT),$(ADDR))RCV_LEN")
+    field(PINI,"YES")
 }
 
 record(longin,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvLen-RB"){
@@ -92,9 +90,9 @@ record(longin,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)RcvLen-RB"){
 record(longout,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnLen-SP"){
     field(DTYP,"asynInt32")
     field(DESC,"Set trigger transmit extension length")
-    field(PINI,"YES")
     field(SCAN,"Passive")
     field(OUT,"@asyn($(PORT),$(ADDR))TRANSM_LEN")
+    field(PINI,"YES")
 }
 
 record(longin,"$(P)$(R)$(TRIGGER_NAME)$(TRIGGER_CHAN)TrnLen-RB"){
