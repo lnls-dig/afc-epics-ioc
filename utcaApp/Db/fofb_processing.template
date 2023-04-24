@@ -5,6 +5,7 @@ record(bo, "$(P)$(R)MaxOrbDistortionEnbl-Sel"){
     field(DTYP, "asynInt32")
     field(SCAN, "Passive")
     field(OUT, "@asyn($(PORT))INTLK_CTL_SRC_EN_ORB_DISTORT")
+    field(PINI, "YES")
     field(ZNAM, "disabled")
     field(ONAM, "enabled")
 }
@@ -22,6 +23,7 @@ record(bo, "$(P)$(R)MinBPMCntEnbl-Sel"){
     field(DTYP, "asynInt32")
     field(SCAN, "Passive")
     field(OUT, "@asyn($(PORT))INTLK_CTL_SRC_EN_PACKET_LOSS")
+    field(PINI, "YES")
     field(ZNAM, "disabled")
     field(ONAM, "enabled")
 }
@@ -48,7 +50,7 @@ record(bo, "$(P)$(R)LoopIntlkReset-Cmd"){
 record(longin, "$(P)$(R)LoopIntlk-Mon"){
     field(DESC, "Monitor FOFB interlock status")
     field(DTYP, "asynInt32")
-    field(SCAN, ".1 second")
+    field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT))INTLK_STA")
     field(HIHI, "1")
 }
@@ -67,8 +69,8 @@ record(longout, "$(P)$(R)MaxOrbDistortion-SP"){
     field(EGU, "nm")
     field(DTYP, "asynInt32")
     field(SCAN, "Passive")
-    field(PINI, "YES")
     field(OUT, "@asyn($(PORT))INTLK_ORB_DISTORT_LIMIT")
+    field(PINI, "YES")
 }
 record(longin, "$(P)$(R)MaxOrbDistortion-RB"){
     field(DESC, "Max orbit distortion for FOFB interlock")
@@ -82,8 +84,8 @@ record(longout, "$(P)$(R)MinBPMCnt-SP"){
     field(DESC, "Min packets for for FOFB interlock")
     field(DTYP, "asynInt32")
     field(SCAN, "Passive")
-    field(PINI, "YES")
     field(OUT, "@asyn($(PORT))INTLK_MIN_NUM_PACKETS")
+    field(PINI, "YES")
 }
 record(longin, "$(P)$(R)MinBPMCnt-RB"){
     field(DESC, "Min packets for FOFB interlock")
@@ -97,6 +99,7 @@ record(aao, "$(P)$(R)RefOrbX-SP"){
     field(DTYP, "asynInt32ArrayOut")
     field(SCAN, "Passive")
     field(OUT, "@asyn($(PORT))REF_ORBIT_X")
+    field(PINI, "YES")
     field(FTVL, "LONG")
     field(NELM, "$(BPMS)")
 }
@@ -113,6 +116,7 @@ record(aao, "$(P)$(R)RefOrbY-SP"){
     field(DTYP, "asynInt32ArrayOut")
     field(SCAN, "Passive")
     field(OUT, "@asyn($(PORT))REF_ORBIT_Y")
+    field(PINI, "YES")
     field(FTVL, "LONG")
     field(NELM, "$(BPMS)")
 }
