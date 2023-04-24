@@ -1,0 +1,19 @@
+$(P)$(R)MaxOrbDistortionEnbl-Sel
+$(P)$(R)MinBPMCntEnbl-Sel
+$(P)$(R)MaxOrbDistortion-SP
+$(P)$(R)MinBPMCnt-SP
+$(P)$(R)RefOrbX-SP
+$(P)$(R)RefOrbY-SP
+
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=M1:PS-FCH:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=M1:PS-FCV:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=M2:PS-FCH:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=M2:PS-FCV:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=C2:PS-FCH:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=C2:PS-FCV:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=C3:PS-FCH:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=C3:PS-FCV:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=XX:PS-FC08:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=XX:PS-FC09:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=XX:PS-FC10:
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=XX:PS-FC11:

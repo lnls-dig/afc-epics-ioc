@@ -1,0 +1,6 @@
+$(S)$(RTM_CHAN)FOFBAccDecimation-SP
+$(S)$(RTM_CHAN)FOFBAccFreeze-Sel
+$(S)$(RTM_CHAN)FOFBAccSatMax-SP
+$(S)$(RTM_CHAN)FOFBAccSatMin-SP
+$(S)$(RTM_CHAN)InvRespMatRowX-SP
+$(S)$(RTM_CHAN)InvRespMatRowY-SP
