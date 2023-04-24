@@ -4,7 +4,6 @@ record(bo,"$(P)$(R)$(FOFB_CC)ErrClr-Cmd"){
     field(DTYP,"asynInt32")
     field(DESC,"clears gigabit transceiver errors")
     field(SCAN,"Passive")
-    field(PINI,"YES")
     field(MASK, "1")
     field(HIGH, "1")
     field(ZNAM, "nothing")
@@ -49,7 +48,7 @@ record(longout,"$(P)$(R)$(FOFB_CC)BPMId-SP"){
     field(DESC,"set FOFB CC BPM ID")
     field(SCAN,"Passive")
     field(OUT,"@asyn($(PORT))BPM_ID")
-    #XXX: field(PINI,"YES")
+    field(PINI,"YES")
 }
 record(longin,"$(P)$(R)$(FOFB_CC)BPMId-RB"){
     field(DTYP,"asynInt32")

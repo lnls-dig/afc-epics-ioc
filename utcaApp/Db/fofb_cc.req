@@ -1,0 +1,3 @@
+$(P)$(R)$(FOFB_CC)CCEnable-Sel
+$(P)$(R)$(FOFB_CC)BPMId-SP
+$(P)$(R)$(FOFB_CC)TimeFrameLen-SP
