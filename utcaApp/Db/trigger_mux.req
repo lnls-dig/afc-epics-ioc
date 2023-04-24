@@ -1,0 +1,16 @@
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=0, TRIGGER_DIR=Rcv, TRIGGER_DIR_SEL=RcvIn
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=0, TRIGGER_DIR=Trn, TRIGGER_DIR_SEL=TrnOut
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=1, TRIGGER_DIR=Rcv, TRIGGER_DIR_SEL=RcvIn
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=1, TRIGGER_DIR=Trn, TRIGGER_DIR_SEL=TrnOut
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=2, TRIGGER_DIR=Rcv, TRIGGER_DIR_SEL=RcvIn
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=2, TRIGGER_DIR=Trn, TRIGGER_DIR_SEL=TrnOut
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=3, TRIGGER_DIR=Rcv, TRIGGER_DIR_SEL=RcvIn
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=3, TRIGGER_DIR=Trn, TRIGGER_DIR_SEL=TrnOut
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=4, TRIGGER_DIR=Rcv, TRIGGER_DIR_SEL=RcvIn
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=4, TRIGGER_DIR=Trn, TRIGGER_DIR_SEL=TrnOut
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=5, TRIGGER_DIR=Rcv, TRIGGER_DIR_SEL=RcvIn
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=5, TRIGGER_DIR=Trn, TRIGGER_DIR_SEL=TrnOut
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=6, TRIGGER_DIR=Rcv, TRIGGER_DIR_SEL=RcvIn
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=6, TRIGGER_DIR=Trn, TRIGGER_DIR_SEL=TrnOut
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=7, TRIGGER_DIR=Rcv, TRIGGER_DIR_SEL=RcvIn
+file "trigger_mux_channel.req", P=${P}, R=${R}, TRIGGER_NAME=${TRIGGER_NAME}, TRIGGER_CHAN=7, TRIGGER_DIR=Trn, TRIGGER_DIR_SEL=TrnOut
