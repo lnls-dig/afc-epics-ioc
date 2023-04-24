@@ -164,8 +164,9 @@ record(longin,"$(S)$(RTM_CHAN)TestLimB-RB"){
 record(ao, "$(S)$(RTM_CHAN)CurrGain-SP"){
     field(DESC, "Current gain")
     field(SCAN, "Passive")
-    field(VAL, "1")
     field(OUT, "$(S)$(RTM_CHAN)CurrGain-RB PP")
+    field(PINI,"YES")
+    field(VAL, "1")
 }
 record(ai, "$(S)$(RTM_CHAN)CurrGain-RB"){
     field(DESC, "Current gain")
@@ -175,8 +176,9 @@ record(ai, "$(S)$(RTM_CHAN)CurrGain-RB"){
 record(longout, "$(S)$(RTM_CHAN)CurrOffset-SP"){
     field(DESC, "Current offset")
     field(SCAN, "Passive")
-    field(VAL, "0")
     field(OUT, "$(S)$(RTM_CHAN)CurrOffset-RB PP")
+    field(PINI,"YES")
+    field(VAL, "0")
 }
 record(longin, "$(S)$(RTM_CHAN)CurrOffset-RB"){
     field(DESC, "Current offset")
@@ -186,8 +188,9 @@ record(longin, "$(S)$(RTM_CHAN)CurrOffset-RB"){
 record(ao, "$(S)$(RTM_CHAN)VoltGain-SP"){
     field(DESC, "Voltage gain")
     field(SCAN, "Passive")
-    field(VAL, "1")
     field(OUT, "$(S)$(RTM_CHAN)VoltGain-RB PP")
+    field(PINI,"YES")
+    field(VAL, "1")
 }
 record(ai, "$(S)$(RTM_CHAN)VoltGain-RB"){
     field(DESC, "Voltage gain")
@@ -197,8 +200,9 @@ record(ai, "$(S)$(RTM_CHAN)VoltGain-RB"){
 record(longout, "$(S)$(RTM_CHAN)VoltOffset-SP"){
     field(DESC, "Voltage offset")
     field(SCAN, "Passive")
-    field(VAL, "0")
     field(OUT, "$(S)$(RTM_CHAN)VoltOffset-RB PP")
+    field(PINI,"YES")
+    field(VAL, "0")
 }
 record(longin, "$(S)$(RTM_CHAN)VoltOffset-RB"){
     field(DESC, "Voltage offset")
@@ -208,8 +212,8 @@ record(longin, "$(S)$(RTM_CHAN)VoltOffset-RB"){
 record(ao,"$(S)$(RTM_CHAN)Current-SP"){
     field(DESC,"set manual current control")
     field(EGU, "A")
-    field(PINI,"YES")
     field(SCAN,"Passive")
+    field(PINI,"YES")
     field(DRVH,"0.95")
     field(DRVL,"-0.95")
 }
@@ -227,10 +231,9 @@ record(longout,"$(S)$(RTM_CHAN)CurrentRaw-SP"){
     field(DTYP,"asynInt32")
     field(DESC,"set manual current control (raw)")
     field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT),$(ADDR))PI_SP")
     field(DRVH,"15200")
     field(DRVL,"-15200")
-    field(OUT,"@asyn($(PORT),$(ADDR))PI_SP")
-    field(PINI,"YES")
 }
 record(longin,"$(S)$(RTM_CHAN)CurrentRaw-RB"){
     field(DTYP,"asynInt32")
@@ -261,8 +264,8 @@ record(calc,"$(S)$(RTM_CHAN)Current-RB"){
 record(ao,"$(S)$(RTM_CHAN)Voltage-SP"){
     field(DESC,"set manual voltage control")
     field(EGU, "V")
-    field(PINI,"YES")
     field(SCAN,"Passive")
+    field(PINI,"YES")
 }
 
 record(calcout,"$(S)$(RTM_CHAN)VoltageConvSP"){
@@ -279,7 +282,6 @@ record(longout,"$(S)$(RTM_CHAN)VoltageRaw-SP"){
     field(DESC,"set manual voltage control (raw)")
     field(SCAN,"Passive")
     field(OUT,"@asyn($(PORT),$(ADDR))DAC")
-    field(PINI,"YES")
     field(DRVH,"32767")
     field(DRVL,"-32768")
 }
