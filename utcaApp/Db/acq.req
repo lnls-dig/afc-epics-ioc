@@ -1,0 +1,14 @@
+$(P)$(R)$(ACQ_NAME)DataType
+$(P)$(R)$(ACQ_NAME)SamplesPre-SP
+$(P)$(R)$(ACQ_NAME)SamplesPost-SP
+$(P)$(R)$(ACQ_NAME)Shots-SP
+$(P)$(R)$(ACQ_NAME)Channel-Sel
+$(P)$(R)$(ACQ_NAME)Trigger-Sel
+$(P)$(R)$(ACQ_NAME)TriggerRep-Sel
+$(P)$(R)$(ACQ_NAME)UpdateTime-SP
+$(P)$(R)$(ACQ_NAME)TriggerDataThres-SP
+$(P)$(R)$(ACQ_NAME)TriggerDataPol-Sel
+$(P)$(R)$(ACQ_NAME)TriggerDataSel-SP
+$(P)$(R)$(ACQ_NAME)TriggerDataHyst-SP
+$(P)$(R)$(ACQ_NAME)TriggerHwDly-SP
+$(P)$(R)$(ACQ_NAME)DataTrigChan-Sel
