@@ -29,5 +29,8 @@ pcie("${SLOT}")
 < "iocBoot/${IOC}/fofb_processing.cmd"
 < "iocBoot/${IOC}/triggers.cmd"
 
-cd "${TOP}/iocBoot/${IOC}"
+< "iocBoot/${IOC}/autosave_pre.cmd"
+
 iocInit
+
+< "iocBoot/${IOC}/autosave_post.cmd"

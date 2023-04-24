@@ -15,6 +15,8 @@ DB += sysid_data.template sysid_pos_channel_data.template sysid_sp_channel_data.
 DB += trigger_iface.template trigger_iface.substitutions
 DB += trigger_mux.template trigger_mux.substitutions
 
+DB += $(AUTOSAVE)/asApp/Db/save_restoreStatus.db
+
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 
