@@ -1,0 +1,13 @@
+file "acq.req", P=${P}, R=${R}, ACQ_NAME=LAMP
+file "acq.req", P=${P}, R=${R}, ACQ_NAME=DCCFMC
+file "acq.req", P=${P}, R=${R}, ACQ_NAME=DCCP2P
+file "acq.req", P=${P}, R=${R}, ACQ_NAME=SYSID
+file "fofb_cc.req", P=${P}, R=${R}, FOFB_CC=DCCFMC
+file "fofb_cc.req", P=${P}, R=${R}, FOFB_CC=DCCP2P
+file "fofb_processing.req", P=${P}, R=${R}, S=${S}
+file "rtmlamp.req", S=${S}
+file "trigger_iface.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER
+file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_LAMP
+file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_DCCFMC
+file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_DCCP2P
+file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_SYSID
