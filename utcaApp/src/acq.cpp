@@ -150,6 +150,8 @@ class Acq: public UDriver {
             p_update_time,
             p_data_type,
         };
+
+        read_parameters();
     }
 
     asynStatus readEnum(asynUser *pasynUser, char *strings[], int values[],

@@ -75,6 +75,8 @@ class FofbCc: public UDriver {
         }
 
         write_only = {p_err_clr, p_toa_rd_str, p_rcb_rd_str};
+
+        read_parameters();
     }
 
     asynStatus writeInt32Impl(asynUser *pasynUser, const int function,

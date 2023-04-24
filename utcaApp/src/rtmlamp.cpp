@@ -60,6 +60,8 @@ class RtmLamp: public UDriver {
         for (unsigned addr = 0; addr < number_of_channels; addr++) {
             setIntegerParam(addr, p_opmode, 0);
         }
+
+        read_parameters();
     }
 
     asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
