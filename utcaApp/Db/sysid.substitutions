@@ -1,3 +1,18 @@
+file db/scan_task.template {
+    {}
+}
+
+file db/sysid.template {
+    {}
+}
+
+global {FCS=12, BPMS=160}
+file db/sysid_channel.template {
+    pattern {PRBS_STATE, ADDR}
+    {"Lvl0", 0}
+    {"Lvl1", 1}
+}
+
 global {PORT="$(ACQ_PORT)"}
 
 file db/sysid_pos_channel_data.template {
