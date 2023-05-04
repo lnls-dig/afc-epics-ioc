@@ -109,10 +109,11 @@ record(longin, "$(S)$(RTM_CHAN)FOFBAccRaw-Mon"){
 }
 record(calc, "$(S)$(RTM_CHAN)FOFBAcc-Mon"){
     field(DESC, "FOFB accumulator decimated value")
-    field(INPA, "$(S)$(RTM_CHAN)FOFBAccRaw-Mon")
-    field(INPB, "$(S)$(RTM_CHAN)CurrGain-SP")
-    field(INPC, "$(S)$(RTM_CHAN)CurrOffset-SP")
-    field(INPD, "$(S)$(RTM_CHAN)FOFBAccDecimation-RB")
+    field(EGU, "A")
+    field(INPA, "$(S)$(RTM_CHAN)FOFBAccRaw-Mon CP")
+    field(INPB, "$(S)$(RTM_CHAN)CurrGain-SP CP")
+    field(INPC, "$(S)$(RTM_CHAN)CurrOffset-SP CP")
+    field(INPD, "$(S)$(RTM_CHAN)FOFBAccDecimation-RB CP")
     field(CALC,"B*(A/D - C)")
 }
 
