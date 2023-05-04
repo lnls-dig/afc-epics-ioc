@@ -7,3 +7,11 @@ record(aai, "$(P)$(R)$(ACQ_NAME)TimeFrameData"){
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT))TIMEFRAME")
 }
+
+record(aai, "$(P)$(R)$(ACQ_NAME)PRBSData"){
+    field(DTYP, "asynInt8ArrayIn")
+    field(NELM, "$(NELM)")
+    field(FTVL, "CHAR")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))PRBS")
+}

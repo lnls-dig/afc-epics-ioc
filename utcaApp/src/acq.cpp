@@ -54,6 +54,7 @@ class AcqWorker: public epicsThreadRunable {
     class Acq &acq;
 
     /* scratch vectors to avoid repeated allocations */
+    std::vector<int8_t> i8scratch;
     std::vector<int16_t> i16scratch;
     std::vector<int32_t> i32scratch;
 
@@ -81,7 +82,7 @@ class Acq: public UDriver {
     int p_event, p_repetitive, p_update_time, p_data_type;
     /* parameters for data storage */
     int p_raw_data, p_lamp_current_data, p_lamp_voltage_data,
-        p_pos_x, p_pos_y, p_setpoint, p_timeframe;
+        p_pos_x, p_pos_y, p_setpoint, p_timeframe, p_prbs;
 
     /* contains the parameters which should be written to the parameter list */
     std::unordered_set<int> parameters_to_store;
@@ -140,6 +141,7 @@ class Acq: public UDriver {
         createParam("SETPOINT", asynParamInt16Array, &p_setpoint);
         /* it's an unsigned 16-bit type, so we need signed 32-bit to store/display it */
         createParam("TIMEFRAME", asynParamInt32Array, &p_timeframe);
+        createParam("PRBS", asynParamInt8Array, &p_prbs);
 
         thread.start();
 
@@ -279,6 +281,8 @@ void AcqWorker::run()
                 return acq.doCallbacksInt32Array(vec.data(), vec.size(), parameter, addr);
             else if constexpr (std::is_same_v<value_type, int16_t>)
                 return acq.doCallbacksInt16Array(vec.data(), vec.size(), parameter, addr);
+            else if constexpr (std::is_same_v<value_type, int8_t>)
+                return acq.doCallbacksInt8Array(vec.data(), vec.size(), parameter, addr);
             else
                 static_assert(!sizeof(value_type)); /* has to depend on template parameter */
         };
@@ -312,6 +316,7 @@ void AcqWorker::run()
                 const size_t atoms = 32, bpm_channels = 8, lamp_channels = 12;
 
                 auto len = rv.size() / atoms;
+                i8scratch.resize(len);
                 i16scratch.resize(len);
                 i32scratch.resize(len);
 
@@ -334,9 +339,12 @@ void AcqWorker::run()
                     do_callbacks(i16scratch, acq.p_setpoint, addr);
                 }
 
-                for (size_t i = 0; i < len; i++)
+                for (size_t i = 0; i < len; i++) {
                     i32scratch[i] = rv[22 + i * atoms] & 0xffff;
+                    i8scratch[i] = rv[23 + i * atoms] & 0x1;
+                }
                 do_callbacks(i32scratch, acq.p_timeframe, 0);
+                do_callbacks(i8scratch, acq.p_prbs, 0);
             }
 
             epicsInt32 repetitive;
