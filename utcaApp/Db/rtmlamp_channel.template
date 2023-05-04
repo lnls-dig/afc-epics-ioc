@@ -178,11 +178,14 @@ record(longout, "$(S)$(RTM_CHAN)CurrOffset-SP"){
     field(SCAN, "Passive")
     field(OUT, "$(S)$(RTM_CHAN)CurrOffset-RB PP")
     field(PINI,"YES")
-    field(VAL, "0")
 }
 record(longin, "$(S)$(RTM_CHAN)CurrOffset-RB"){
     field(DESC, "Current offset")
     field(SCAN, "Passive")
+}
+record(calc, "$(S)$(RTM_CHAN)CurrOffsetNegative"){
+    field(INPA, "$(S)$(RTM_CHAN)CurrOffset-RB CP")
+    field(CALC, "-A")
 }
 
 record(ao, "$(S)$(RTM_CHAN)VoltGain-SP"){
@@ -202,11 +205,14 @@ record(longout, "$(S)$(RTM_CHAN)VoltOffset-SP"){
     field(SCAN, "Passive")
     field(OUT, "$(S)$(RTM_CHAN)VoltOffset-RB PP")
     field(PINI,"YES")
-    field(VAL, "0")
 }
 record(longin, "$(S)$(RTM_CHAN)VoltOffset-RB"){
     field(DESC, "Voltage offset")
     field(SCAN, "Passive")
+}
+record(calc, "$(S)$(RTM_CHAN)VoltOffsetNegative"){
+    field(INPA, "$(S)$(RTM_CHAN)VoltOffset-RB CP")
+    field(CALC, "-A")
 }
 
 record(ao,"$(S)$(RTM_CHAN)Current-SP"){
