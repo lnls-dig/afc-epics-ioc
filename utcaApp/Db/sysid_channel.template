@@ -1,0 +1,49 @@
+# System Identification per-channel records
+
+record(aao, "$(P)$(R)SYSIDPRBSFOFBAcc$(PRBS_STATE)-SP"){
+    field(DTYP, "asynInt16ArrayOut")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))SP_DISTORT")
+    field(PINI, "YES")
+    field(FTVL, "SHORT")
+    field(NELM, "$(FCS)")
+}
+record(aai, "$(P)$(R)SYSIDPRBSFOFBAcc$(PRBS_STATE)-RB"){
+    field(DTYP, "asynInt16ArrayIn")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))SP_DISTORT")
+    field(FTVL, "SHORT")
+    field(NELM, "$(FCS)")
+}
+
+record(aao, "$(P)$(R)SYSIDPRBSBPMPosX$(PRBS_STATE)-SP"){
+    field(DTYP, "asynInt16ArrayOut")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))POS_X_DISTORT")
+    field(PINI, "YES")
+    field(FTVL, "SHORT")
+    field(NELM, "$(BPMS)")
+}
+record(aai, "$(P)$(R)SYSIDPRBSBPMPosX$(PRBS_STATE)-RB"){
+    field(DTYP, "asynInt16ArrayIn")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))POS_X_DISTORT")
+    field(FTVL, "SHORT")
+    field(NELM, "$(BPMS)")
+}
+
+record(aao, "$(P)$(R)SYSIDPRBSBPMPosY$(PRBS_STATE)-SP"){
+    field(DTYP, "asynInt16ArrayOut")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT),$(ADDR))POS_Y_DISTORT")
+    field(PINI, "YES")
+    field(FTVL, "SHORT")
+    field(NELM, "$(BPMS)")
+}
+record(aai, "$(P)$(R)SYSIDPRBSBPMPosY$(PRBS_STATE)-RB"){
+    field(DTYP, "asynInt16ArrayIn")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))POS_Y_DISTORT")
+    field(FTVL, "SHORT")
+    field(NELM, "$(BPMS)")
+}

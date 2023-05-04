@@ -1,0 +1,98 @@
+# System Identification Records
+
+record(longout,"$(P)$(R)SYSIDBaseBPMId-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "base BPMId for acq")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))BASE_BPM_ID")
+    field(PINI, "YES")
+}
+record(longin,"$(P)$(R)SYSIDBaseBPMId-RB"){
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))BASE_BPM_ID")
+}
+
+record(bo,"$(P)$(R)SYSIDPRBSSyncEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set PRBS triggered reset")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))PRBS_CTL_RST")
+    field(PINI,"YES")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+record(bi,"$(P)$(R)SYSIDPRBSSyncEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get PRBS triggered reset")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))PRBS_CTL_RST")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+
+record(longout,"$(P)$(R)SYSIDPRBSStepDuration-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "set PRBS duration step")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))PRBS_CTL_STEP_DURATION")
+    field(PINI, "YES")
+    field(DRVL, 1)
+}
+record(longin,"$(P)$(R)SYSIDPRBSStepDuration-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "get PRBS duration step")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))PRBS_CTL_STEP_DURATION")
+}
+
+record(longout,"$(P)$(R)SYSIDPRBSLFSRLength-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "set LFSR size")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))PRBS_CTL_LFSR_LENGTH")
+    field(PINI, "YES")
+    field(DRVL, 2)
+}
+record(longin,"$(P)$(R)SYSIDPRBSLFSRLength-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "get LFSR size")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))PRBS_CTL_LFSR_LENGTH")
+}
+
+record(bo,"$(P)$(R)SYSIDPRBSBPMPosEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"enable BPM position distortion")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))PRBS_CTL_BPM_POS_DISTORT_EN")
+    field(PINI,"YES")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+record(bi,"$(P)$(R)SYSIDPRBSBPMPosEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"enable BPM position distortion")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))PRBS_CTL_BPM_POS_DISTORT_EN")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+
+record(bo,"$(P)$(R)SYSIDPRBSFOFBAccEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"enable FOFB setpoint distortion")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))PRBS_CTL_SP_DISTORT_EN")
+    field(PINI,"YES")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+record(bi,"$(P)$(R)SYSIDPRBSFOFBAccEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"enable FOFB setpoint distortion")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))PRBS_CTL_SP_DISTORT_EN")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
