@@ -3,6 +3,7 @@
 /db/
 /dbd/
 O.*
+configure/*.local
 
 # clangd
 .cache/
