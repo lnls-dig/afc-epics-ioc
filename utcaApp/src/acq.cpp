@@ -83,7 +83,7 @@ class Acq: public UDriver {
         p_pre_samples, p_post_samples, p_channel, p_data_trigger_channel;
 
     /* custom logic parameters */
-    int p_event, p_repetitive, p_update_time, p_data_type;
+    int p_event, p_repetitive, p_update_time, p_data_type, p_count;
     /* parameters for data storage */
     int p_raw_data, p_lamp_current_data, p_lamp_voltage_data,
         p_pos_x, p_pos_y, p_setpoint, p_timeframe, p_prbs;
@@ -132,10 +132,12 @@ class Acq: public UDriver {
         createParam("REPETITIVE", asynParamInt32, &p_repetitive);
         createParam("UPDATE_TIME", asynParamFloat64, &p_update_time);
         createParam("TYPE", asynParamInt32, &p_data_type);
+        createParam("COUNT", asynParamInt32, &p_count);
         /* have to be initialized for the worker thread to work properly */
         setIntegerParam(p_repetitive, (int)repetitive_trigger::normal);
         setDoubleParam(p_update_time, 0);
         setIntegerParam(p_data_type, (int)data_type::raw);
+        setIntegerParam(p_count, 0);
 
         createParam("RAW", asynParamInt32Array, &p_raw_data);
         createParam("LAMP_I", asynParamInt16Array, &p_lamp_current_data);
@@ -351,12 +353,17 @@ void AcqWorker::run()
                 do_callbacks(i8scratch, acq.p_prbs, 0);
             }
 
-            epicsInt32 repetitive;
+            epicsInt32 repetitive, counter;
             epicsFloat64 update_time;
             {
                 std::lock_guard g(acq);
                 acq.getIntegerParam(acq.p_repetitive, &repetitive);
                 acq.getDoubleParam(acq.p_update_time, &update_time);
+
+                /* since we are already holding the lock, update COUNT as well */
+                acq.getIntegerParam(acq.p_count, &counter);
+                acq.setIntegerParam(acq.p_count, counter+1);
+                acq.callParamCallbacks(0);
             }
             /* only start a new acquisition if there is no incoming command */
             if (repetitive == (int)repetitive_trigger::repetitive && queue.pending() == 0) {
