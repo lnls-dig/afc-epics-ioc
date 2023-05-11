@@ -1,49 +1,41 @@
 # System Identification per-channel records
 
-record(aao, "$(P)$(R)SYSIDPRBSFOFBAcc$(PRBS_STATE)-SP"){
-    field(DTYP, "asynInt16ArrayOut")
-    field(SCAN, "Passive")
-    field(OUT, "@asyn($(PORT),$(ADDR))SP_DISTORT")
-    field(PINI, "YES")
-    field(FTVL, "SHORT")
-    field(NELM, "$(FCS)")
-}
-record(aai, "$(P)$(R)SYSIDPRBSFOFBAcc$(PRBS_STATE)-RB"){
-    field(DTYP, "asynInt16ArrayIn")
-    field(SCAN, "I/O Intr")
-    field(INP, "@asyn($(PORT),$(ADDR))SP_DISTORT")
-    field(FTVL, "SHORT")
-    field(NELM, "$(FCS)")
+record(ao,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)-SP"){
+    field(DESC, "set $(PRBS_STATE) FOFBAcc distortion")
+    field(EGU, "A")
+    field(SCAN,"Passive")
+    field(PINI,"YES")
+    field(DRVH,"0.95")
+    field(DRVL,"-0.95")
 }
 
-record(aao, "$(P)$(R)SYSIDPRBSBPMPosX$(PRBS_STATE)-SP"){
-    field(DTYP, "asynInt16ArrayOut")
-    field(SCAN, "Passive")
-    field(OUT, "@asyn($(PORT),$(ADDR))POS_X_DISTORT")
-    field(PINI, "YES")
-    field(FTVL, "SHORT")
-    field(NELM, "$(BPMS)")
-}
-record(aai, "$(P)$(R)SYSIDPRBSBPMPosX$(PRBS_STATE)-RB"){
-    field(DTYP, "asynInt16ArrayIn")
-    field(SCAN, "I/O Intr")
-    field(INP, "@asyn($(PORT),$(ADDR))POS_X_DISTORT")
-    field(FTVL, "SHORT")
-    field(NELM, "$(BPMS)")
+record(calcout,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Conv"){
+    field(SCAN,"Passive")
+    field(INPA,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)-SP CP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP CP")
+    field(CALC,"A/B+C")
+    field(OUT,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Raw-SP PP")
 }
 
-record(aao, "$(P)$(R)SYSIDPRBSBPMPosY$(PRBS_STATE)-SP"){
-    field(DTYP, "asynInt16ArrayOut")
+record(longout, "$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Raw-SP"){
+    field(DTYP, "asynInt32")
     field(SCAN, "Passive")
-    field(OUT, "@asyn($(PORT),$(ADDR))POS_Y_DISTORT")
+    field(OUT, "@asyn($(PORT),$(ADDR))SP_DISTORT_$(LEVEL)")
     field(PINI, "YES")
-    field(FTVL, "SHORT")
-    field(NELM, "$(BPMS)")
 }
-record(aai, "$(P)$(R)SYSIDPRBSBPMPosY$(PRBS_STATE)-RB"){
-    field(DTYP, "asynInt16ArrayIn")
+record(longin, "$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Raw-RB"){
+    field(DTYP, "asynInt32")
     field(SCAN, "I/O Intr")
-    field(INP, "@asyn($(PORT),$(ADDR))POS_Y_DISTORT")
-    field(FTVL, "SHORT")
-    field(NELM, "$(BPMS)")
+    field(INP, "@asyn($(PORT),$(ADDR))SP_DISTORT_$(LEVEL)")
+}
+
+record(calc,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)-RB"){
+    field(DESC, "get $(PRBS_STATE) FOFBAcc distortion")
+    field(EGU, "A")
+    field(SCAN,"Passive")
+    field(INPA,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Raw-RB CP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP CP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP CP")
+    field(CALC,"B*(A-C)")
 }
