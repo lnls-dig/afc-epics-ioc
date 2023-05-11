@@ -75,6 +75,8 @@ class FofbProcessing: public UDriver {
         for (unsigned addr = 0; addr < ::number_of_channels; addr++)
             setDoubleParam(addr, p_acc_gain, dec.get_channel_data<double>("CH_ACC_GAIN", addr));
 
+        do_callbacks();
+
         return asynSuccess;
     }
 
