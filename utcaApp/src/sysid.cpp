@@ -6,6 +6,10 @@
 #include "pcie-single.h"
 #include "udriver.h"
 
+namespace {
+    const unsigned number_of_channels = 12;
+}
+
 class SysId: public UDriver {
     sys_id::Core dec;
     sys_id::Controller ctl;
@@ -13,14 +17,15 @@ class SysId: public UDriver {
     int p_base_bpm_id, p_prbs_rst, p_prbs_step_duration, p_prbs_lfsr_length,
         p_prbs_bpm_pos_distort_en, p_prbs_setpoint_distort_en;
 
-    int p_setpoint_distortion, p_posx_distortion, p_posy_distortion;
+    int p_setpoint_distortion_lvl0, p_setpoint_distortion_lvl1;
+    int p_posx_distortion, p_posy_distortion;
 
   public:
     /* 2 channels: prbs_0 and prbs_1 in the same parameter */
     SysId(int port_number):
       UDriver(
           "SYSID", port_number, &dec,
-          2,
+          ::number_of_channels,
           {
               {"BASE_BPM_ID", p_base_bpm_id},
               {"PRBS_CTL_RST", p_prbs_rst},
@@ -40,11 +45,27 @@ class SysId: public UDriver {
             throw std::runtime_error("couldn't find sys_id module");
         }
 
-        createParam("SP_DISTORT", asynParamInt16Array, &p_setpoint_distortion);
+        createParam("SP_DISTORT_LVL0", asynParamInt32, &p_setpoint_distortion_lvl0);
+        createParam("SP_DISTORT_LVL1", asynParamInt32, &p_setpoint_distortion_lvl1);
+
         createParam("POS_X_DISTORT", asynParamInt16Array, &p_posx_distortion);
         createParam("POS_Y_DISTORT", asynParamInt16Array, &p_posy_distortion);
 
         read_parameters();
+    }
+
+    asynStatus read_parameters()
+    {
+        UDriver::read_parameters();
+
+        for (unsigned addr = 0; addr < number_of_channels; addr++) {
+            setIntegerParam(addr, p_setpoint_distortion_lvl0, dec.setpoint_distortion.prbs_0.at(addr));
+            setIntegerParam(addr, p_setpoint_distortion_lvl1, dec.setpoint_distortion.prbs_1.at(addr));
+        }
+
+        do_callbacks();
+
+        return asynSuccess;
     }
 
     asynStatus writeInt32Impl(asynUser *pasynUser, const int function,
@@ -56,6 +77,8 @@ class SysId: public UDriver {
         else if (function == p_prbs_lfsr_length) ctl.lfsr_length = value;
         else if (function == p_prbs_bpm_pos_distort_en) ctl.bpm_pos_distort_en = value;
         else if (function == p_prbs_setpoint_distort_en) ctl.sp_distort_en = value;
+        else if (function == p_setpoint_distortion_lvl0) ctl.setpoint_distortion.prbs_0.at(addr) = value;
+        else if (function == p_setpoint_distortion_lvl1) ctl.setpoint_distortion.prbs_1.at(addr) = value;
 
         try {
             ctl.write_params();
@@ -77,16 +100,15 @@ class SysId: public UDriver {
         int function = pasynUser->reason, addr;
         getAddress(pasynUser, &addr);
 
-        const bool is_distortion = function == p_setpoint_distortion || function == p_posx_distortion || function == p_posy_distortion;
+        const bool is_distortion = function == p_posx_distortion || function == p_posy_distortion;
 
         auto get_prbs_array =
-          [p_setpoint_distortion = this->p_setpoint_distortion,
-           p_posx_distortion = this->p_posx_distortion,
+          [p_posx_distortion = this->p_posx_distortion,
            p_posy_distortion = this->p_posy_distortion](int function, int addr, auto &dec_or_ctl) -> auto & {
             sys_id::distortion_levels *dp;
-            if (function == p_setpoint_distortion) dp = &dec_or_ctl.setpoint_distortion;
             if (function == p_posx_distortion) dp = &dec_or_ctl.posx_distortion;
-            if (function == p_posy_distortion) dp = &dec_or_ctl.posy_distortion;
+            else if (function == p_posy_distortion) dp = &dec_or_ctl.posy_distortion;
+
             return addr == 0 ? dp->prbs_0 : dp->prbs_1;
         };
 
