@@ -102,10 +102,15 @@ class UDriver: public asynPortDriver {
         getIntegerParam(0, p_counter, &counter);
         setIntegerParam(0, p_counter, counter+1);
 
-        for (unsigned addr = 0; addr < number_of_channels; addr++)
-            callParamCallbacks(addr);
+        do_callbacks();
 
         return asynSuccess;
+    }
+
+    void do_callbacks()
+    {
+        for (unsigned addr = 0; addr < number_of_channels; addr++)
+            callParamCallbacks(addr);
     }
 
     asynStatus readInt32(asynUser *pasynUser, epicsInt32 *value)
