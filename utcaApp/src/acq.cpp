@@ -16,8 +16,12 @@
 #include "pcie-single.h"
 #include "udriver.h"
 
+using namespace std::chrono_literals;
+
 namespace {
     const unsigned number_of_channels = 24;
+
+    const auto acq_task_sleep = 100ms;
 
     enum class data_type {raw, lamp, sysid, last};
     const char *const data_type_strings[(int)data_type::last] = {"raw", "lamp", "sysid"};
@@ -356,10 +360,11 @@ void AcqWorker::run()
             }
             /* only start a new acquisition if there is no incoming command */
             if (repetitive == (int)repetitive_trigger::repetitive && queue.pending() == 0) {
-                using namespace std::chrono_literals;
                 std::this_thread::sleep_until(start_time + update_time * 1s);
                 queue.send(&msg, sizeof msg);
             }
+        } else if (ongoing) {
+            std::this_thread::sleep_for(acq_task_sleep);
         }
     }
 }
