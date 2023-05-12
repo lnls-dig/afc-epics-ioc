@@ -212,6 +212,13 @@ record(mbbi,"$(P)$(R)$(ACQ_NAME)DataTrigChan-Sts"){
     field(INP,"@asyn($(PORT))DTRIG_WHICH")
 }
 
+record(mbbi,"$(P)$(R)$(ACQ_NAME)Status-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get acquisition status")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))STATUS")
+}
+
 record(longin,"$(P)$(R)$(ACQ_NAME)Count-Mon"){
     field(DTYP,"asynInt32")
     field(DESC,"get acquisition count")
