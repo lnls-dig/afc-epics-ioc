@@ -17,8 +17,9 @@ class RtmLamp: public UDriver {
     lamp::ControllerV2 ctl;
 
     int p_psstatus;
-    int p_ampstatus,
-        p_pwrstate, p_opmode, p_trigen, p_loopkp, p_loopti,
+    int p_ampstatus, p_ampstatus_latch,
+        p_pwrstate, p_opmode, p_trigen, p_reset_latch,
+        p_loopkp, p_loopti,
         p_testwaveperiod, p_testlim_a, p_testlim_b,
         p_pi_sp, p_dac, p_eff_adc, p_eff_dac, p_eff_sp;
 
@@ -32,9 +33,11 @@ class RtmLamp: public UDriver {
           },
           {
               {"AMP_STATUS", p_ampstatus},
+              {"AMP_STATUS_LATCH", p_ampstatus_latch},
               {"AMP_EN", p_pwrstate},
               {"MODE", p_opmode},
               {"TRIG_EN", p_trigen},
+              {"RST_LATCH", p_reset_latch},
               {"PI_KP", p_loopkp},
               {"PI_TI", p_loopti},
               {"CNT", p_testwaveperiod},
@@ -60,6 +63,8 @@ class RtmLamp: public UDriver {
         for (unsigned addr = 0; addr < number_of_channels; addr++) {
             setIntegerParam(addr, p_opmode, 0);
         }
+
+        write_only = {p_reset_latch};
 
         read_parameters();
     }
@@ -91,6 +96,7 @@ class RtmLamp: public UDriver {
         /* XXX: if someone writes 1 into trigen and it's not supported by the hardware,
          * we'll error out continuously until zeroed-out again */
         write_param(p_trigen, ctl.trigger_enable);
+        write_param(p_reset_latch, ctl.reset_latch);
 
         try {
             ctl.write_params();
