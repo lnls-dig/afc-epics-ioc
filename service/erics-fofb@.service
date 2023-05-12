@@ -6,7 +6,6 @@ User=bpm-epics-ioc
 Group=bpm-epics-ioc
 
 MemoryAccounting=yes
-MemoryLimit=1G
 
 PermissionsStartOnly=true
 WorkingDirectory=/opt/erics/iocBoot/iocutca
