@@ -299,7 +299,7 @@ void AcqWorker::run()
                 static_assert(!sizeof(value_type)); /* has to depend on template parameter */
         };
 
-        if (ongoing && acq.ctl.result_async() == acq::acq_status::success) {
+        if (ongoing && acq.ctl.get_acq_status() == acq::acq_status::success) {
             ongoing = false;
 
             if (msg.type == data_type::raw) {
