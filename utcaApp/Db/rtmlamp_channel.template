@@ -9,6 +9,15 @@ record(longin, "$(S)$(RTM_CHAN)AlarmsAmp-Mon"){
     field(HHSV, "MAJOR")
 }
 
+record(longin, "$(S)$(RTM_CHAN)AlarmsAmpLtc-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Latched AlarmsAmp")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))AMP_STATUS_LATCH")
+    field(HIHI, "1")
+    field(HHSV, "MAJOR")
+}
+
 record(waveform, "$(S)$(RTM_CHAN)AlarmsAmpLabels-Cte"){
     field(DESC, "Labels for each bit in AlarmsAmp-Mon")
     field(FTVL, "STRING")
@@ -18,6 +27,17 @@ record(waveform, "$(S)$(RTM_CHAN)AlarmsAmpLabels-Cte"){
         "amplifier right overcurrent flag", "amplifier right overtemperature flag"]
     )
     field(PINI, YES)
+}
+
+record(bo,"$(S)$(RTM_CHAN)AlarmsAmpLtcRst-Cmd"){
+    field(DTYP,"asynInt32")
+    field(DESC,"clears AlarmsAmpLtc")
+    field(SCAN,"Passive")
+    field(MASK, "1")
+    field(HIGH, "1")
+    field(ZNAM, "nothing")
+    field(ONAM, "reset")
+    field(OUT,"@asyn($(PORT),$(ADDR))RST_LATCH")
 }
 
 record(mbbo,"$(S)$(RTM_CHAN)PwrState-Sel"){
