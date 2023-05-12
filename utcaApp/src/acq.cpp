@@ -51,6 +51,21 @@ namespace {
     enum class repetitive_trigger {normal, repetitive, last};
     const enum_info repetitive_trigger_info[(int)repetitive_trigger::last] = {{"normal"}, {"repetitive"}};
 
+    enum class acq_status {
+      idle, waiting,
+      /* TODO: these aren't used yet */ external_trigger, data_trigger, sw_trigger,
+      acquiring,
+      error, bad_post_samples, too_many_samples, no_samples,
+      /* TODO: these aren't used yet */ no_memory, overflow,
+      last};
+    const enum_info acq_status_info[(int)acq_status::last] = {
+        {"idle"}, {"waiting"},
+        {"external_trigger"}, {"data_trigger"}, {"sw_trigger"},
+        {"acquiring"},
+        {"error", MINOR_ALARM}, {"bad_post_samples", MINOR_ALARM}, {"too_many_samples", MINOR_ALARM}, {"no_samples", MINOR_ALARM},
+        {"no_memory", MAJOR_ALARM}, {"overflow", MAJOR_ALARM}
+    };
+
     /* message format for the queue */
     struct AcqMessage {
         acq_command command;
@@ -88,7 +103,7 @@ class Acq: public UDriver {
         p_pre_samples, p_post_samples, p_channel, p_data_trigger_channel;
 
     /* custom logic parameters */
-    int p_event, p_repetitive, p_update_time, p_data_type, p_count;
+    int p_event, p_repetitive, p_update_time, p_data_type, p_status, p_count;
     /* parameters for data storage */
     int p_raw_data, p_lamp_current_data, p_lamp_voltage_data,
         p_pos_x, p_pos_y, p_setpoint, p_timeframe, p_prbs;
@@ -137,11 +152,13 @@ class Acq: public UDriver {
         createParam("REPETITIVE", asynParamInt32, &p_repetitive);
         createParam("UPDATE_TIME", asynParamFloat64, &p_update_time);
         createParam("TYPE", asynParamInt32, &p_data_type);
+        createParam("STATUS", asynParamInt32, &p_status);
         createParam("COUNT", asynParamInt32, &p_count);
         /* have to be initialized for the worker thread to work properly */
         setIntegerParam(p_repetitive, (int)repetitive_trigger::normal);
         setDoubleParam(p_update_time, 0);
         setIntegerParam(p_data_type, (int)data_type::raw);
+        setIntegerParam(p_status, (int)acq_status::idle);
         setIntegerParam(p_count, 0);
 
         createParam("RAW", asynParamInt32Array, &p_raw_data);
@@ -200,6 +217,8 @@ class Acq: public UDriver {
             set_enum(trigger_event_info);
         } else if (function == p_repetitive) {
             set_enum(repetitive_trigger_info);
+        } else if (function == p_status) {
+            set_enum(acq_status_info);
         } else {
             *nIn = 0;
             return asynError;
@@ -266,20 +285,48 @@ void AcqWorker::run()
     bool ongoing = false;
     std::chrono::time_point<std::chrono::steady_clock> start_time;
 
+    auto set_status = [this](acq_status v) {
+        std::lock_guard g(acq);
+        acq.setIntegerParam(acq.p_status, (int)v);
+        acq.callParamCallbacks(0);
+    };
+
     while (1) {
         AcqMessage msg;
         /* block in queue if there is no acquisition happening */
         if ((ongoing && queue.tryReceive(&msg, sizeof msg) != -1) ||
             (!ongoing && queue.receive(&msg, sizeof msg) != -1)) {
             if (msg.command == acq_command::start && !ongoing) {
-                std::lock_guard g(acq.ctl_lock);
-                acq.ctl.start_acquisition();
-                ongoing = true;
-                start_time = std::chrono::steady_clock::now();
+                acq::acq_error error;
+                {
+                    /* lock only inside this block so we don't deadlock when locking acq afterwards */
+                    std::lock_guard g(acq.ctl_lock);
+                    error = acq.ctl.start_acquisition();
+                }
+                switch (error) {
+                    case acq::acq_error::success:
+                        ongoing = true;
+                        start_time = std::chrono::steady_clock::now();
+                        set_status(acq_status::acquiring);
+                        break;
+                    case acq::acq_error::error:
+                        set_status(acq_status::error);
+                        break;
+                    case acq::acq_error::bad_post_samples:
+                        set_status(acq_status::bad_post_samples);
+                        break;
+                    case acq::acq_error::too_many_samples:
+                        set_status(acq_status::too_many_samples);
+                        break;
+                    case acq::acq_error::no_samples:
+                        set_status(acq_status::no_samples);
+                        break;
+                }
             }
             if (msg.command == acq_command::stop) {
                 acq.ctl.stop_acquisition();
                 ongoing = false;
+                set_status(acq_status::idle);
             }
         }
 
@@ -373,8 +420,11 @@ void AcqWorker::run()
             }
             /* only start a new acquisition if there is no incoming command */
             if (repetitive == (int)repetitive_trigger::repetitive && queue.pending() == 0) {
+                set_status(acq_status::waiting);
                 std::this_thread::sleep_until(start_time + update_time * 1s);
                 queue.send(&msg, sizeof msg);
+            } else {
+                set_status(acq_status::idle);
             }
         } else if (ongoing) {
             std::this_thread::sleep_for(acq_task_sleep);
