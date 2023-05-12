@@ -6,6 +6,7 @@
 #include <tuple>
 #include <unordered_set>
 
+#include <alarm.h>
 #include <epicsMessageQueue.h>
 #include <epicsString.h>
 #include <epicsThread.h>
@@ -23,28 +24,32 @@ namespace {
 
     const auto acq_task_sleep = 100ms;
 
+    struct enum_info {
+        const char *const name;
+        const int severity = NO_ALARM;
+    };
+
     enum class data_type {raw, lamp, sysid, last};
-    const char *const data_type_strings[(int)data_type::last] = {"raw", "lamp", "sysid"};
+    const enum_info data_type_info[(int)data_type::last] = {{"raw"}, {"lamp"}, {"sysid"}};
 
     enum class polarity {positive, negative, last};
-    const char *const polarity_strings[(int)polarity::last] = {"positive", "negative"};
+    const enum_info polarity_info[(int)polarity::last] = {{"positive"}, {"negative"}};
 
     enum class channel_organizations {lamp, dcc, sysid, sysid_applied, last};
-    const char *const channel_strings[16][(int)channel_organizations::last] = {
-        {"lamp", "invalid", "invalid", "invalid"},
-        {"invalid", "dcc", "invalid", "invalid"},
-        {"invalid", "invalid", "sysid", "sysid_applied"},
+    const enum_info channel_info[][(int)channel_organizations::last] = {
+        {{"lamp"}, {"invalid"}, {"invalid"}, {"invalid"}},
+        {{"invalid"}, {"dcc"}, {"invalid"}, {"invalid"}},
+        {{"invalid"}, {"invalid"}, {"sysid"}, {"sysid_applied"}},
     };
 
     enum class trigger {now, external, data, software, last};
-    const char *const trigger_strings[(int)trigger::last] = {"now", "external", "data", "software"};
+    const enum_info trigger_info[(int)trigger::last] = {{"now"}, {"external"}, {"data"}, {"software"}};
 
-    /* TODO: implement STOP action */
     enum class acq_command {start, stop, last};
-    const char *const trigger_event_strings[(int)acq_command::last] = {"start", "stop"};
+    const enum_info trigger_event_info[(int)acq_command::last] = {{"start"}, {"stop"}};
 
     enum class repetitive_trigger {normal, repetitive, last};
-    const char *const repetitive_trigger_strings[(int)repetitive_trigger::last] = {"normal", "repetitive"};
+    const enum_info repetitive_trigger_info[(int)repetitive_trigger::last] = {{"normal"}, {"repetitive"}};
 
     /* message format for the queue */
     struct AcqMessage {
@@ -163,37 +168,38 @@ class Acq: public UDriver {
     }
 
     asynStatus readEnum(asynUser *pasynUser, char *strings[], int values[],
-        [[maybe_unused]] int severities[], [[maybe_unused]] size_t nElements, size_t *nIn)
+        int severities[], [[maybe_unused]] size_t nElements, size_t *nIn)
     {
         const int function = pasynUser->reason;
 
-        auto set_enum = [&strings, &values, nIn](auto &new_strings) {
-            for (auto &&[i, s]: enumerate(new_strings)) {
-                strings[i] = epicsStrDup(s);
+        auto set_enum = [&strings, &values, &severities, nIn](auto &infos) {
+            for (auto &&[i, info]: enumerate(infos)) {
+                strings[i] = epicsStrDup(info.name);
                 values[i] = i;
+                severities[i] = info.severity;
 
                 *nIn = i+1;
             }
         };
 
         if (function == p_data_type) {
-            set_enum(data_type_strings);
+            set_enum(data_type_info);
         } else if (function == p_polarity) {
-            set_enum(polarity_strings);
+            set_enum(polarity_info);
         } else if (function == p_data_trigger_channel) {
-            set_enum(channel_strings[(int)channel_organizations::lamp]);
+            set_enum(channel_info[(int)channel_organizations::lamp]);
         } else if (function == p_channel) {
             /* TODO: make this more generic; perhaps take into account data_type,
              * using a callback from writeInt32Impl */
-            if (port_number == 0) set_enum(channel_strings[(int)channel_organizations::lamp]);
-            else if (port_number < 3) set_enum(channel_strings[(int)channel_organizations::dcc]);
-            else set_enum(channel_strings[(int)channel_organizations::sysid]);
+            if (port_number == 0) set_enum(channel_info[(int)channel_organizations::lamp]);
+            else if (port_number < 3) set_enum(channel_info[(int)channel_organizations::dcc]);
+            else set_enum(channel_info[(int)channel_organizations::sysid]);
         } else if (function == p_trigger_type) {
-            set_enum(trigger_strings);
+            set_enum(trigger_info);
         } else if (function == p_event) {
-            set_enum(trigger_event_strings);
+            set_enum(trigger_event_info);
         } else if (function == p_repetitive) {
-            set_enum(repetitive_trigger_strings);
+            set_enum(repetitive_trigger_info);
         } else {
             *nIn = 0;
             return asynError;
@@ -208,7 +214,7 @@ class Acq: public UDriver {
         {
             std::lock_guard g(ctl_lock);
 
-            if (function == p_trigger_type) ctl.trigger_type = trigger_strings[value];
+            if (function == p_trigger_type) ctl.trigger_type = trigger_info[value].name;
 
             if (function == p_polarity) ctl.data_trigger_polarity_neg = value;
             if (function == p_data_trigger_sel) ctl.data_trigger_sel = value;
