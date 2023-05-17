@@ -15,7 +15,7 @@ class SysId: public UDriver {
     sys_id::Controller ctl;
 
     int p_base_bpm_id, p_prbs_rst, p_prbs_step_duration, p_prbs_lfsr_length,
-        p_prbs_bpm_pos_distort_en, p_prbs_setpoint_distort_en;
+        p_prbs_bpm_pos_distort_en, p_prbs_setpoint_distort_en, p_sp_movavg;
 
     int p_setpoint_distortion_lvl0, p_setpoint_distortion_lvl1;
     int p_posx_distortion, p_posy_distortion;
@@ -33,6 +33,7 @@ class SysId: public UDriver {
               {"PRBS_CTL_LFSR_LENGTH", p_prbs_lfsr_length},
               {"PRBS_CTL_BPM_POS_DISTORT_EN", p_prbs_bpm_pos_distort_en},
               {"PRBS_CTL_SP_DISTORT_EN", p_prbs_setpoint_distort_en},
+              {"SP_DISTORT_MOV_AVG_NUM_TAPS_SEL", p_sp_movavg},
           },
           { }),
       dec(bars),
@@ -77,6 +78,7 @@ class SysId: public UDriver {
         else if (function == p_prbs_lfsr_length) ctl.lfsr_length = value;
         else if (function == p_prbs_bpm_pos_distort_en) ctl.bpm_pos_distort_en = value;
         else if (function == p_prbs_setpoint_distort_en) ctl.sp_distort_en = value;
+        else if (function == p_sp_movavg) ctl.sp_mov_avg_samples = value;
         else if (function == p_setpoint_distortion_lvl0) ctl.setpoint_distortion.prbs_0.at(addr) = value;
         else if (function == p_setpoint_distortion_lvl1) ctl.setpoint_distortion.prbs_1.at(addr) = value;
 
