@@ -96,3 +96,17 @@ record(bi,"$(P)$(R)SYSIDPRBSFOFBAccEn-Sts"){
     field(ZNAM, "disable")
     field(ONAM, "enable")
 }
+
+record(longout,"$(P)$(R)SYSIDPRBSFOFBAccMovAvgTaps-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "set FOFBAcc moving average taps")
+    field(SCAN, "Passive")
+    field(OUT, "@asyn($(PORT))SP_DISTORT_MOV_AVG_NUM_TAPS_SEL")
+    field(PINI, "YES")
+}
+record(longin,"$(P)$(R)SYSIDPRBSFOFBAccMovAvgTaps-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "get FOFBAcc moving average taps")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))SP_DISTORT_MOV_AVG_NUM_TAPS_SEL")
+}
