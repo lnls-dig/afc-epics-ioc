@@ -7,7 +7,5 @@ Group=bpm-epics-ioc
 
 MemoryAccounting=yes
 
-PermissionsStartOnly=true
 WorkingDirectory=/opt/erics/iocBoot/iocutca
-
 ExecStart=/opt/erics/iocBoot/iocutca/runFOFB.sh %i
