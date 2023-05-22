@@ -6,6 +6,7 @@ file "fofb_cc.req", P=${P}, R=${R}, FOFB_CC=DCCFMC
 file "fofb_cc.req", P=${P}, R=${R}, FOFB_CC=DCCP2P
 file "fofb_processing.req", P=${P}, R=${R}, S=${S}
 file "rtmlamp.req", S=${S}
+file "sysid.req", P=${P}, R=${R}
 file "trigger_iface.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER
 file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_LAMP
 file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_DCCFMC
