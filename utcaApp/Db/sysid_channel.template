@@ -5,6 +5,7 @@ record(ao,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)-SP"){
     field(EGU, "A")
     field(SCAN,"Passive")
     field(PINI,"YES")
+    field(VAL, 0)
     field(DRVH,"0.95")
     field(DRVL,"-0.95")
 }
@@ -22,7 +23,6 @@ record(longout, "$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Raw-SP"){
     field(DTYP, "asynInt32")
     field(SCAN, "Passive")
     field(OUT, "@asyn($(PORT),$(ADDR))SP_DISTORT_$(LEVEL)")
-    field(PINI, "YES")
 }
 record(longin, "$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Raw-RB"){
     field(DTYP, "asynInt32")
