@@ -1,21 +1,8 @@
 #!../../bin/linux-x86_64/utca
 
-## You may have to change utca to something else
-## everywhere it appears in this file
+< common.cmd
 
-< envPaths
-< set_env.cmd
-
-cd "${TOP}"
-
-## Register all support components
-dbLoadDatabase "dbd/utca.dbd"
-utca_registerRecordDeviceDriver pdbbase
-
-var dbRecordsOnceOnly 1
-
-## Run this to trace the stages of iocInit
-#traceIocInit
+epicsEnvSet("S", "${RTM_PREFIX}")
 
 pcie("${SLOT}")
 
