@@ -14,4 +14,4 @@ val_name=CRATE_${CRATE}_FOFB_${VSLOT}_PV_DEVICE_PREFIX
 eval "export DEVICE_PREFIX=\$${val_name}"
 export RTM_PREFIX=SI-${CRATE}
 
-exec procServ -f -n fofb${SLOT} -L- -i ^C^D -P $(expr 1700 + ${VSLOT}) ./st.cmd
+exec procServ -f -n fofb${SLOT} -L- -i ^C^D -P $(expr 1700 + ${VSLOT}) ./stFOFB.cmd
