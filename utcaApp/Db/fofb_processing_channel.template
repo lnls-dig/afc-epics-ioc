@@ -57,8 +57,10 @@ record(longin, "$(S)$(RTM_CHAN)CurrentRawRefPassive"){
 record(calcout, "$(S)$(RTM_CHAN)OpModeHelperCopyCurrent"){
     field(SCAN, "Passive")
     field(INPA, "$(S)$(RTM_CHAN)CurrentRawRefPassive PP")
-    field(CALC, "A")
-    field(OUT, "$(S)$(RTM_CHAN)CurrentRaw-SP PP")
+    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
+    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
+    field(CALC,"B*(A-C)")
+    field(OUT, "$(S)$(RTM_CHAN)Current-SP PP")
 }
 
 # set ps mode + (possibly) resume accumulator happens for both!
