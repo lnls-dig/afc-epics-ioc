@@ -268,15 +268,6 @@ record(longin,"$(S)$(RTM_CHAN)CurrentRaw-RB"){
     field(INP,"@asyn($(PORT),$(ADDR))PI_SP")
 }
 
-record(calcout,"$(S)$(RTM_CHAN)CurrentRawPropagateSP"){
-    field(SCAN,"Passive")
-    field(INPA,"$(S)$(RTM_CHAN)CurrentRaw-SP CP")
-    field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP")
-    field(INPC,"$(S)$(RTM_CHAN)CurrOffset-SP")
-    field(CALC,"B*(A-C)")
-    field(OUT,"$(S)$(RTM_CHAN)Current-SP NPP")
-}
-
 record(calc,"$(S)$(RTM_CHAN)Current-RB"){
     field(DESC,"get manual current control")
     field(EGU, "A")
