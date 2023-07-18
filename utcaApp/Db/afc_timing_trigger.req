@@ -1,0 +1,9 @@
+$(P)$(R)$(S)$(C)Dir-Sel
+$(P)$(R)$(S)$(C)Log-Sel
+$(P)$(R)$(S)$(C)Polarity-Sel
+$(P)$(R)$(S)$(C)State-Sel
+$(P)$(R)$(S)$(C)Src-Sel
+$(P)$(R)$(S)$(C)Delay-SP
+$(P)$(R)$(S)$(C)Evt-SP
+$(P)$(R)$(S)$(C)NrPulses-SP
+$(P)$(R)$(S)$(C)Width-SP

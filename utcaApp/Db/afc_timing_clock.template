@@ -1,0 +1,160 @@
+# AFC Timing PLLs
+
+record(longout, "$(P)$(R)$(CLOCK)FreqPropGain-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set proportional gain of $(CLOCK) freq loop")
+    field(PINI, YES)
+    field(OUT,"@asyn($(PORT),$(ADDR))FREQ_KP")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)FreqPropGain-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get proportional gain of $(CLOCK) freq loop")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))FREQ_KP")
+}
+
+record(longout, "$(P)$(R)$(CLOCK)FreqIntgGain-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set integral gain of $(CLOCK) freq loop")
+    field(PINI, YES)
+    field(OUT,"@asyn($(PORT),$(ADDR))FREQ_KI")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)FreqIntgGain-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get integral gain of $(CLOCK) freq loop")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))FREQ_KI")
+}
+
+record(longout, "$(P)$(R)$(CLOCK)PhasePropGain-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set proportional gain of $(CLOCK) phase loop")
+    field(PINI, YES)
+    field(OUT,"@asyn($(PORT),$(ADDR))PHASE_KP")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)PhasePropGain-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get proportional gain of $(CLOCK) freq loop")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))PHASE_KP")
+}
+
+record(longout, "$(P)$(R)$(CLOCK)PhaseIntgGain-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set integral gain of $(CLOCK) phase loop")
+    field(PINI, YES)
+    field(OUT,"@asyn($(PORT),$(ADDR))PHASE_KI")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)PhaseIntgGain-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get integral gain of $(CLOCK) phase loop")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))PHASE_KI")
+}
+
+record(longout, "$(P)$(R)$(CLOCK)PhaseNavg-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set average number of $(CLOCK) phase loop")
+    field(PINI, YES)
+    field(OUT,"@asyn($(PORT),$(ADDR))MAF_NAVG")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)PhaseNavg-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get average number of $(CLOCK) phase loop")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))MAF_NAVG")
+}
+
+record(longout, "$(P)$(R)$(CLOCK)PhaseDiv-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set divider 2^N of $(CLOCK) phase loop")
+    field(PINI, YES)
+    field(OUT,"@asyn($(PORT),$(ADDR))MAF_DIV_EXP")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)PhaseDiv-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get average number of $(CLOCK) phase loop")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))MAF_DIV_EXP")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)RFReqHi-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get $(CLOCK) Si57x RF Req[37-20]")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))RFREQ_HI")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)RFReqLo-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get $(CLOCK) Si57x RF Req[19-0]")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))RFREQ_LO")
+}
+
+record(longin, "$(P)$(R)$(CLOCK)n1-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get $(CLOCK) Si57x n1")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))N1")
+}
+
+record(mbbi, "$(P)$(R)$(CLOCK)hs_div-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get $(CLOCK) Si57x hs-div")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))HS_DIV")
+    field(ZRST, "4")
+    field(ZRVL, "0x0")
+    field(ONST, "5")
+    field(ONVL, "0x1")
+    field(TWST, "6")
+    field(TWVL, "0x2")
+    field(THST, "7")
+    field(THVL, "0x3")
+    field(FRST, "9")
+    field(FRVL, "0x5")
+    field(FVST, "11")
+    field(FVVL, "0x7")
+}
+
+record(longout, "$(P)$(R)$(CLOCK)FreqMult-Cte"){
+    field(DESC, "$(CLOCK) Si57x Freq Multiplier")
+    field(VAL, "$(MULT)")
+}
+
+record(longout, "$(P)$(R)$(CLOCK)FreqDiv-Cte"){
+    field(DESC, "$(CLOCK) Si57x Freq Divider")
+    field(VAL, "$(DIV)")
+}
+
+record(calcout, "$(P)$(R)$(CLOCK)FreqCalc"){
+    field(DESC, "Set $(CLOCK) Si57x Freq from FPGA clock")
+    field(EGU, "Hz")
+    field(INPA, "$(P)$(R)FPGAClk-Cte CP")
+    field(INPB, "$(P)$(R)$(CLOCK)FreqMult-Cte")
+    field(INPC, "$(P)$(R)$(CLOCK)FreqDiv-Cte")
+    field(CALC, "A*B/C")
+    field(OUT,"$(P)$(R)$(CLOCK)Freq-SP PP")
+}
+
+record(ao, "$(P)$(R)$(CLOCK)Freq-SP"){
+    field(DTYP, "asynFloat64")
+    field(DESC, "Set $(CLOCK) Si57x Freq")
+    field(EGU, "Hz")
+    field(OUT,"@asyn($(PORT),$(ADDR))FREQ")
+}
+
+record(ai, "$(P)$(R)$(CLOCK)Freq-RB"){
+    field(DTYP, "asynFloat64")
+    field(DESC, "Get $(CLOCK) Si57x Freq")
+    field(EGU, "Hz")
+    field(SCAN, "I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))FREQ")
+}
