@@ -1,0 +1,6 @@
+$(P)$(R)$(CLOCK)FreqPropGain-SP
+$(P)$(R)$(CLOCK)FreqIntgGain-SP
+$(P)$(R)$(CLOCK)PhasePropGain-SP
+$(P)$(R)$(CLOCK)PhaseIntgGain-SP
+$(P)$(R)$(CLOCK)PhaseNavg-SP
+$(P)$(R)$(CLOCK)PhaseDiv-SP

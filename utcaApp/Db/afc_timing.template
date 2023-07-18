@@ -1,0 +1,74 @@
+# AFC Timing global configuration
+
+## read EVG FPGAClk value at startup
+record(ai, "$(P)$(R)FPGAClk-Cte") {
+    field(DESC, "FPGA Clock from EVG")
+    field(EGU, "Hz")
+    field(INP, "AS-RaMO:TI-EVG:FPGAClk-Cte CP")
+    field(FLNK, "$(P)$(R)DisableFPGAClk PP")
+}
+record(stringout, "$(P)$(R)DisableFPGAClk"){
+    field(VAL, "")
+    field(OUT, "$(P)$(R)FPGAClk-Cte.INP CA")
+}
+
+record(mbbi, "$(P)$(R)LinkStatus-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get link status")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))STA_LINK")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"off")
+    field(ONST,"on")
+}
+
+record(mbbi, "$(P)$(R)RxEnStatus-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get RX Enable Status")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))STA_RXEN")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"off")
+    field(ONST,"on")
+}
+
+record(mbbi, "$(P)$(R)RefClkLocked-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get Ref. Clock Locked Status")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))STA_REFCLKLOCK")
+    field(NOBT,"1")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"off")
+    field(ONST,"on")
+}
+
+record(bo, "$(P)$(R)DevEnbl-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Event Receiver state control")
+    field(PINI, YES)
+    field(ZNAM, "Dsbl")
+    field(ONAM, "Enbl")
+    field(OUT,"@asyn($(PORT))STA_EVREN")
+}
+
+record(bi, "$(P)$(R)DevEnbl-Sts"){
+    field(DTYP, "asynInt32")
+    field(ZNAM, "Dsbl")
+    field(ONAM, "Enbl")
+    field(DESC, "Event Receiver state status")
+    field(INP,"@asyn($(PORT))STA_EVREN")
+    field(SCAN,"I/O Intr")
+}
+
+record(longin, "$(P)$(R)Alive-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Alive free running counter")
+    field(INP,"@asyn($(PORT))ALIVE")
+    field(SCAN,"I/O Intr")
+}

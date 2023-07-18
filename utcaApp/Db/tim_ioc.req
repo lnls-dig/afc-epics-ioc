@@ -1,0 +1,23 @@
+$(P)$(R)DevEnbl-Sel
+
+file "afc_timing_clock.req", P=${P}, R=${R}, CLOCK=RTM
+file "afc_timing_clock.req", P=${P}, R=${R}, CLOCK=AFC
+
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=AMC, C=0
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=AMC, C=1
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=AMC, C=2
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=AMC, C=3
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=AMC, C=4
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=AMC, C=5
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=AMC, C=6
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=AMC, C=7
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC1, C=Ch0
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC1, C=Ch1
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC1, C=Ch2
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC1, C=Ch3
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC1, C=Ch4
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC2, C=Ch0
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC2, C=Ch1
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC2, C=Ch2
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC2, C=Ch3
+file "afc_timing_trigger.req", P=${P}, R=${R}, S=FMC2, C=Ch4

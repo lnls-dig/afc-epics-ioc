@@ -1,0 +1,238 @@
+# AFC Timing triggers
+
+record(bo, "$(P)$(R)$(S)$(C)State-Sel"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) state")
+  field(PINI, YES)
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_EN")
+  field(MASK, "1")
+  field(ZNAM, "Dsbl")
+  field(ONAM, "Enbl")
+}
+
+record(bi, "$(P)$(R)$(S)$(C)State-Sts"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) state")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_EN")
+  field(ZNAM, "Dsbl")
+  field(ONAM, "Enbl")
+}
+
+record(bo, "$(P)$(R)$(S)$(C)Polarity-Sel"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) Polarity")
+  field(PINI, YES)
+  field(MASK, "1")
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_POL")
+  field(ZNAM, "Normal")
+  field(ONAM, "Inverse")
+}
+
+record(bi, "$(P)$(R)$(S)$(C)Polarity-Sts"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) Polarity")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_POL")
+  field(ZNAM, "Normal")
+  field(ONAM, "Inverse")
+}
+
+record(bo, "$(P)$(R)$(S)$(C)Log-Sel"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) Time Log")
+  field(PINI, YES)
+  field(MASK, "1")
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_LOG")
+  field(ZNAM, "Dsbl")
+  field(ONAM, "Enbl")
+}
+
+record(bi, "$(P)$(R)$(S)$(C)Log-Sts"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) Time Log")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_LOG")
+  field(ZNAM, "Dsbl")
+  field(ONAM, "Enbl")
+}
+
+record(mbbo, "$(P)$(R)$(S)$(C)Src-Sel"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Set $(S) channel $(C) source")
+  field(PINI, YES)
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_SRC")
+}
+
+record(mbbi, "$(P)$(R)$(S)$(C)Src-Sts"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Get $(S) channel $(C) source")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_SRC")
+}
+
+record(bo, "$(P)$(R)$(S)$(C)Dir-Sel"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) direction")
+  field(PINI, YES)
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_DIR")
+  field(MASK, "1")
+  field(ZNAM, "Out")
+  field(ONAM, "In")
+}
+
+record(bi, "$(P)$(R)$(S)$(C)Dir-Sts"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) direction")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_DIR")
+  field(ZNAM, "Out")
+  field(ONAM, "In")
+}
+
+record(bo, "$(P)$(R)$(S)$(C)EvtCntRst-Cmd"){
+  field(DTYP, "asynInt32")
+  field(DESC, "$(S) trigger $(C) event counter reset")
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_COUNT_RST")
+  field(PINI, "1")
+  field(MASK, "1")
+  field(HIGH, "1")
+  field(ZNAM, "Dsbl")
+  field(ONAM, "Enbl")
+}
+
+record(longout, "$(P)$(R)$(S)$(C)Evt-SP"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Set $(S) trigger $(C) event code")
+  field(PINI, YES)
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_EVT")
+}
+
+record(longin, "$(P)$(R)$(S)$(C)Evt-RB"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Get $(S) trigger $(C) event code")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_EVT")
+}
+
+record(calcout, "$(P)$(R)$(S)$(C)WidthUpdate") {
+  field(DESC, "Set $(S) trigger $(C) width update")
+  field(INPA, "$(P)$(R)$(S)$(C)WidthRaw-SP")
+  field(INPB, "$(P)$(R)FPGAClk-Cte CP")
+  field(CALC, "A/B*1000000")
+  field(OUT, "$(P)$(R)$(S)$(C)Width-SP PP")
+}
+
+record(ao, "$(P)$(R)$(S)$(C)Width-SP") {
+  field(DESC, "Set $(S) trigger $(C) width")
+  field(EGU, "us")
+  field(PREC, "3")
+  field(VAL, "0.008")
+  field(PINI, YES)
+  field(FLNK, "$(P)$(R)$(S)$(C)WidthCalc PP")
+  field(DRVH, "17000000")
+  field(DRVL, "0.008")
+}
+
+record(calcout, "$(P)$(R)$(S)$(C)WidthCalc") {
+  field(DESC, "trigger $(C) width calc")
+  field(INPA, "$(P)$(R)$(S)$(C)Width-SP")
+  field(INPB, "$(P)$(R)FPGAClk-Cte")
+  field(CALC, "NINT(A*(B/1000000))")
+  field(OUT, "$(P)$(R)$(S)$(C)WidthRaw-SP PP")
+}
+
+record(longout, "$(P)$(R)$(S)$(C)WidthRaw-SP"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Set $(S) trigger $(C) width")
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_WDT")
+  field(DRVL, 1)
+}
+
+record(longin, "$(P)$(R)$(S)$(C)WidthRaw-RB"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Get $(S) trigger $(C) width")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_WDT")
+  field(FLNK, "$(P)$(R)$(S)$(C)Width-RB PP")
+}
+
+record(calc, "$(P)$(R)$(S)$(C)Width-RB") {
+  field(DESC, "Get $(S) trigger $(C) width")
+  field(EGU, "us")
+  field(PREC, "3")
+  field(INPA, "$(P)$(R)$(S)$(C)WidthRaw-RB")
+  field(INPB, "$(P)$(R)FPGAClk-Cte CP")
+  field(CALC, "A/B*1000000")
+}
+
+record(calcout, "$(P)$(R)$(S)$(C)DelayUpdate") {
+  field(DESC, "Set $(S) trigger $(C) delay update")
+  field(INPA, "$(P)$(R)$(S)$(C)DelayRaw-SP")
+  field(INPB, "$(P)$(R)FPGAClk-Cte CP")
+  field(CALC, "A/B*1000000")
+  field(OUT, "$(P)$(R)$(S)$(C)Delay-SP PP")
+}
+
+record(ao, "$(P)$(R)$(S)$(C)Delay-SP") {
+  field(DESC, "Set $(S) trigger $(C) delay")
+  field(EGU, "us")
+  field(PREC, "3")
+  field(VAL, "0.000")
+  field(PINI, YES)
+  field(FLNK, "$(P)$(R)$(S)$(C)DelayCalc PP")
+  field(DRVH, "17000000")
+  field(DRVL, "0.000")
+}
+
+record(calcout, "$(P)$(R)$(S)$(C)DelayCalc") {
+  field(DESC, "trigger $(C) delay calc")
+  field(INPA, "$(P)$(R)$(S)$(C)Delay-SP")
+  field(INPB, "$(P)$(R)FPGAClk-Cte")
+  field(CALC, "NINT(A*(B/1000000))")
+  field(OUT, "$(P)$(R)$(S)$(C)DelayRaw-SP PP")
+}
+
+record(longout, "$(P)$(R)$(S)$(C)DelayRaw-SP"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Set $(S) trigger $(C) delay")
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_DLY")
+}
+
+record(longin, "$(P)$(R)$(S)$(C)DelayRaw-RB"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Get $(S) trigger $(C) delay")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_DLY")
+  field(FLNK, "$(P)$(R)$(S)$(C)Delay-RB PP")
+}
+
+record(calc, "$(P)$(R)$(S)$(C)Delay-RB") {
+  field(DESC, "Get $(S) trigger $(C) delay")
+  field(PREC, "3")
+  field(EGU, "us")
+  field(INPA, "$(P)$(R)$(S)$(C)DelayRaw-RB")
+  field(INPB, "$(P)$(R)FPGAClk-Cte CP")
+  field(CALC, "A/B*1000000")
+}
+
+record(longout, "$(P)$(R)$(S)$(C)NrPulses-SP"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Set $(S) trigger $(C) pulses")
+  field(PINI, YES)
+  field(OUT,"@asyn($(PORT),$(ADDR))CH_PULSES")
+}
+
+record(longin, "$(P)$(R)$(S)$(C)NrPulses-RB"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Get $(S) trigger $(C) pulses")
+  field(SCAN,"I/O Intr")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_PULSES")
+}
+
+record(longin, "$(P)$(R)$(S)$(C)EvtCnt-Mon"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Get $(S) trigger $(C) event counter")
+  field(INP,"@asyn($(PORT),$(ADDR))CH_COUNT")
+  field(SCAN,"I/O Intr")
+}

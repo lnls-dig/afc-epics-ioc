@@ -1,0 +1,35 @@
+file db/scan_task.template {
+    {}
+}
+
+file db/afc_timing.template {
+    {}
+}
+
+file db/afc_timing_clock.template {
+    pattern {CLOCK, ADDR, MULT, DIV}
+    {RTM, 0, 1, 1}
+    {AFC, 1, 5, 9}
+}
+
+file db/afc_timing_trigger.template {
+    pattern {S, C, ADDR}
+    {AMC, 0, 0}
+    {AMC, 1, 1}
+    {AMC, 2, 2}
+    {AMC, 3, 3}
+    {AMC, 4, 4}
+    {AMC, 5, 5}
+    {AMC, 6, 6}
+    {AMC, 7, 7}
+    {FMC1, Ch0, 8}
+    {FMC1, Ch1, 9}
+    {FMC1, Ch2, 10}
+    {FMC1, Ch3, 11}
+    {FMC1, Ch4, 12}
+    {FMC2, Ch0, 13}
+    {FMC2, Ch1, 14}
+    {FMC2, Ch2, 15}
+    {FMC2, Ch3, 16}
+    {FMC2, Ch4, 17}
+}
