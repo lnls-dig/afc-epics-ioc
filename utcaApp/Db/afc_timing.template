@@ -1,15 +1,18 @@
 # AFC Timing global configuration
 
-## read EVG FPGAClk value at startup
-record(ai, "$(P)$(R)FPGAClk-Cte") {
+## read EVG FPGAClk value at startup.
+## this works by using "closed_loop" OMSL,
+## and we switch to "supervisory" after processing once
+record(ao, "$(P)$(R)FPGAClk-Cte") {
     field(DESC, "FPGA Clock from EVG")
     field(EGU, "Hz")
-    field(INP, "AS-RaMO:TI-EVG:FPGAClk-Cte CP")
+    field(DOL, "AS-RaMO:TI-EVG:FPGAClk-Cte CP")
+    field(OMSL, 1)
     field(FLNK, "$(P)$(R)DisableFPGAClk PP")
 }
-record(stringout, "$(P)$(R)DisableFPGAClk"){
-    field(VAL, "")
-    field(OUT, "$(P)$(R)FPGAClk-Cte.INP CA")
+record(longout, "$(P)$(R)DisableFPGAClk"){
+    field(VAL, 0)
+    field(OUT, "$(P)$(R)FPGAClk-Cte.OMSL")
 }
 
 record(mbbi, "$(P)$(R)LinkStatus-Mon"){
