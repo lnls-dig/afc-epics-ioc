@@ -137,6 +137,7 @@ record(longout, "$(P)$(R)$(CLOCK)FreqDiv-Cte"){
 record(calcout, "$(P)$(R)$(CLOCK)FreqCalc"){
     field(DESC, "Set $(CLOCK) Si57x Freq from FPGA clock")
     field(EGU, "Hz")
+    field(PINI, YES)
     field(INPA, "$(P)$(R)FPGAClk-Cte CP")
     field(INPB, "$(P)$(R)$(CLOCK)FreqMult-Cte")
     field(INPC, "$(P)$(R)$(CLOCK)FreqDiv-Cte")

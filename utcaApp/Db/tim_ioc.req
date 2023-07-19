@@ -1,3 +1,5 @@
+$(P)$(R)FPGAClk-Cte
+$(P)$(R)FPGAClk-Cte.DOL
 $(P)$(R)DevEnbl-Sel
 
 file "afc_timing_clock.req", P=${P}, R=${R}, CLOCK=RTM
