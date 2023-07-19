@@ -1,0 +1,11 @@
+[Unit]
+Description=TIM IOC %i
+
+[Service]
+User=bpm-epics-ioc
+Group=bpm-epics-ioc
+
+MemoryAccounting=yes
+
+WorkingDirectory=/opt/erics/iocBoot/iocutca
+ExecStart=/opt/erics/iocBoot/iocutca/runTIM.sh %i
