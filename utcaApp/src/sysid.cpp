@@ -55,9 +55,9 @@ class SysId: public UDriver {
         read_parameters();
     }
 
-    asynStatus read_parameters()
+    asynStatus read_parameters(bool only_monitors=false)
     {
-        UDriver::read_parameters();
+        UDriver::read_parameters(only_monitors);
 
         for (unsigned addr = 0; addr < number_of_channels; addr++) {
             setIntegerParam(addr, p_setpoint_distortion_lvl0, dec.setpoint_distortion.prbs_0.at(addr));
