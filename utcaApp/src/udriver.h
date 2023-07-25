@@ -71,9 +71,9 @@ class UDriver: public asynPortDriver {
         create_params(name_and_index_channel, first_channel_parameter, last_channel_parameter);
     }
 
-    virtual asynStatus read_parameters()
+    virtual asynStatus read_parameters(bool only_monitors=false)
     {
-        generic_decoder->read();
+        generic_decoder->get_data(only_monitors);
 
         auto get_params = [this](auto first_param, auto last_param, auto fn) {
             if (first_param < 0) return;
@@ -119,7 +119,7 @@ class UDriver: public asynPortDriver {
 
         if (function == p_scan_task) {
             *value = scan_counter++;
-            return read_parameters();
+            return read_parameters(true);
         }
         else return asynPortDriver::readInt32(pasynUser, value);
     }

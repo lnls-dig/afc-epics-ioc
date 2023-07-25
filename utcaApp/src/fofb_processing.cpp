@@ -68,9 +68,9 @@ class FofbProcessing: public UDriver {
         read_parameters();
     }
 
-    asynStatus read_parameters()
+    asynStatus read_parameters(bool only_monitors=false)
     {
-        UDriver::read_parameters();
+        UDriver::read_parameters(only_monitors);
 
         for (unsigned addr = 0; addr < ::number_of_channels; addr++)
             setDoubleParam(addr, p_acc_gain, dec.get_channel_data<double>("CH_ACC_GAIN", addr));
