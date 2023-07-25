@@ -2,8 +2,8 @@
 Description=TIM IOC %i
 
 [Service]
-User=bpm-epics-ioc
-Group=bpm-epics-ioc
+User=iocs
+Group=iocs
 
 MemoryAccounting=yes
 
