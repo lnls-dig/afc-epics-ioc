@@ -13,7 +13,7 @@ for slot in /sys/bus/pci/slots/* ; do
 done
 
 if [ -n "${devslot}" -a "${devslot}" = "1" ]; then
-    systemctl restart erics-tim@${devslot}.service
+    : systemctl restart erics-tim@${devslot}.service
 fi
 
 if [ -n "${devslot}" -a "${devslot}" = "2-1" ]; then
