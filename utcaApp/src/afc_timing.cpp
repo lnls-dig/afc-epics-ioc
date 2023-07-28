@@ -15,7 +15,11 @@ class AFCTiming: public UDriver {
     afc_timing::Core dec;
     afc_timing::Controller ctl;
 
-    int p_link, p_rxen, p_refclock_lock, p_evren, p_alive;
+    int p_link, p_rxen, p_refclock_lock, p_evren,
+        p_rtm_lock, p_gt0_lock,
+        p_afc_lock_latch, p_rtm_lock_latch, p_gt0_lock_latch,
+        p_lock_latch_rst,
+        p_alive;
     int p_rfreq_hi, p_rfreq_lo, p_n1, p_hs_div,
         p_freq_kp, p_freq_ki, p_phase_kp, p_phase_ki,
         p_maf_navg, p_maf_divexp;
@@ -35,6 +39,12 @@ class AFCTiming: public UDriver {
               {"STA_REFCLKLOCK", p_refclock_lock},
               {"STA_EVREN", p_evren},
               {"ALIVE", p_alive},
+              {"STA_LOCKED_RTM", p_rtm_lock},
+              {"STA_LOCKED_GT0", p_gt0_lock},
+              {"STA_LOCKED_AFC_LATCH", p_afc_lock_latch},
+              {"STA_LOCKED_RTM_LATCH", p_rtm_lock_latch},
+              {"STA_LOCKED_GT0_LATCH", p_gt0_lock_latch},
+              {"STA_LOCKED_RST_LATCH", p_lock_latch_rst},
           },
           {
               {"RFREQ_HI", p_rfreq_hi},
@@ -73,7 +83,7 @@ class AFCTiming: public UDriver {
 
         createParam("FREQ", asynParamFloat64, &p_freq);
 
-        write_only = {p_ch_count_rst};
+        write_only = {p_lock_latch_rst, p_ch_count_rst};
 
         read_parameters();
     }
@@ -91,6 +101,13 @@ class AFCTiming: public UDriver {
 
                 *nIn = i+1;
             }
+        } else if (function == p_refclock_lock || function >= p_rtm_lock && function <= p_gt0_lock_latch) {
+            static const char *off_on[] = {"off", "on"};
+            for (auto &&[i, name]: enumerate(off_on)) {
+                strings[i] = epicsStrDup(name);
+                values[i] = i;
+                severities[i] = i == 0 ? MAJOR_ALARM : NO_ALARM;
+            }
         } else {
             *nIn = 0;
             return asynError;
@@ -103,6 +120,8 @@ class AFCTiming: public UDriver {
     {
         if (function == p_evren) {
             ctl.event_receiver_enable = value;
+        } else if (function == p_lock_latch_rst) {
+            ctl.reset_latches = value;
         } else if (function >= p_freq_kp && function <= p_maf_divexp) {
             auto &clock = addr == 0 ? ctl.rtm_clock : ctl.afc_clock;
 
