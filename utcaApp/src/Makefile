@@ -29,9 +29,6 @@ utca_DBD += aSubRoutines.dbd
 
 utca_DBD += menuScan.dbd
 
-UHAL = $(EPICS_BASE)/../uhal
-UHAL_LIBS = $(UHAL)/lib/x86_64-linux-gnu
-
 utca_LIBS += uhal-modules uhal-utilities
 uhal-utilities_DIR = $(UHAL_LIBS)
 uhal-modules_DIR = $(UHAL_LIBS)
