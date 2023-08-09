@@ -113,7 +113,7 @@ class UDriver: public asynPortDriver {
             callParamCallbacks(addr);
     }
 
-    asynStatus readInt32(asynUser *pasynUser, epicsInt32 *value)
+    asynStatus readInt32(asynUser *pasynUser, epicsInt32 *value) override
     {
         const int function = pasynUser->reason;
 
@@ -125,7 +125,7 @@ class UDriver: public asynPortDriver {
     }
 
     virtual asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value) = 0;
-    asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value) final
+    asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value) override final
     {
         const int function = pasynUser->reason;
         int addr;
