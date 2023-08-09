@@ -56,6 +56,9 @@ utca_SRCS += utca_registerRecordDeviceDriver.cpp
 utca_SRCS_DEFAULT += utcaMain.cpp
 utca_SRCS_vxWorks += -nil-
 
+utca_DBD += pvxsIoc.dbd
+utca_LIBS += pvxsIoc pvxs
+
 # Finally link IOC to the EPICS Base libraries
 utca_LIBS += $(EPICS_BASE_IOC_LIBS)
 
