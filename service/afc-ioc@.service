@@ -1,0 +1,11 @@
+[Unit]
+Description=AFC EPICS IOC %i
+
+[Service]
+User=iocs
+Group=iocs
+
+MemoryAccounting=yes
+
+WorkingDirectory=/opt/afc-epics-ioc/iocBoot/iocutca
+ExecStart=/opt/afc-epics-ioc/iocBoot/iocutca/run.sh %i
