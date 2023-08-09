@@ -34,6 +34,7 @@ EPICS_BASE = $(TOP)/../epics-7
 ASYN = $(EPICS_BASE)/../asyn
 AUTOSAVE = $(EPICS_BASE)/../autosave
 RETOOLS = $(EPICS_BASE)/../retools
+PVXS = $(EPICS_BASE)/../pvxs
 
 # Set RULES here if you want to use build rules from somewhere
 # other than EPICS_BASE:
