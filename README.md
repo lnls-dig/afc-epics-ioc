@@ -1,6 +1,6 @@
-# LNLS μTCA IOCs
+# AFC EPICS IOC
 
-This project implements IOCs for the FPGA devices supported by the [μHAL
+This project implements IOCs for the AFC boards supported by the [μHAL
 library](https://github.com/lnls-dig/uhal).
 
 ## How to build
