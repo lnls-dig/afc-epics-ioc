@@ -2,7 +2,6 @@
 #include <epicsString.h>
 
 #include <modules/afc_timing.h>
-#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"
@@ -74,12 +73,9 @@ class AFCTiming: public UDriver {
       dec(bars),
       ctl(bars)
     {
-        if (auto v = read_sdb(&bars, ctl.device_match, port_number)) {
-            dec.set_devinfo(*v);
-            ctl.set_devinfo(*v);
-        } else {
-            throw std::runtime_error("couldn't find afc_timing module");
-        }
+        auto v = find_device(port_number);
+        dec.set_devinfo(v);
+        ctl.set_devinfo(v);
 
         createParam("FREQ", asynParamFloat64, &p_freq);
 

@@ -1,7 +1,6 @@
 #include <algorithm>
 
 #include <modules/fofb_processing.h>
-#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"
@@ -49,12 +48,9 @@ class FofbProcessing: public UDriver {
       dec(bars),
       ctl(bars)
     {
-        if (auto v = read_sdb(&bars, ctl.device_match, port_number)) {
-            dec.set_devinfo(*v);
-            ctl.set_devinfo(*v);
-        } else {
-            throw std::runtime_error("couldn't find fofb_processing module");
-        }
+        auto v = find_device(port_number);
+        dec.set_devinfo(v);
+        ctl.set_devinfo(v);
 
         createParam("REF_ORBIT_X", asynParamInt32Array, &p_reforb_x);
         createParam("REF_ORBIT_Y", asynParamInt32Array, &p_reforb_y);

@@ -1,7 +1,6 @@
 #include <algorithm>
 
 #include <modules/sysid.h>
-#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"
@@ -39,12 +38,9 @@ class SysId: public UDriver {
       dec(bars),
       ctl(bars)
     {
-        if (auto v = read_sdb(&bars, ctl.device_match, port_number)) {
-            dec.set_devinfo(*v);
-            ctl.set_devinfo(*v);
-        } else {
-            throw std::runtime_error("couldn't find sys_id module");
-        }
+        auto v = find_device(port_number);
+        dec.set_devinfo(v);
+        ctl.set_devinfo(v);
 
         createParam("SP_DISTORT_LVL0", asynParamInt32, &p_setpoint_distortion_lvl0);
         createParam("SP_DISTORT_LVL1", asynParamInt32, &p_setpoint_distortion_lvl1);
