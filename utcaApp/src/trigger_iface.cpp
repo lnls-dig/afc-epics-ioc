@@ -3,7 +3,6 @@
 #include <tuple>
 
 #include <modules/trigger_iface.h>
-#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"
@@ -37,12 +36,9 @@ class TriggerIface: public UDriver {
       dec(bars),
       ctl(bars)
     {
-        if (auto v = read_sdb(&bars, ctl.device_match, port_number)) {
-            dec.set_devinfo(*v);
-            ctl.set_devinfo(*v);
-        } else {
-            throw std::runtime_error("couldn't find trigger_iface module");
-        }
+        auto v = find_device(port_number);
+        dec.set_devinfo(v);
+        ctl.set_devinfo(v);
 
         write_only = {p_rcv_count_rst, p_transm_count_rst};
 

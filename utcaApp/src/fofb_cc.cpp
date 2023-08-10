@@ -3,7 +3,6 @@
 #include <tuple>
 
 #include <modules/fofb_cc.h>
-#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"
@@ -67,12 +66,9 @@ class FofbCc: public UDriver {
       dec(bars),
       ctl(bars)
     {
-        if (auto v = read_sdb(&bars, ctl.device_match, port_number)) {
-            dec.set_devinfo(*v);
-            ctl.set_devinfo(*v);
-        } else {
-            throw std::runtime_error("couldn't find fofb_cc module");
-        }
+        auto v = find_device(port_number);
+        dec.set_devinfo(v);
+        ctl.set_devinfo(v);
 
         write_only = {p_err_clr, p_toa_rd_str, p_rcb_rd_str};
 

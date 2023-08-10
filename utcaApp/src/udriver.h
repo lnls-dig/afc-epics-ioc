@@ -8,8 +8,11 @@
 
 #include <asynPortDriver.h>
 
+#include <decoders.h>
+#include <util_sdb.h>
+
 #include "enumerate.h"
-#include "decoders.h"
+#include "pcie-single.h"
 
 class UDriver: public asynPortDriver {
     RegisterDecoder *generic_decoder;
@@ -69,6 +72,14 @@ class UDriver: public asynPortDriver {
 
         create_params(name_and_index, first_general_parameter, last_general_parameter);
         create_params(name_and_index_channel, first_channel_parameter, last_channel_parameter);
+    }
+
+    sdb_device_info find_device(int port_number)
+    {
+        if (auto v = read_sdb(&bars, generic_decoder->match_devinfo_lambda, port_number))
+            return *v;
+        else
+            throw std::runtime_error("couldn't find module");
     }
 
     virtual asynStatus read_parameters(bool only_monitors=false)

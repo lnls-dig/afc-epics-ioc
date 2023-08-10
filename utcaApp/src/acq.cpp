@@ -12,7 +12,6 @@
 #include <epicsThread.h>
 
 #include <modules/acq.h>
-#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"
@@ -138,12 +137,9 @@ class Acq: public UDriver {
       ctl(bars),
       thread(worker, (std::string(portName) + "-worker").c_str(), epicsThreadGetStackSize(epicsThreadStackMedium), epicsThreadPriorityMedium)
     {
-        if (auto v = read_sdb(&bars, ctl.device_match, port_number)) {
-            dec.set_devinfo(*v);
-            ctl.set_devinfo(*v);
-        } else {
-            throw std::runtime_error("couldn't find acq module");
-        }
+        auto v = find_device(port_number);
+        dec.set_devinfo(v);
+        ctl.set_devinfo(v);
 
         /* isn't read back from hardware */
         createParam("TRIGGER", asynParamInt32, &p_trigger_type);

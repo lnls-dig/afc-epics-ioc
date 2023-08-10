@@ -3,7 +3,6 @@
 #include <tuple>
 
 #include <modules/lamp.h>
-#include <util_sdb.h>
 
 #include "pcie-single.h"
 #include "udriver.h"
@@ -52,12 +51,9 @@ class RtmLamp: public UDriver {
       dec(bars),
       ctl(bars)
     {
-        if (auto v = read_sdb(&bars, ctl.device_match, port_number)) {
-            dec.set_devinfo(*v);
-            ctl.set_devinfo(*v);
-        } else {
-            throw std::runtime_error("couldn't find lamp module");
-        }
+        auto v = find_device(port_number);
+        dec.set_devinfo(v);
+        ctl.set_devinfo(v);
 
         /* XXX: initialize this one specifically to avoid an exception */
         for (unsigned addr = 0; addr < number_of_channels; addr++) {
