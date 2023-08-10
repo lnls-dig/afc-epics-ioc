@@ -34,7 +34,7 @@ uhal-utilities_DIR = $(UHAL_LIBS)
 uhal-modules_DIR = $(UHAL_LIBS)
 
 OP_SYS_INCLUDES += -I$(UHAL)/include/uhal
-USR_CXXFLAGS += -std=c++17 -Wall -Wextra
+USR_CXXFLAGS += -std=c++20 -Wall -Wextra
 
 # Build the IOC application
 PROD_IOC = utca
