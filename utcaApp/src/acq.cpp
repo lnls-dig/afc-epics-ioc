@@ -57,13 +57,15 @@ namespace {
       acquiring,
       error, bad_post_samples, too_many_samples, no_samples,
       /* TODO: these aren't used yet */ no_memory, overflow,
+      result_error,
       last};
     const enum_info acq_status_info[(int)acq_status::last] = {
         {"idle"}, {"waiting"},
         {"external_trigger"}, {"data_trigger"}, {"sw_trigger"},
         {"acquiring"},
         {"error", MINOR_ALARM}, {"bad_post_samples", MINOR_ALARM}, {"too_many_samples", MINOR_ALARM}, {"no_samples", MINOR_ALARM},
-        {"no_memory", MAJOR_ALARM}, {"overflow", MAJOR_ALARM}
+        {"no_memory", MAJOR_ALARM}, {"overflow", MAJOR_ALARM},
+        {"result_error", MAJOR_ALARM},
     };
 
     /* message format for the queue */
@@ -83,6 +85,12 @@ class AcqWorker: public epicsThreadRunable {
     std::vector<int32_t> i32scratch;
 
     asynStatus do_callbacks(auto &, int, int);
+
+    /* forward processing to other proc_* functions */
+    asynStatus proc_data(data_type);
+    asynStatus proc_raw();
+    asynStatus proc_lamp();
+    asynStatus proc_sysid();
 
   public:
     AcqWorker(Acq &acq): acq(acq) { }
@@ -350,62 +358,7 @@ void AcqWorker::run()
         if (ongoing && acq.ctl.get_acq_status() == acq::acq_status::success) {
             ongoing = false;
 
-            if (msg.type == data_type::raw) {
-                auto rv = acq.ctl.get_result<int32_t>();
-
-                do_callbacks(rv, acq.p_raw_data, 0);
-            } else if (msg.type == data_type::lamp) {
-                auto rv = acq.ctl.get_result<int16_t>();
-
-                auto len = rv.size() / 32;
-                i16scratch.resize(len);
-                for (int addr = 0; addr < 12; addr++) {
-                    for (size_t i = 0; i < len; i++) {
-                        i16scratch[i] = rv[addr + i * 32];
-                    }
-                    do_callbacks(i16scratch, acq.p_lamp_current_data, addr);
-
-                    for (size_t i = 0; i < len; i++) {
-                        i16scratch[i] = rv[addr + 12 + i * 32];
-                    }
-                    do_callbacks(i16scratch, acq.p_lamp_voltage_data, addr);
-                }
-            } else if (msg.type == data_type::sysid) {
-                auto rv = acq.ctl.get_result<int32_t>();
-
-                const size_t atoms = 32, bpm_channels = 8, lamp_channels = 12;
-
-                auto len = rv.size() / atoms;
-                i8scratch.resize(len);
-                i16scratch.resize(len);
-                i32scratch.resize(len);
-
-                for (size_t addr = 0; addr < bpm_channels; addr++) {
-                    for (size_t i = 0; i < len; i++)
-                        i32scratch[i] = rv[addr + i * atoms];
-                    do_callbacks(i32scratch, acq.p_pos_x, addr);
-
-                    for (size_t i = 0; i < len; i++)
-                        i32scratch[i] = rv[addr + bpm_channels + i * atoms];
-                    do_callbacks(i32scratch, acq.p_pos_y, addr);
-                }
-
-                /* the setpoint samples are grouped two-by-two in 32-bit atoms */
-                for (size_t addr = 0; addr < lamp_channels; addr++) {
-                    for (size_t i = 0; i < len; i++) {
-                        auto v = (uint32_t)rv[addr/2 + 16 + i * atoms];
-                        i16scratch[i] = (uint16_t)(addr & 0x1 ? v & 0xffff : v >> 16);
-                    }
-                    do_callbacks(i16scratch, acq.p_setpoint, addr);
-                }
-
-                for (size_t i = 0; i < len; i++) {
-                    i32scratch[i] = rv[22 + i * atoms] & 0xffff;
-                    i8scratch[i] = rv[23 + i * atoms] & 0x1;
-                }
-                do_callbacks(i32scratch, acq.p_timeframe, 0);
-                do_callbacks(i8scratch, acq.p_prbs, 0);
-            }
+            asynStatus result_status = proc_data(msg.type);
 
             epicsInt32 repetitive, counter;
             epicsFloat64 update_time;
@@ -419,18 +372,107 @@ void AcqWorker::run()
                 acq.setIntegerParam(acq.p_count, counter+1);
                 acq.callParamCallbacks(0);
             }
-            /* only start a new acquisition if there is no incoming command */
-            if (repetitive == (int)repetitive_trigger::repetitive && queue.pending() == 0) {
-                set_status(acq_status::waiting);
-                std::this_thread::sleep_until(start_time + update_time * 1s);
-                queue.send(&msg, sizeof msg);
+
+            if (result_status == asynSuccess) {
+                /* only start a new acquisition if there is no incoming command */
+                if (repetitive == (int)repetitive_trigger::repetitive && queue.pending() == 0) {
+                    set_status(acq_status::waiting);
+                    std::this_thread::sleep_until(start_time + update_time * 1s);
+                    queue.send(&msg, sizeof msg);
+                } else {
+                    set_status(acq_status::idle);
+                }
             } else {
-                set_status(acq_status::idle);
+                /* this likely indicates a channel and data type mismatch */
+                set_status(acq_status::result_error);
             }
         } else if (ongoing) {
             std::this_thread::sleep_for(acq_task_sleep);
         }
     }
+}
+
+asynStatus AcqWorker::proc_data(data_type type)
+{
+    switch (type) {
+        case data_type::raw:
+            return proc_raw();
+        case data_type::lamp:
+            return proc_lamp();
+        case data_type::sysid:
+            return proc_sysid();
+        case data_type::last:
+            return asynError;
+    }
+}
+
+asynStatus AcqWorker::proc_raw()
+{
+    auto rv = acq.ctl.get_result<int32_t>();
+    do_callbacks(rv, acq.p_raw_data, 0);
+
+    return asynSuccess;
+}
+
+asynStatus AcqWorker::proc_lamp()
+{
+    auto rv = acq.ctl.get_result<int16_t>();
+
+    auto len = rv.size() / 32;
+    i16scratch.resize(len);
+    for (int addr = 0; addr < 12; addr++) {
+        for (size_t i = 0; i < len; i++) {
+            i16scratch[i] = rv[addr + i * 32];
+        }
+        do_callbacks(i16scratch, acq.p_lamp_current_data, addr);
+
+        for (size_t i = 0; i < len; i++) {
+            i16scratch[i] = rv[addr + 12 + i * 32];
+        }
+        do_callbacks(i16scratch, acq.p_lamp_voltage_data, addr);
+    }
+
+    return asynSuccess;
+}
+
+asynStatus AcqWorker::proc_sysid()
+{
+    auto rv = acq.ctl.get_result<int32_t>();
+
+    const size_t atoms = 32, bpm_channels = 8, lamp_channels = 12;
+
+    auto len = rv.size() / atoms;
+    i8scratch.resize(len);
+    i16scratch.resize(len);
+    i32scratch.resize(len);
+
+    for (size_t addr = 0; addr < bpm_channels; addr++) {
+        for (size_t i = 0; i < len; i++)
+            i32scratch[i] = rv[addr + i * atoms];
+        do_callbacks(i32scratch, acq.p_pos_x, addr);
+
+        for (size_t i = 0; i < len; i++)
+            i32scratch[i] = rv[addr + bpm_channels + i * atoms];
+        do_callbacks(i32scratch, acq.p_pos_y, addr);
+    }
+
+    /* the setpoint samples are grouped two-by-two in 32-bit atoms */
+    for (size_t addr = 0; addr < lamp_channels; addr++) {
+        for (size_t i = 0; i < len; i++) {
+            auto v = (uint32_t)rv[addr/2 + 16 + i * atoms];
+            i16scratch[i] = (uint16_t)(addr & 0x1 ? v & 0xffff : v >> 16);
+        }
+        do_callbacks(i16scratch, acq.p_setpoint, addr);
+    }
+
+    for (size_t i = 0; i < len; i++) {
+        i32scratch[i] = rv[22 + i * atoms] & 0xffff;
+        i8scratch[i] = rv[23 + i * atoms] & 0x1;
+    }
+    do_callbacks(i32scratch, acq.p_timeframe, 0);
+    do_callbacks(i8scratch, acq.p_prbs, 0);
+
+    return asynSuccess;
 }
 
 namespace {
