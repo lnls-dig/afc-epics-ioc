@@ -84,6 +84,11 @@ class AcqWorker: public epicsThreadRunable {
     std::vector<int16_t> i16scratch;
     std::vector<int32_t> i32scratch;
 
+    struct channel_properties {
+        int atom_width, num_atoms;
+    };
+    struct channel_properties get_channel_properties();
+
     asynStatus do_callbacks(auto &, int, int);
 
     /* forward processing to other proc_* functions */
@@ -288,6 +293,18 @@ class Acq: public UDriver {
     }
 };
 
+struct AcqWorker::channel_properties AcqWorker::get_channel_properties()
+{
+    std::lock_guard g(acq);
+    struct channel_properties rv;
+
+    auto channel = acq.dec.get_general_data<int32_t>("WHICH");
+    rv.atom_width = acq.dec.get_channel_data<int32_t>("ATOM_WIDTH", channel);
+    rv.num_atoms = acq.dec.get_channel_data<int32_t>("NUM_ATOMS", channel);
+
+    return rv;
+}
+
 asynStatus AcqWorker::do_callbacks(auto &vec, int parameter, int addr)
 {
     using vec_type = std::remove_reference_t<decltype(vec)>;
@@ -416,18 +433,23 @@ asynStatus AcqWorker::proc_raw()
 
 asynStatus AcqWorker::proc_lamp()
 {
+    auto channel_properties = get_channel_properties();
+    if (channel_properties.atom_width != 16 ||
+        channel_properties.num_atoms < 24)
+        return asynError;
+
     auto rv = acq.ctl.get_result<int16_t>();
 
-    auto len = rv.size() / 32;
+    auto len = rv.size() / channel_properties.num_atoms;
     i16scratch.resize(len);
     for (int addr = 0; addr < 12; addr++) {
         for (size_t i = 0; i < len; i++) {
-            i16scratch[i] = rv[addr + i * 32];
+            i16scratch[i] = rv[addr + i * channel_properties.num_atoms];
         }
         do_callbacks(i16scratch, acq.p_lamp_current_data, addr);
 
         for (size_t i = 0; i < len; i++) {
-            i16scratch[i] = rv[addr + 12 + i * 32];
+            i16scratch[i] = rv[addr + 12 + i * channel_properties.num_atoms];
         }
         do_callbacks(i16scratch, acq.p_lamp_voltage_data, addr);
     }
@@ -437,9 +459,14 @@ asynStatus AcqWorker::proc_lamp()
 
 asynStatus AcqWorker::proc_sysid()
 {
+    auto channel_properties = get_channel_properties();
+    if (channel_properties.atom_width != 32 ||
+        channel_properties.num_atoms < 32)
+        return asynError;
+
     auto rv = acq.ctl.get_result<int32_t>();
 
-    const size_t atoms = 32, bpm_channels = 8, lamp_channels = 12;
+    const size_t atoms = channel_properties.num_atoms, bpm_channels = 8, lamp_channels = 12;
 
     auto len = rv.size() / atoms;
     i8scratch.resize(len);
