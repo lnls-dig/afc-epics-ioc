@@ -20,7 +20,7 @@ case "$(decode-reg build_info -q --slot ${SLOT})" in
 
         case $(hostname) in
           ia-*) ;;
-          *) export EPICS_CA_ADDR_LIST=10.0.38.59:60000
+          *) export EPICS_CA_ADDR_LIST=10.0.38.59:62000
         esac
 
         cmd=TIM
