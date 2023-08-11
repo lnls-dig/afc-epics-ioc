@@ -82,6 +82,8 @@ class AcqWorker: public epicsThreadRunable {
     std::vector<int16_t> i16scratch;
     std::vector<int32_t> i32scratch;
 
+    asynStatus do_callbacks(auto &, int, int);
+
   public:
     AcqWorker(Acq &acq): acq(acq) { }
 
@@ -278,6 +280,23 @@ class Acq: public UDriver {
     }
 };
 
+asynStatus AcqWorker::do_callbacks(auto &vec, int parameter, int addr)
+{
+    using vec_type = std::remove_reference_t<decltype(vec)>;
+    using value_type = typename vec_type::value_type;
+
+    std::lock_guard g(acq);
+
+    if constexpr (std::is_same_v<value_type, int32_t>)
+        return acq.doCallbacksInt32Array(vec.data(), vec.size(), parameter, addr);
+    else if constexpr (std::is_same_v<value_type, int16_t>)
+        return acq.doCallbacksInt16Array(vec.data(), vec.size(), parameter, addr);
+    else if constexpr (std::is_same_v<value_type, int8_t>)
+        return acq.doCallbacksInt8Array(vec.data(), vec.size(), parameter, addr);
+    else
+        static_assert(!sizeof(value_type)); /* has to depend on template parameter */
+};
+
 void AcqWorker::run()
 {
     bool ongoing = false;
@@ -327,22 +346,6 @@ void AcqWorker::run()
                 set_status(acq_status::idle);
             }
         }
-
-        auto do_callbacks = [this](auto &vec, int parameter, int addr) -> asynStatus {
-            using vec_type = std::remove_reference_t<decltype(vec)>;
-            using value_type = typename vec_type::value_type;
-
-            std::lock_guard g(acq);
-
-            if constexpr (std::is_same_v<value_type, int32_t>)
-                return acq.doCallbacksInt32Array(vec.data(), vec.size(), parameter, addr);
-            else if constexpr (std::is_same_v<value_type, int16_t>)
-                return acq.doCallbacksInt16Array(vec.data(), vec.size(), parameter, addr);
-            else if constexpr (std::is_same_v<value_type, int8_t>)
-                return acq.doCallbacksInt8Array(vec.data(), vec.size(), parameter, addr);
-            else
-                static_assert(!sizeof(value_type)); /* has to depend on template parameter */
-        };
 
         if (ongoing && acq.ctl.get_acq_status() == acq::acq_status::success) {
             ongoing = false;
