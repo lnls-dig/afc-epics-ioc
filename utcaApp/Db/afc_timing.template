@@ -76,7 +76,7 @@ record(bi, "$(P)$(R)GT0ClkLockedLtc-Mon"){
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT))STA_LOCKED_GT0_LATCH")
 }
-record(bo, "$(P)$(R)LtcRst-Cmd"){
+record(bo, "$(P)$(R)ClkLockedLtcRst-Cmd"){
   field(DTYP, "asynInt32")
   field(DESC, "Reset Clock Locked Latches")
   field(OUT,"@asyn($(PORT))STA_LOCKED_RST_LATCH")
