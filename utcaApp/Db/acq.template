@@ -9,7 +9,7 @@ record (mbbo, "$(P)$(R)$(ACQ_NAME)DataType"){
 
 record(longout,"$(P)$(R)$(ACQ_NAME)SamplesPre-SP"){
     field(DTYP,"asynInt32")
-    field(DESC,"Set number of pre samples for waveforms")
+    field(DESC,"Number of pre-trigger samples")
     field(DRVH,"$(NELM)")
     field(DRVL,"0")
     field(SCAN,"Passive")
@@ -17,15 +17,19 @@ record(longout,"$(P)$(R)$(ACQ_NAME)SamplesPre-SP"){
     field(PINI, "YES")
 }
 record(longin,"$(P)$(R)$(ACQ_NAME)SamplesPre-RB"){
+    field(DESC,"Number of pre-trigger samples")
+    field(INP, "$(P)$(R)$(ACQ_NAME)SamplesPre-SP CP")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)SamplesPre-Mon"){
     field(DTYP,"asynInt32")
-    field(DESC,"Get number of pre samples for waveforms")
+    field(DESC,"Number of pre-trigger samples in hw.")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT))PRE_SAMPLES")
 }
 
 record(longout,"$(P)$(R)$(ACQ_NAME)SamplesPost-SP"){
     field(DTYP,"asynInt32")
-    field(DESC,"Set number of post samples for waveforms")
+    field(DESC,"Number of post-trigger samples")
     field(DRVH,"$(NELM)")
     field(DRVL,"0")
     field(SCAN,"Passive")
@@ -33,16 +37,19 @@ record(longout,"$(P)$(R)$(ACQ_NAME)SamplesPost-SP"){
     field(PINI, "YES")
 }
 record(longin,"$(P)$(R)$(ACQ_NAME)SamplesPost-RB"){
+    field(DESC,"Number of post-trigger samples")
+    field(INP, "$(P)$(R)$(ACQ_NAME)SamplesPost-SP CP")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)SamplesPost-Mon"){
     field(DTYP,"asynInt32")
-    field(DESC,"Get number of post samples for waveforms")
+    field(DESC,"Number of post-trigger samples in hw.")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT))POST_SAMPLES")
-    field(VAL, "0")
 }
 
 record(longout,"$(P)$(R)$(ACQ_NAME)Shots-SP"){
     field(DTYP,"asynInt32")
-    field(DESC,"Set number of shots for waveforms")
+    field(DESC,"Number of shots")
     field(DRVH,"100000")
     field(DRVL,"1")
     field(SCAN,"Passive")
@@ -50,22 +57,30 @@ record(longout,"$(P)$(R)$(ACQ_NAME)Shots-SP"){
     field(PINI, "YES")
 }
 record(longin,"$(P)$(R)$(ACQ_NAME)Shots-RB"){
+    field(DESC,"Number of shots")
+    field(INP, "$(P)$(R)$(ACQ_NAME)Shots-SP CP")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)Shots-Mon"){
     field(DTYP,"asynInt32")
-    field(DESC,"Get number of shots for waveforms")
+    field(DESC,"Number of shots in hw.")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT))NB")
 }
 
 record(mbbo, "$(P)$(R)$(ACQ_NAME)Channel-Sel"){
     field(DTYP, "asynInt32")
-    field(DESC, "Set acquisition's channel")
+    field(DESC, "Acquisition channel")
     field(SCAN, "Passive")
     field(OUT, "@asyn($(PORT))WHICH")
     field(PINI, "YES")
 }
-record(mbbi, "$(P)$(R)$(ACQ_NAME)Channel-Sts"){
+record(longin,"$(P)$(R)$(ACQ_NAME)Channel-Sts"){
+    field(DESC, "Acquisition channel")
+    field(INP, "$(P)$(R)$(ACQ_NAME)Channel-Sel CP")
+}
+record(mbbi, "$(P)$(R)$(ACQ_NAME)Channel-Mon"){
     field(DTYP, "asynInt32")
-    field(DESC, "Get acquisition's channel")
+    field(DESC, "Acquisition channel in hw.")
     field(INP,"@asyn($(PORT))WHICH")
     field(SCAN,"I/O Intr")
 }
@@ -93,14 +108,14 @@ record(mbbo, "$(P)$(R)$(ACQ_NAME)TriggerEvent-Cmd"){
 
 record(mbbo, "$(P)$(R)$(ACQ_NAME)TriggerRep-Sel"){
     field(DTYP, "asynInt32")
-    field(DESC, "Set repetitive acquisitions")
+    field(DESC, "Repetitive acquisitions")
     field(SCAN,"Passive")
     field(OUT,"@asyn($(PORT))REPETITIVE")
     field(PINI, "YES")
 }
 record(mbbi, "$(P)$(R)$(ACQ_NAME)TriggerRep-Sts"){
     field(DTYP, "asynInt32")
-    field(DESC, "Get repetitive acquisitions")
+    field(DESC, "Repetitive acquisitions")
     field(INP,"@asyn($(PORT))REPETITIVE")
     field(SCAN,"I/O Intr")
 }
@@ -184,7 +199,7 @@ record(longin,"$(P)$(R)$(ACQ_NAME)TriggerDataHyst-RB"){
 
 record(longout,"$(P)$(R)$(ACQ_NAME)TriggerHwDly-SP"){
     field(DTYP,"asynInt32")
-    field(DESC,"set trigger delay")
+    field(DESC,"Trigger delay")
     field(DRVH,"2147483647")
     field(DRVL,"0")
     field(SCAN,"Passive")
@@ -192,8 +207,12 @@ record(longout,"$(P)$(R)$(ACQ_NAME)TriggerHwDly-SP"){
     field(PINI, "YES")
 }
 record(longin,"$(P)$(R)$(ACQ_NAME)TriggerHwDly-RB"){
+    field(DESC, "Trigger delay")
+    field(INP, "$(P)$(R)$(ACQ_NAME)TriggerHwDly-SP CP")
+}
+record(longin,"$(P)$(R)$(ACQ_NAME)TriggerHwDly-Mon"){
     field(DTYP,"asynInt32")
-    field(DESC,"get trigger delay")
+    field(DESC, "Trigger delay in hw.")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT))TRIG_DLY")
 }
