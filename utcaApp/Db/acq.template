@@ -129,7 +129,9 @@ record(ao, "$(P)$(R)$(ACQ_NAME)UpdateTime-SP"){
     field(EGU, "s")
     field(OUT,"@asyn($(PORT))UPDATE_TIME")
     field(PINI, "YES")
-    field(DRVL,"0.001")
+    field(DRVL, 0.001)
+    field(DRVH, 100)
+    field(PREC, 3)
 }
 record(ai, "$(P)$(R)$(ACQ_NAME)UpdateTime-RB"){
     field(DTYP, "asynFloat64")
@@ -137,6 +139,7 @@ record(ai, "$(P)$(R)$(ACQ_NAME)UpdateTime-RB"){
     field(EGU, "s")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT))UPDATE_TIME")
+    field(PREC, 3)
 }
 
 record(longout,"$(P)$(R)$(ACQ_NAME)TriggerDataThres-SP"){
