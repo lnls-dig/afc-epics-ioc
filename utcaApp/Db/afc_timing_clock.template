@@ -84,30 +84,30 @@ record(longin, "$(P)$(R)$(CLOCK)PhaseDiv-RB"){
     field(INP,"@asyn($(PORT),$(ADDR))MAF_DIV_EXP")
 }
 
-record(longin, "$(P)$(R)$(CLOCK)RFReqHi-RB"){
+record(longin, "$(P)$(R)$(CLOCK)RFreqHi-Mon"){
     field(DTYP, "asynInt32")
-    field(DESC, "Get $(CLOCK) Si57x RF Req[37-20]")
+    field(DESC, "$(CLOCK) Si57x ref freq [37-20]")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))RFREQ_HI")
 }
 
-record(longin, "$(P)$(R)$(CLOCK)RFReqLo-RB"){
+record(longin, "$(P)$(R)$(CLOCK)RFreqLo-Mon"){
     field(DTYP, "asynInt32")
-    field(DESC, "Get $(CLOCK) Si57x RF Req[19-0]")
+    field(DESC, "$(CLOCK) Si57x ref freq [19-0]")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))RFREQ_LO")
 }
 
-record(longin, "$(P)$(R)$(CLOCK)n1-RB"){
+record(longin, "$(P)$(R)$(CLOCK)N1-Mon"){
     field(DTYP, "asynInt32")
-    field(DESC, "Get $(CLOCK) Si57x n1")
+    field(DESC, "Get $(CLOCK) Si57x N1")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))N1")
 }
 
-record(mbbi, "$(P)$(R)$(CLOCK)hs_div-RB"){
+record(mbbi, "$(P)$(R)$(CLOCK)HSDiv-Mon"){
     field(DTYP, "asynInt32")
-    field(DESC, "Get $(CLOCK) Si57x hs-div")
+    field(DESC, "Get $(CLOCK) Si57x HS_DIV")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))HS_DIV")
     field(ZRST, "4")
