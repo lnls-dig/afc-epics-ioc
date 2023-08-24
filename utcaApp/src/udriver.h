@@ -8,6 +8,7 @@
 
 #include <asynPortDriver.h>
 
+#include <controllers.h>
 #include <decoders.h>
 #include <util_sdb.h>
 
@@ -122,6 +123,26 @@ class UDriver: public asynPortDriver {
     {
         for (unsigned addr = 0; addr < number_of_channels; addr++)
             callParamCallbacks(addr);
+    }
+
+    asynStatus write_params(asynUser *pasynUser, RegisterController &ctl)
+    {
+        const int function = pasynUser->reason;
+        const char *param_name;
+        getParamName(function, &param_name);
+
+        try {
+            ctl.write_params();
+        } catch (std::runtime_error &e) {
+            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
+                "UDriver::write_params: %s: %s", param_name, e.what());
+
+            return asynError;
+        }
+
+        read_parameters();
+
+        return asynSuccess;
     }
 
     asynStatus readInt32(asynUser *pasynUser, epicsInt32 *value) override
