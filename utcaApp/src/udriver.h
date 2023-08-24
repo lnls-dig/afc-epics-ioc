@@ -2,6 +2,12 @@
 #include <unordered_set>
 #include <vector>
 
+#include <version>
+#if __cpp_lib_source_location >= 201907L
+# include <source_location>
+# define HAS_SOURCE_LOCATION
+#endif
+
 #include <cantProceed.h>
 #include <epicsExport.h>
 #include <iocsh.h>
@@ -125,7 +131,12 @@ class UDriver: public asynPortDriver {
             callParamCallbacks(addr);
     }
 
-    asynStatus write_params(asynUser *pasynUser, RegisterController &ctl)
+    asynStatus write_params(
+        asynUser *pasynUser, RegisterController &ctl
+#ifdef HAS_SOURCE_LOCATION
+        , const std::source_location location = std::source_location::current()
+#endif
+        )
     {
         const int function = pasynUser->reason;
         const char *param_name;
@@ -134,8 +145,21 @@ class UDriver: public asynPortDriver {
         try {
             ctl.write_params();
         } catch (std::runtime_error &e) {
+#if defined(HAS_SOURCE_LOCATION) && defined(__GNUC__)
+            std::string function_name = location.function_name();
+            auto fp = function_name.find('(');
+            function_name.erase(fp);
+            auto fs = function_name.rfind(' ');
+            function_name.erase(0, fs);
+#endif
+
             epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "UDriver::write_params: %s: %s", param_name, e.what());
+#ifdef HAS_SOURCE_LOCATION
+                "%s: %s: %s", function_name.c_str(), param_name, e.what()
+#else
+                "UDriver::write_params: %s: %s", param_name, e.what()
+#endif
+                );
 
             return asynError;
         }
