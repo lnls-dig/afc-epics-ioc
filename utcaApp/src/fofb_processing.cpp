@@ -105,10 +105,7 @@ class FofbProcessing: public UDriver {
             return asynPortDriver::writeFloat64(pasynUser, value);
         }
 
-        ctl.write_params();
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 
     asynStatus writeInt32Array(asynUser *pasynUser, epicsInt32 *value, size_t nElements)
@@ -127,15 +124,14 @@ class FofbProcessing: public UDriver {
             return asynPortDriver::writeInt32Array(pasynUser, value, nElements);
         }
 
-        ctl.write_params();
-        read_parameters();
+        auto rv = write_params(pasynUser, ctl);
 
         if (function == p_reforb_x)
             doCallbacksInt32Array(dec.ref_orb_x.data(), dec.ref_orb_x.size(), p_reforb_x, 0);
         if (function == p_reforb_y)
             doCallbacksInt32Array(dec.ref_orb_y.data(), dec.ref_orb_y.size(), p_reforb_y, 0);
 
-        return asynSuccess;
+        return rv;
     }
 
     asynStatus writeFloat64Array(asynUser *pasynUser, epicsFloat64 *value, size_t nElements)
@@ -151,15 +147,14 @@ class FofbProcessing: public UDriver {
             return asynPortDriver::writeFloat64Array(pasynUser, value, nElements);
         }
 
-        ctl.write_params();
-        read_parameters();
+        auto rv = write_params(pasynUser, ctl);
 
         if (function == p_coeffs_x)
             doCallbacksFloat64Array(dec.coefficients_x[addr].data(), dec.coefficients_x[addr].size(), p_coeffs_x, addr);
         if (function == p_coeffs_y)
             doCallbacksFloat64Array(dec.coefficients_y[addr].data(), dec.coefficients_y[addr].size(), p_coeffs_y, addr);
 
-        return asynSuccess;
+        return rv;
     }
 };
 
