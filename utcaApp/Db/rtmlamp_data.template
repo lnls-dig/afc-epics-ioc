@@ -16,6 +16,14 @@ record(aai, "$(S)$(RTM_CHAN)$(ACQ_NAME)VoltageRawData"){
     field(INP, "@asyn($(PORT),$(ADDR))LAMP_V")
     field(FLNK, "$(S)$(RTM_CHAN)$(ACQ_NAME)VoltageConv PP")
 }
+record(aai, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentRefRawData"){
+    field(DTYP, "asynInt16ArrayIn")
+    field(NELM, "$(NELM)")
+    field(FTVL, "SHORT")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR))LAMP_I_SP")
+    field(FLNK, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentRefConv PP")
+}
 
 record(aai, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentData"){
     field(EGU, "A")
@@ -25,6 +33,12 @@ record(aai, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentData"){
 }
 record(aai, "$(S)$(RTM_CHAN)$(ACQ_NAME)VoltageData"){
     field(EGU, "V")
+    field(NELM, "$(NELM)")
+    field(FTVL, "FLOAT")
+    field(SCAN, "Passive")
+}
+record(aai, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentRefData"){
+    field(EGU, "A")
     field(NELM, "$(NELM)")
     field(FTVL, "FLOAT")
     field(SCAN, "Passive")
@@ -51,6 +65,18 @@ record(aSub, "$(S)$(RTM_CHAN)$(ACQ_NAME)VoltageConv"){
     field(INPC, "$(S)$(RTM_CHAN)VoltGain-SP")
     field(INPD, "0")
     field(OUTA, "$(S)$(RTM_CHAN)$(ACQ_NAME)VoltageData PP")
+    field(FTVA, "FLOAT")
+    field(NOVA, "$(NELM)")
+}
+record(aSub, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentRefConv"){
+    field(SNAM, "asub_goff")
+    field(INPA, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentRefRawData")
+    field(FTA, "SHORT")
+    field(NOA, "$(NELM)")
+    field(INPB, "$(S)$(RTM_CHAN)CurrOffsetNegative")
+    field(INPC, "$(S)$(RTM_CHAN)CurrGain-SP")
+    field(INPD, "0")
+    field(OUTA, "$(S)$(RTM_CHAN)$(ACQ_NAME)CurrentRefData PP")
     field(FTVA, "FLOAT")
     field(NOVA, "$(NELM)")
 }

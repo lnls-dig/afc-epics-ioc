@@ -120,7 +120,7 @@ class Acq: public UDriver {
     /* custom logic parameters */
     int p_channel_rb, p_event, p_repetitive, p_update_time, p_data_type, p_status, p_count;
     /* parameters for data storage */
-    int p_raw_data, p_lamp_current_data, p_lamp_voltage_data,
+    int p_raw_data, p_lamp_current_data, p_lamp_voltage_data, p_lamp_current_sp_data,
         p_pos_x, p_pos_y, p_setpoint, p_timeframe, p_prbs;
 
     /* contains the parameters which should be written to the parameter list */
@@ -177,6 +177,7 @@ class Acq: public UDriver {
         createParam("RAW", asynParamInt32Array, &p_raw_data);
         createParam("LAMP_I", asynParamInt16Array, &p_lamp_current_data);
         createParam("LAMP_V", asynParamInt16Array, &p_lamp_voltage_data);
+        createParam("LAMP_I_SP", asynParamInt16Array, &p_lamp_current_sp_data);
         createParam("POS_X", asynParamInt32Array, &p_pos_x);
         createParam("POS_Y", asynParamInt32Array, &p_pos_y);
         createParam("SETPOINT", asynParamInt16Array, &p_setpoint);
@@ -435,7 +436,7 @@ asynStatus AcqWorker::proc_lamp()
 {
     auto channel_properties = get_channel_properties();
     if (channel_properties.atom_width != 16 ||
-        channel_properties.num_atoms < 24)
+        channel_properties.num_atoms < 32)
         return asynError;
 
     auto rv = acq.ctl.get_result<int16_t>();
@@ -452,6 +453,13 @@ asynStatus AcqWorker::proc_lamp()
             i16scratch[i] = rv[addr + 12 + i * channel_properties.num_atoms];
         }
         do_callbacks(i16scratch, acq.p_lamp_voltage_data, addr);
+
+        if (addr < 8) {
+            for (size_t i = 0; i < len; i++) {
+                i16scratch[i] = rv[addr + 24 + i * channel_properties.num_atoms];
+            }
+            do_callbacks(i16scratch, acq.p_lamp_current_sp_data, addr);
+        }
     }
 
     return asynSuccess;
