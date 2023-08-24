@@ -35,10 +35,11 @@ namespace {
     const enum_info polarity_info[(int)polarity::last] = {{"positive"}, {"negative"}};
 
     enum class channel_organizations {lamp, dcc, sysid, sysid_applied, last};
+    const enum_info invalid_channel = {"invalid", MINOR_ALARM};
     const enum_info channel_info[][(int)channel_organizations::last] = {
-        {{"lamp"}, {"invalid"}, {"invalid"}, {"invalid"}},
-        {{"invalid"}, {"dcc"}, {"invalid"}, {"invalid"}},
-        {{"invalid"}, {"invalid"}, {"sysid"}, {"sysid_applied"}},
+        {{"lamp"}, invalid_channel, invalid_channel, invalid_channel},
+        {invalid_channel, {"dcc"}, invalid_channel, invalid_channel},
+        {invalid_channel, invalid_channel, {"sysid"}, {"sysid_applied"}},
     };
 
     enum class trigger {now, external, data, software, last};
