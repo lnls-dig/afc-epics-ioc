@@ -78,19 +78,7 @@ class SysId: public UDriver {
         else if (function == p_setpoint_distortion_lvl0) ctl.setpoint_distortion.prbs_0.at(addr) = value;
         else if (function == p_setpoint_distortion_lvl1) ctl.setpoint_distortion.prbs_1.at(addr) = value;
 
-        try {
-            ctl.write_params();
-        } catch (std::runtime_error &e) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: %s", param_name, e.what());
-
-            return asynError;
-        }
-
-        /* refresh parameters */
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 
     asynStatus writeInt16Array(asynUser *pasynUser, epicsInt16 *value, size_t nElements)

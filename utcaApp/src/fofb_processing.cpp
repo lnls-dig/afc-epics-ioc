@@ -90,19 +90,7 @@ class FofbProcessing: public UDriver {
         else if (function == p_sp_limits_min) ctl.parameters[addr].sp_limit_min = value;
         else if (function == p_sp_decim_ratio) ctl.parameters[addr].sp_decim_ratio = value;
 
-        try {
-            ctl.write_params();
-        } catch (std::runtime_error &e) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: %s", param_name, e.what());
-
-            return asynError;
-        }
-
-        /* refresh parameters */
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 
     asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value)

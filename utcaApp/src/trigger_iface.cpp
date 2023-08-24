@@ -54,19 +54,7 @@ class TriggerIface: public UDriver {
         if (function == p_rcv_len) ctl.parameters[addr].rcv_len = value;
         if (function == p_transm_len) ctl.parameters[addr].transm_len = value;
 
-        try {
-            ctl.write_params();
-        } catch (std::runtime_error &e) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: %s", param_name, e.what());
-
-            return asynError;
-        }
-
-        /* refresh parameters */
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 };
 

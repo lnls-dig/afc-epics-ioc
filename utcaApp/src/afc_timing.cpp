@@ -142,18 +142,7 @@ class AFCTiming: public UDriver {
             else if (function == p_ch_wdt) trigger.width = value;
         }
 
-        try {
-            ctl.write_params();
-        } catch (std::runtime_error &e) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: %s", param_name, e.what());
-
-            return asynError;
-        }
-
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 
     asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value)

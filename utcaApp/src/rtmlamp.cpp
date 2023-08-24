@@ -94,18 +94,7 @@ class RtmLamp: public UDriver {
         write_param(p_trigen, ctl.trigger_enable);
         write_param(p_reset_latch, ctl.reset_latch);
 
-        try {
-            ctl.write_params();
-        } catch (std::runtime_error &e) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: %s", param_name, e.what());
-
-            return asynError;
-        }
-
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 };
 

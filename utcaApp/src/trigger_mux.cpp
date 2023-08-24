@@ -46,19 +46,7 @@ class TriggerMux: public UDriver {
         if (function == p_transm_src) ctl.parameters[addr].transm_src = value;
         if (function == p_transm_out_sel) ctl.parameters[addr].transm_out_sel = value;
 
-        try {
-            ctl.write_params();
-        } catch (std::runtime_error &e) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: %s", param_name, e.what());
-
-            return asynError;
-        }
-
-        /* refresh parameters */
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 };
 
