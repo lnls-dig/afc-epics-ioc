@@ -98,18 +98,7 @@ class FofbCc: public UDriver {
         write_param(p_payload_sel, ctl.payload_sel);
         write_param(p_fofb_data_sel, ctl.fofb_data_sel);
 
-        try {
-            ctl.write_params();
-        } catch (std::runtime_error &e) {
-            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: %s", param_name, e.what());
-
-            return asynError;
-        }
-
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 };
 
