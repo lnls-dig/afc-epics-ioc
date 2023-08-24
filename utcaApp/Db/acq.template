@@ -74,9 +74,11 @@ record(mbbo, "$(P)$(R)$(ACQ_NAME)Channel-Sel"){
     field(OUT, "@asyn($(PORT))WHICH")
     field(PINI, "YES")
 }
-record(longin,"$(P)$(R)$(ACQ_NAME)Channel-Sts"){
+record(mbbi, "$(P)$(R)$(ACQ_NAME)Channel-Sts"){
+    field(DTYP, "asynInt32")
     field(DESC, "Acquisition channel")
-    field(INP, "$(P)$(R)$(ACQ_NAME)Channel-Sel CP")
+    field(INP,"@asyn($(PORT))WHICH_RB")
+    field(SCAN,"I/O Intr")
 }
 record(mbbi, "$(P)$(R)$(ACQ_NAME)Channel-Mon"){
     field(DTYP, "asynInt32")

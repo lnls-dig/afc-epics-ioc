@@ -103,7 +103,7 @@ class Acq: public UDriver {
         p_pre_samples, p_post_samples, p_channel, p_data_trigger_channel;
 
     /* custom logic parameters */
-    int p_event, p_repetitive, p_update_time, p_data_type, p_status, p_count;
+    int p_channel_rb, p_event, p_repetitive, p_update_time, p_data_type, p_status, p_count;
     /* parameters for data storage */
     int p_raw_data, p_lamp_current_data, p_lamp_voltage_data,
         p_pos_x, p_pos_y, p_setpoint, p_timeframe, p_prbs;
@@ -145,6 +145,7 @@ class Acq: public UDriver {
         /* isn't read back from hardware */
         createParam("TRIGGER", asynParamInt32, &p_trigger_type);
 
+        createParam("WHICH_RB", asynParamInt32, &p_channel_rb);
         createParam("EVENT", asynParamInt32, &p_event);
         createParam("REPETITIVE", asynParamInt32, &p_repetitive);
         createParam("UPDATE_TIME", asynParamFloat64, &p_update_time);
@@ -202,7 +203,7 @@ class Acq: public UDriver {
             set_enum(polarity_info);
         } else if (function == p_data_trigger_channel) {
             set_enum(channel_info[(int)channel_organizations::lamp]);
-        } else if (function == p_channel) {
+        } else if (function == p_channel || function == p_channel_rb) {
             /* TODO: make this more generic; perhaps take into account data_type,
              * using a callback from writeInt32Impl */
             if (port_number == 0) set_enum(channel_info[(int)channel_organizations::lamp]);
@@ -240,7 +241,7 @@ class Acq: public UDriver {
             if (function == p_number_shots) ctl.number_shots = value;
             if (function == p_pre_samples) ctl.pre_samples = value;
             if (function == p_post_samples) ctl.post_samples = value;
-            if (function == p_channel) ctl.channel = value;
+            if (function == p_channel) {ctl.channel = value; setIntegerParam(addr, p_channel_rb, value);}
             if (function == p_data_trigger_channel) ctl.data_trigger_channel = value;
         }
 
