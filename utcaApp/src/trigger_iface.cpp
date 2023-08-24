@@ -45,7 +45,7 @@ class TriggerIface: public UDriver {
         read_parameters();
     }
 
-    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value)
     {
         if (function == p_dir) ctl.parameters[addr].direction = value;
         if (function == p_dir_pol) ctl.parameters[addr].direction_polarity = value;

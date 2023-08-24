@@ -39,7 +39,7 @@ class TriggerMux: public UDriver {
         read_parameters();
     }
 
-    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value)
     {
         if (function == p_rcv_src) ctl.parameters[addr].rcv_src = value;
         if (function == p_rcv_in_sel) ctl.parameters[addr].rcv_in_sel = value;
