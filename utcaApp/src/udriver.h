@@ -156,7 +156,7 @@ class UDriver: public asynPortDriver {
         else return asynPortDriver::readInt32(pasynUser, value);
     }
 
-    virtual asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value) = 0;
+    virtual asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value) = 0;
     asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value) override final
     {
         const int function = pasynUser->reason;
@@ -177,7 +177,7 @@ class UDriver: public asynPortDriver {
             return asynError;
         }
 
-        return writeInt32Impl(pasynUser, function, addr, param_name, value);
+        return writeInt32Impl(pasynUser, function, addr, value);
     }
 };
 

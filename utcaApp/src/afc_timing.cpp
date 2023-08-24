@@ -112,7 +112,7 @@ class AFCTiming: public UDriver {
         return asynSuccess;
     }
 
-    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value)
     {
         if (function == p_evren) {
             ctl.event_receiver_enable = value;

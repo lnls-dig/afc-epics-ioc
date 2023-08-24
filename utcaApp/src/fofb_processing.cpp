@@ -76,7 +76,7 @@ class FofbProcessing: public UDriver {
         return asynSuccess;
     }
 
-    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value)
     {
         if (function == p_intlk_clr) ctl.intlk_sta_clr = value;
         else if (function == p_intlk_en_orb_distort) ctl.intlk_en_orb_distort = value;

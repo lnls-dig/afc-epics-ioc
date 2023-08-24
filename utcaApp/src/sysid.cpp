@@ -66,7 +66,7 @@ class SysId: public UDriver {
     }
 
     asynStatus writeInt32Impl(asynUser *pasynUser, const int function,
-        [[maybe_unused]] const int addr, const char *param_name, epicsInt32 value)
+        [[maybe_unused]] const int addr, epicsInt32 value)
     {
         if (function == p_base_bpm_id) ctl.base_bpm_id = value;
         else if (function == p_prbs_rst) ctl.prbs_reset = value;

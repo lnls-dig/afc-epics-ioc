@@ -65,7 +65,7 @@ class RtmLamp: public UDriver {
         read_parameters();
     }
 
-    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, const char *param_name, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value)
     {
         setIntegerParam(addr, function, value);
 

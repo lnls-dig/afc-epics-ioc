@@ -226,7 +226,7 @@ class Acq: public UDriver {
     }
 
     asynStatus writeInt32Impl([[maybe_unused]] asynUser *pasynUser, const int function,
-        [[maybe_unused]] const int addr, [[maybe_unused]] const char *param_name, epicsInt32 value)
+        [[maybe_unused]] const int addr, epicsInt32 value)
     {
         {
             std::lock_guard g(ctl_lock);
