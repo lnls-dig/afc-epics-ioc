@@ -47,6 +47,19 @@ record(longin,"$(P)$(R)$(ACQ_NAME)SamplesPost-Mon"){
     field(INP,"@asyn($(PORT))POST_SAMPLES")
 }
 
+record(calcout,"$(P)$(R)$(ACQ_NAME)SamplesTotalHIHI"){
+    field(CALC,"$(NELM)+1")
+    field(OUT,"$(P)$(R)$(ACQ_NAME)SamplesTotal-Mon.HIHI PP")
+    field(PINI, YES)
+}
+record(calc,"$(P)$(R)$(ACQ_NAME)SamplesTotal-Mon"){
+    field(DESC,"Total samples configured")
+    field(INPA,"$(P)$(R)$(ACQ_NAME)SamplesPre-RB CP")
+    field(INPB,"$(P)$(R)$(ACQ_NAME)SamplesPost-RB CP")
+    field(CALC,"A+B")
+    field(HHSV,"MAJOR")
+}
+
 record(longout,"$(P)$(R)$(ACQ_NAME)Shots-SP"){
     field(DTYP,"asynInt32")
     field(DESC,"Number of shots")
