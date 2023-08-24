@@ -105,15 +105,14 @@ class SysId: public UDriver {
             return asynPortDriver::writeInt16Array(pasynUser, value, nElements);
         }
 
-        ctl.write_params();
-        read_parameters();
+        auto rv = write_params(pasynUser, ctl);
 
         if (is_distortion) {
             auto &prbs = get_prbs_array(function, addr, dec);
             doCallbacksInt16Array(prbs.data(), prbs.size(), function, addr);
         }
 
-        return asynSuccess;
+        return rv;
     }
 };
 

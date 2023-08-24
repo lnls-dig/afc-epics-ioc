@@ -163,10 +163,7 @@ class AFCTiming: public UDriver {
             return asynPortDriver::writeFloat64(pasynUser, value);
         }
 
-        ctl.write_params();
-        read_parameters();
-
-        return asynSuccess;
+        return write_params(pasynUser, ctl);
     }
 };
 
