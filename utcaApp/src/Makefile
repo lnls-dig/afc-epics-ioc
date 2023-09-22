@@ -23,7 +23,7 @@ utca_DBD += asSupport.dbd
 utca_LIBS += retools
 utca_DBD += retools.dbd
 
-utca_SRCS += pcie-single.cpp acq.cpp afc_timing.cpp bpm_swap.cpp build_info.cpp fofb_cc.cpp fofb_processing.cpp orbit_intlk.cpp rtmlamp.cpp trigger_iface.cpp trigger_mux.cpp sysid.cpp
+utca_SRCS += pcie-single.cpp acq.cpp afc_timing.cpp bpm_swap.cpp build_info.cpp fofb_cc.cpp fofb_processing.cpp fofb_shaper_filt.cpp orbit_intlk.cpp rtmlamp.cpp trigger_iface.cpp trigger_mux.cpp sysid.cpp
 utca_DBD += drivers.dbd
 
 utca_SRCS += asub-routines.cpp
