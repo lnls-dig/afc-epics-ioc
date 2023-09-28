@@ -50,7 +50,7 @@ static iocshFuncDef func_def {
 #endif
 };
 
-static void call_func([[maybe_unused]] const iocshArgBuf *args)
+static void call_func(const iocshArgBuf *)
 {
     new BuildInformation();
 }
