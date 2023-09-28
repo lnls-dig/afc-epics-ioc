@@ -3,6 +3,7 @@
 record(ao,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)-SP"){
     field(DESC, "set $(PRBS_STATE) FOFBAcc distortion")
     field(EGU, "A")
+    field(PREC, 3)
     field(SCAN,"Passive")
     field(PINI,"YES")
     field(VAL, 0)
@@ -33,6 +34,7 @@ record(longin, "$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Raw-RB"){
 record(calc,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)-RB"){
     field(DESC, "get $(PRBS_STATE) FOFBAcc distortion")
     field(EGU, "A")
+    field(PREC, 3)
     field(SCAN,"Passive")
     field(INPA,"$(S)$(RTM_CHAN)SYSIDPRBSFOFBAcc$(PRBS_STATE)Raw-RB CP")
     field(INPB,"$(S)$(RTM_CHAN)CurrGain-SP CP")
