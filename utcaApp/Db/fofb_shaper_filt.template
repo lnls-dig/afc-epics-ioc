@@ -1,0 +1,5 @@
+record(longin, "$(P)$(R)FOFBAccFilterNumBiquads-Cte") {
+    field(DTYP, asynInt32)
+    field(PINI, YES)
+    field(INP, "@asyn($(PORT))NUM_BIQUADS")
+}
