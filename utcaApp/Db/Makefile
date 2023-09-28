@@ -12,6 +12,7 @@ DB += afc_timing.template afc_timing_clock.template afc_timing_trigger.template 
 DB += bpm_swap.template bpm_swap.substitutions
 DB += fofb_cc.template fofb_cc_channel.template fofb_cc.substitutions
 DB += fofb_processing.template fofb_processing_channel.template fofb_processing.substitutions
+DB += fofb_shaper_filt.template fofb_shaper_filt_channel.template fofb_shaper_filt.substitutions
 DB += orbit_intlk.template orbit_intlk.substitutions
 DB += rtmlamp.template rtmlamp_channel.template rtmlamp_data.template rtmlamp.substitutions
 DB += sysid.template sysid_channel.template sysid_pos.template sysid_data.template sysid_pos_channel_data.template sysid_sp_channel_data.template sysid.substitutions
