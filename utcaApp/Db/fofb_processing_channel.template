@@ -121,13 +121,39 @@ record(calc, "$(S)$(RTM_CHAN)FOFBAcc-Mon"){
 
 record(ao, "$(S)$(RTM_CHAN)FOFBAccGain-SP"){
     field(DESC, "Accumulator gain")
+    field(PINI, "YES")
+}
+record(ai, "$(S)$(RTM_CHAN)FOFBAccGain-RB"){
+    field(DESC, "Accumulator gain")
+    field(INP, "$(S)$(RTM_CHAN)FOFBAccGain-SP CP")
+}
+
+record(ao, "$(S)$(RTM_CHAN)FOFBAccFilterGain-SP"){
+    field(DESC, "Shaper filter gain")
+    field(VAL, 1)
+    field(PINI, "YES")
+}
+record(ai, "$(S)$(RTM_CHAN)FOFBAccFilterGain-RB"){
+    field(DESC, "Shaper filter gain")
+    field(INP, "$(S)$(RTM_CHAN)FOFBAccFilterGain-SP CP")
+}
+
+record(calcout, "$(S)$(RTM_CHAN)FOFBAccGainCalc"){
+    field(INPA, "$(S)$(RTM_CHAN)FOFBAccGain-SP CP")
+    field(INPB, "$(S)$(RTM_CHAN)FOFBAccFilterGain-SP CP")
+    field(CALC, "A*B")
+    field(OUT, "$(S)$(RTM_CHAN)FOFBAccActualGain-SP PP")
+}
+
+record(ao, "$(S)$(RTM_CHAN)FOFBAccActualGain-SP"){
+    field(DESC, "Accumulator gain in hw.")
     field(DTYP, "asynFloat64")
     field(SCAN, "Passive")
     field(OUT, "@asyn($(PORT),$(ADDR))CH_ACC_GAIN")
     field(PINI, "YES")
 }
-record(ai, "$(S)$(RTM_CHAN)FOFBAccGain-RB"){
-    field(DESC, "Accumulator gain")
+record(ai, "$(S)$(RTM_CHAN)FOFBAccActualGain-RB"){
+    field(DESC, "Accumulator gain in hw.")
     field(DTYP, "asynFloat64")
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),$(ADDR))CH_ACC_GAIN")
