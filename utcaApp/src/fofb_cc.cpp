@@ -73,8 +73,7 @@ class FofbCc: public UDriver {
         read_parameters();
     }
 
-    asynStatus writeInt32Impl(asynUser *pasynUser, const int function,
-        [[maybe_unused]] const int addr, epicsInt32 value)
+    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int, epicsInt32 value)
     {
         auto write_param = [function, value](auto fn, auto &ctl_value) {
             if (function == fn) ctl_value = value;
