@@ -34,12 +34,11 @@ namespace {
     enum class polarity {positive, negative, last};
     const enum_info polarity_info[(int)polarity::last] = {{"positive"}, {"negative"}};
 
-    enum class channel_organizations {lamp, dcc, sysid, sysid_applied, last};
+    enum class channel_organizations {lamp, sysid, sysid_applied, sysid_filtered, last};
     const enum_info invalid_channel = {"invalid", MINOR_ALARM};
     const enum_info channel_info[][(int)channel_organizations::last] = {
         {{"lamp"}, invalid_channel, invalid_channel, invalid_channel},
-        {invalid_channel, {"dcc"}, invalid_channel, invalid_channel},
-        {invalid_channel, invalid_channel, {"sysid"}, {"sysid_applied"}},
+        {invalid_channel, {"sysid"}, {"sysid_applied"}, {"sysid_filtered"}},
     };
 
     enum class trigger {now, external, data, software, last};
@@ -223,8 +222,7 @@ class Acq: public UDriver {
             /* TODO: make this more generic; perhaps take into account data_type,
              * using a callback from writeInt32Impl */
             if (port_number == 0) set_enum(channel_info[(int)channel_organizations::lamp]);
-            else if (port_number < 3) set_enum(channel_info[(int)channel_organizations::dcc]);
-            else set_enum(channel_info[(int)channel_organizations::sysid]);
+            else if (port_number == 1) set_enum(channel_info[(int)channel_organizations::sysid]);
         } else if (function == p_trigger_type) {
             set_enum(trigger_info);
         } else if (function == p_event) {
