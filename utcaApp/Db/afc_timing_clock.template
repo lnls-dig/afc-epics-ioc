@@ -159,3 +159,22 @@ record(ai, "$(P)$(R)$(CLOCK)Freq-RB"){
     field(SCAN, "I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))FREQ")
 }
+
+record(bo, "$(P)$(R)$(CLOCK)ClkRst-Cmd"){
+    field(DESC, "Reset $(CLOCK) PLL")
+    field(PINI, YES)
+    field(MASK, 1)
+    field(HIGH, 1)
+    field(ZNAM, "nothing")
+    field(ONAM, "reset")
+}
+
+record(calcout, "$(P)$(R)$(CLOCK)ClkRstCalc"){
+    field(INPA, "$(P)$(R)$(CLOCK)Freq-RB")
+    field(INPB, "$(P)$(R)$(CLOCK)ClkRst-Cmd CP")
+    field(CALC, "B")
+    field(OCAL, "A+1")
+    field(OOPT, "When Non-zero")
+    field(DOPT, "Use OCAL")
+    field(OUT, "$(P)$(R)$(CLOCK)Freq-SP PP")
+}
