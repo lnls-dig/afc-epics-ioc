@@ -40,7 +40,7 @@ record(fanout, "$(S)$(RTM_CHAN)OpModeHelperManualFanout") {
     field(SCAN, "Passive")
     field(SELM, "All")
     field(LNK0, "$(S)$(RTM_CHAN)OpModeHelperPauseAccumulator PP")
-    field(LNK1, "$(LAMP_PORT):ScanTaskPassive PP")
+    field(LNK1, "$(P)$(R)$(LAMP_PORT):ScanTaskPassive PP")
     field(LNK2, "$(S)$(RTM_CHAN)OpModeHelperCopyCurrent PP")
     field(LNK3, "$(S)$(RTM_CHAN)OpModeHelperSetPSMode PP")
 }
