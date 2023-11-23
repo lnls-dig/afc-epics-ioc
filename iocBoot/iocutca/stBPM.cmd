@@ -22,5 +22,6 @@ reAddAlias "${P1}${R1}(DCCP2P.*)" "${P2}${R2}$1"
 reAddAlias "${P1}${R1}(TRIGGER[[:digit:]].*)" "${P2}${R2}$1"
 
 < "iocBoot/${IOC}/bpm_acq.cmd"
+< "iocBoot/${IOC}/bpm_swap.cmd"
 
 iocInit
