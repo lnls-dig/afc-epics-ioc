@@ -9,6 +9,26 @@ VSLOT=$(./getSlot.sh $SLOT)
 
 cmd=
 case "$(decode-reg build_info -q --slot ${SLOT})" in
+    bpm-gw-*-sirius*)
+        CRATE=${CRATE#0}
+
+        . ./bpm-slot-mapping
+
+        VSLOT1=$VSLOT
+        VSLOT2=$(( VSLOT1 + 1 ))
+
+        val_name=CRATE_${CRATE}_BPM_${VSLOT1}_PV_AREA_PREFIX
+        eval "export AREA_PREFIX_1=\$${val_name}"
+        val_name=CRATE_${CRATE}_BPM_${VSLOT2}_PV_AREA_PREFIX
+        eval "export AREA_PREFIX_2=\$${val_name}"
+
+        val_name=CRATE_${CRATE}_BPM_${VSLOT1}_PV_DEVICE_PREFIX
+        eval "export DEVICE_PREFIX_1=\$${val_name}"
+        val_name=CRATE_${CRATE}_BPM_${VSLOT2}_PV_DEVICE_PREFIX
+        eval "export DEVICE_PREFIX_2=\$${val_name}"
+
+        cmd=BPM
+        ;;
     afc-tim-receive*)
         CRATE=${CRATE#0}
 
