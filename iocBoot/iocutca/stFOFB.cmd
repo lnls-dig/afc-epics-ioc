@@ -7,8 +7,8 @@ epicsEnvSet("S", "${RTM_PREFIX}")
 pcie("${SLOT}")
 
 < "iocBoot/$(IOC)/build_info.cmd"
-< "iocBoot/${IOC}/acq.cmd"
-< "iocBoot/${IOC}/fofb_cc.cmd"
+< "iocBoot/${IOC}/fofb_acq.cmd"
+< "iocBoot/${IOC}/fofb_fofb_cc.cmd"
 # rtmlamp has to be after acq
 < "iocBoot/${IOC}/rtmlamp.cmd"
 < "iocBoot/${IOC}/sysid.cmd"
