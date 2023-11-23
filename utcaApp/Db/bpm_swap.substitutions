@@ -1,0 +1,7 @@
+file db/scan_task.template {
+    {}
+}
+
+file db/bpm_swap.template {
+    {}
+}
