@@ -2,6 +2,7 @@
 
 registrar("registerAcq")
 registrar("registerAfcTiming")
+registrar("registerBpmSwap")
 registrar("registerBuildInformation")
 registrar("registerPcie")
 registrar("registerRtmLamp")
