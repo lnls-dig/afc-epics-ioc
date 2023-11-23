@@ -1,0 +1,26 @@
+#!../../bin/linux-x86_64/utca
+
+< common.cmd
+
+pcie("${SLOT}")
+
+epicsEnvSet("P1", "${AREA_PREFIX_1}")
+epicsEnvSet("P2", "${AREA_PREFIX_2}")
+
+epicsEnvSet("R1", "${DEVICE_PREFIX_1}")
+epicsEnvSet("R2", "${DEVICE_PREFIX_2}")
+
+epicsEnvSet("P", "${P1}")
+epicsEnvSet("R", "${R1}")
+< "iocBoot/$(IOC)/build_info.cmd"
+< "iocBoot/${IOC}/bpm_fofb_cc.cmd"
+< "iocBoot/${IOC}/triggers.cmd"
+
+var reToolsVerbose 0
+reAddAlias "${P1}${R1}(GwInfo.*)" "${P2}${R2}$1"
+reAddAlias "${P1}${R1}(DCCP2P.*)" "${P2}${R2}$1"
+reAddAlias "${P1}${R1}(TRIGGER[[:digit:]].*)" "${P2}${R2}$1"
+
+< "iocBoot/${IOC}/bpm_acq.cmd"
+
+iocInit
