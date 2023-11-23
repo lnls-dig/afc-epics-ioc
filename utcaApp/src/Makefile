@@ -20,6 +20,8 @@ utca_LIBS += asyn
 utca_DBD += asyn.dbd
 utca_LIBS += autosave
 utca_DBD += asSupport.dbd
+utca_LIBS += retools
+utca_DBD += retools.dbd
 
 utca_SRCS += pcie-single.cpp acq.cpp afc_timing.cpp build_info.cpp fofb_cc.cpp fofb_processing.cpp rtmlamp.cpp trigger_iface.cpp trigger_mux.cpp sysid.cpp
 utca_DBD += drivers.dbd
