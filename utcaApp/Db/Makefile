@@ -9,6 +9,7 @@ DB += build_info.template
 DB += scan_task.template
 DB += acq.template raw_data.template acq.substitutions
 DB += afc_timing.template afc_timing_clock.template afc_timing_trigger.template afc_timing.substitutions
+DB += bpm_swap.template bpm_swap.substitutions
 DB += fofb_cc.template fofb_cc_channel.template fofb_cc.substitutions
 DB += fofb_processing.template fofb_processing_channel.template fofb_processing.substitutions
 DB += rtmlamp.template rtmlamp_channel.template rtmlamp_data.template rtmlamp.substitutions

@@ -1,0 +1,70 @@
+# BPM Swap records
+
+record(mbbo,"$(P)$(R)SwMode-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC switching")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))MODE")
+}
+
+record(mbbi,"$(P)$(R)SwMode-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC switching")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))MODE")
+}
+
+record(longout,"$(P)$(R)SwDeswapDly-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC switching delay")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))DLY")
+    field(EGU, "clks")
+}
+
+record(longin,"$(P)$(R)SwDeswapDly-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC switching delay")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))DLY")
+    field(EGU, "clks")
+}
+
+record(longout,"$(P)$(R)SwDivClk-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC switching divider clock")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(OUT,"@asyn($(PORT))DIV_F")
+    field(ASG, "Interlock")
+}
+
+record(longin,"$(P)$(R)SwDivClk-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC switching divider clock")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))DIV_F")
+}
+
+record(bo,"$(P)$(R)SwPhaseSyncEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"enable switching phase sync")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(VAL, 1)
+    field(OUT,"@asyn($(PORT))DIV_F_CNT_EN")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+record(mbbi,"$(P)$(R)SwPhaseSyncEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"enable switching phase sync")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))DIV_F_CNT_EN")
+    field(ZRVL, 0)
+    field(ONVL, 1)
+    field(ZRST, "disable")
+    field(ONST, "enable")
+}
