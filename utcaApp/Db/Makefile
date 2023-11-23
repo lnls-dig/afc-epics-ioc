@@ -14,7 +14,7 @@ DB += fofb_processing.template fofb_processing_channel.template fofb_processing.
 DB += rtmlamp.template rtmlamp_channel.template rtmlamp_data.template rtmlamp.substitutions
 DB += sysid.template sysid_channel.template sysid_pos.template sysid_data.template sysid_pos_channel_data.template sysid_sp_channel_data.template sysid.substitutions
 DB += trigger_iface.template trigger_iface.substitutions
-DB += trigger_mux.template trigger_mux.substitutions
+DB += trigger_mux.template
 
 DB += $(AUTOSAVE)/asApp/Db/save_restoreStatus.db
 
