@@ -12,3 +12,5 @@ dbLoadDatabase "dbd/utca.dbd"
 utca_registerRecordDeviceDriver pdbbase
 
 var dbRecordsOnceOnly 1
+
+asSetFilename("$(TOP)/db/accessSecurityFile.acf")
