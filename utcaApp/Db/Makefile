@@ -19,6 +19,8 @@ DB += trigger_mux.template
 
 DB += $(AUTOSAVE)/asApp/Db/save_restoreStatus.db
 
+DB += accessSecurityFile.acf
+
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 
