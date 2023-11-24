@@ -7,8 +7,8 @@ library](https://github.com/lnls-dig/uhal).
 
 This project uses the EPICS build system, and it depends on EPICS 7, and the
 Asyn and Autosave modules; and the μHAL library. The `configure/RELEASE.local`
-file must define the paths for `EPICS_BASE`, `ASYN` and `AUTOSAVE`, `UHAL` and
-`UHAL_LIBS`.
+file must define the paths for `EPICS_BASE`, `ASYN`, `AUTOSAVE`, and `RETOOLS`;
+and `UHAL` and `UHAL_LIBS`.
 
 ## Licensing
 
