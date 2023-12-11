@@ -39,4 +39,34 @@ extern "C" {
     }
 
     epicsExportRegistrar(registerPcie);
+
+    static const iocshArg initArg0_serial = {"portPath", iocshArgString};
+    static const iocshArg *initArgs_serial[] = {&initArg0_serial};
+    static constexpr iocshFuncDef initFuncDef_serial {
+        "serial",
+        1,
+        initArgs_serial
+#ifdef IOCSHFUNCDEF_HAS_USAGE
+        ,"Connect to serial port portPath\n"
+#endif
+    };
+    static void initCallFunc_serial(const iocshArgBuf *args)
+    {
+        try {
+            std::string port_path = args[0].sval;
+            dev_open_serial(bars, port_path.c_str());
+        } catch (std::runtime_error &e) {
+            /* FIXME: do something with this exception,
+             * so far we are only avoiding propagating it through C */
+            fprintf(stderr, "init serial error: %s\n", e.what());
+            return;
+        }
+    }
+
+    static void registerSerial(void)
+    {
+        iocshRegister(&initFuncDef_serial, initCallFunc_serial);
+    }
+
+    epicsExportRegistrar(registerSerial);
 }
