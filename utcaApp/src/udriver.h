@@ -30,9 +30,6 @@ class UDriver: public asynPortDriver {
     int first_general_parameter = -1, last_general_parameter = -1,
         first_channel_parameter = -1, last_channel_parameter = -1;
 
-    std::vector<std::tuple<const char *, int &>> name_and_index;
-    std::vector<std::tuple<const char *, int &>> name_and_index_channel;
-
   protected:
     unsigned number_of_channels;
     int port_number;
@@ -42,8 +39,8 @@ class UDriver: public asynPortDriver {
     UDriver(
         const char *name, int port_number, RegisterDecoder *generic_decoder,
         unsigned number_of_channels,
-        std::vector<std::tuple<const char *, int &>> name_and_index,
-        std::vector<std::tuple<const char *, int &>> name_and_index_channel):
+        const std::vector<std::tuple<const char *, int &>> &name_and_index,
+        const std::vector<std::tuple<const char *, int &>> &name_and_index_channel):
       asynPortDriver(
           (std::string(name) + "-" + std::to_string(port_number)).c_str(),
           number_of_channels, /* channels */
@@ -51,7 +48,6 @@ class UDriver: public asynPortDriver {
           0, 1, 0, 0 /* no flags, auto connect, default priority and stack size */
       ),
       generic_decoder(generic_decoder),
-      name_and_index(name_and_index), name_and_index_channel(name_and_index_channel),
       number_of_channels(number_of_channels), port_number(port_number)
     {
         /* here, we don't call setIntegerParam to initialize these parameters:
