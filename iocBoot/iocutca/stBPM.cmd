@@ -12,6 +12,9 @@ epicsEnvSet("R2", "${DEVICE_PREFIX_2}")
 
 epicsEnvSet("P", "${P1}")
 epicsEnvSet("R", "${R1}")
+
+asSetSubstitutions("P=$(P),R=$(R)")
+
 < "iocBoot/$(IOC)/build_info.cmd"
 < "iocBoot/${IOC}/bpm_fofb_cc.cmd"
 < "iocBoot/${IOC}/triggers.cmd"
