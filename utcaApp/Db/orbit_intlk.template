@@ -1,0 +1,441 @@
+# BPM Interlock records
+
+# Interlock control
+
+record(bo,"$(P)$(R)IntlkEn-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock enable")
+    field(PINI, "YES")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(OUT,  "@asyn($(PORT))EN")
+}
+
+record(bi,"$(P)$(R)IntlkEn-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock enable")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))EN")
+}
+
+record(bo,"$(P)$(R)IntlkClr-Cmd"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock clear")
+    field(PINI, "YES")
+    field(ZNAM, "nothing")
+    field(ONAM, "reset")
+    field(HIGH, 1)
+    field(MASK, 1)
+    field(OUT,  "@asyn($(PORT))CLR")
+}
+
+record(bo,"$(P)$(R)IntlkMinSumEn-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock min. sum enable")
+    field(PINI, "YES")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(OUT,  "@asyn($(PORT))MIN_SUM_EN")
+    field(ASG, "Interlock")
+}
+
+record(bi,"$(P)$(R)IntlkMinSumEn-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock min. sum enable")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))MIN_SUM_EN")
+}
+
+record(bo,"$(P)$(R)IntlkPosEn-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock pos. enable")
+    field(PINI, "YES")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(OUT,  "@asyn($(PORT))POS_EN")
+    field(ASG, "Interlock")
+}
+
+record(bi,"$(P)$(R)IntlkPosEn-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock pos. enable")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_EN")
+}
+
+record(bo,"$(P)$(R)IntlkPosClr-Cmd"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock pos. clear")
+    field(PINI, "YES")
+    field(ZNAM, "nothing")
+    field(ONAM, "reset")
+    field(HIGH, 1)
+    field(MASK, 1)
+    field(OUT,  "@asyn($(PORT))POS_CLR")
+}
+
+record(bo,"$(P)$(R)IntlkAngEn-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock ang. enable")
+    field(PINI, "YES")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(OUT,  "@asyn($(PORT))ANG_EN")
+    field(ASG, "Interlock")
+}
+
+record(bi,"$(P)$(R)IntlkAngEn-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock ang. enable")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_EN")
+}
+
+record(bo,"$(P)$(R)IntlkAngClr-Cmd"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock ang. clear")
+    field(PINI, "YES")
+    field(ZNAM, "nothing")
+    field(ONAM, "reset")
+    field(HIGH, 1)
+    field(MASK, 1)
+    field(OUT,  "@asyn($(PORT))ANG_CLR")
+}
+
+# Interlock upper status
+
+record(bi,"$(P)$(R)IntlkPosUpperX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip max. pos. X")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_UPPER_X")
+}
+
+record(bi,"$(P)$(R)IntlkPosUpperY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip max. pos. Y")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_UPPER_Y")
+}
+
+record(bi,"$(P)$(R)IntlkPosUpperLtcX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip max. pos. latched X")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_UPPER_LTC_X")
+}
+
+record(bi,"$(P)$(R)IntlkPosUpperLtcY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip max. pos. latched Y")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_UPPER_LTC_Y")
+}
+
+record(bi,"$(P)$(R)IntlkAngUpperX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip max. ang. X")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_UPPER_X")
+}
+
+record(bi,"$(P)$(R)IntlkAngUpperY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip max. ang. Y")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_UPPER_Y")
+}
+
+record(bi,"$(P)$(R)IntlkAngUpperLtcX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip max. ang. latched X")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_UPPER_LTC_X")
+}
+
+record(bi,"$(P)$(R)IntlkAngUpperLtcY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip max. ang. latched Y")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_UPPER_LTC_Y")
+}
+
+# Interlock lower status
+
+record(bi,"$(P)$(R)IntlkPosLowerX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip min. pos. X")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_LOWER_X")
+}
+
+record(bi,"$(P)$(R)IntlkPosLowerY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip min. pos. Y")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_LOWER_Y")
+}
+
+record(bi,"$(P)$(R)IntlkPosLowerLtcX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip min. pos. latched X")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_LOWER_LTC_X")
+}
+
+record(bi,"$(P)$(R)IntlkPosLowerLtcY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip min. pos. latched Y")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))POS_LOWER_LTC_Y")
+}
+
+record(bi,"$(P)$(R)IntlkAngLowerX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip min. ang. X")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_LOWER_X")
+}
+
+record(bi,"$(P)$(R)IntlkAngLowerY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip min. ang. Y")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_LOWER_Y")
+}
+
+record(bi,"$(P)$(R)IntlkAngLowerLtcX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip min. ang. latched X")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_LOWER_LTC_X")
+}
+
+record(bi,"$(P)$(R)IntlkAngLowerLtcY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip min. ang. latched Y")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))ANG_LOWER_LTC_Y")
+}
+
+# Interlock general status
+
+record(bi,"$(P)$(R)Intlk-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))INTLK")
+}
+
+record(bi,"$(P)$(R)IntlkLtc-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock trip latched")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+    field(INP,  "@asyn($(PORT))INTLK_LTC")
+}
+
+# Interlock limits
+
+record(longout, "$(P)$(R)IntlkLmtMinSum-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock minimum sum threshold")
+    field(OUT,  "@asyn($(PORT))MIN_SUM")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtMinSum-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock minimum sum threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))MIN_SUM")
+}
+
+record(longout, "$(P)$(R)IntlkLmtPosMaxX-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock pos. max X threshold")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT))POS_MAX_X")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtPosMaxX-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock pos. max X threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))POS_MAX_X")
+}
+
+record(longout, "$(P)$(R)IntlkLmtPosMaxY-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock pos. max Y threshold")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT))POS_MAX_Y")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtPosMaxY-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock pos. max Y threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))POS_MAX_Y")
+}
+
+record(longout, "$(P)$(R)IntlkLmtAngMaxX-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock ang. max X threshold")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT))ANG_MAX_X")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtAngMaxX-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock ang. max X threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))ANG_MAX_X")
+}
+
+record(longout, "$(P)$(R)IntlkLmtAngMaxY-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock ang. max Y threshold")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT))ANG_MAX_Y")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtAngMaxY-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock ang. max Y threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))ANG_MAX_Y")
+}
+
+record(longout, "$(P)$(R)IntlkLmtPosMinX-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock pos. min X threshold")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT))POS_MIN_X")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtPosMinX-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock pos. min X threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))POS_MIN_X")
+}
+
+record(longout, "$(P)$(R)IntlkLmtPosMinY-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock pos. min Y threshold")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT))POS_MIN_Y")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtPosMinY-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock pos. min Y threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))POS_MIN_Y")
+}
+
+record(longout, "$(P)$(R)IntlkLmtAngMinX-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock ang. min X threshold")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT))ANG_MIN_X")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtAngMinX-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock ang. min X threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))ANG_MIN_X")
+}
+
+record(longout, "$(P)$(R)IntlkLmtAngMinY-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Set interlock ang. min Y threshold")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT))ANG_MIN_Y")
+    field(ASG, "Interlock")
+}
+
+record(longin,  "$(P)$(R)IntlkLmtAngMinY-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock ang. min Y threshold")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))ANG_MIN_Y")
+}
+
+record(longin,"$(P)$(R)IntlkPosX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock X position")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))POS_X_INST")
+}
+record(longin,"$(P)$(R)IntlkPosY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock Y position")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))POS_Y_INST")
+}
+
+record(longin,"$(P)$(R)IntlkAngX-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock X angle")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))ANG_X_INST")
+}
+record(longin,"$(P)$(R)IntlkAngY-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Get interlock Y angle")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT))ANG_Y_INST")
+}
