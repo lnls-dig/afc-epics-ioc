@@ -14,3 +14,4 @@ utca_registerRecordDeviceDriver pdbbase
 var dbRecordsOnceOnly 1
 
 asSetFilename("$(TOP)/db/accessSecurityFile.acf")
+asSetSubstitutions("P=$(P),R=$(R)")
