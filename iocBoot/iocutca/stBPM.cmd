@@ -17,11 +17,13 @@ asSetSubstitutions("P=$(P),R=$(R)")
 
 < "iocBoot/$(IOC)/build_info.cmd"
 < "iocBoot/${IOC}/bpm_fofb_cc.cmd"
+< "iocBoot/${IOC}/orbit_intlk.cmd"
 < "iocBoot/${IOC}/triggers.cmd"
 
 var reToolsVerbose 0
 reAddAlias "${P1}${R1}(GwInfo.*)" "${P2}${R2}$1"
 reAddAlias "${P1}${R1}(DCCP2P.*)" "${P2}${R2}$1"
+reAddAlias "${P1}${R1}(Intlk.*)" "${P2}${R2}$1"
 reAddAlias "${P1}${R1}(TRIGGER[[:digit:]].*)" "${P2}${R2}$1"
 
 < "iocBoot/${IOC}/bpm_acq.cmd"
