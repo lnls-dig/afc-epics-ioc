@@ -1,0 +1,33 @@
+name: Build IOC
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/cnpem/lnls-alpine-3.18-epics-7:v0.6.0
+    steps:
+      - name: Install dependencies
+        run: apk add --no-cache git meson
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: lnls-dig/uhal
+          submodules: true
+          ref: master
+          path: uhal-src
+      - name: Build uhal
+        run: cd uhal-src && LDFLAGS=-static meson setup --prefix $PWD/../uhal build && ninja -C build install
+      - name: Configure IOC
+        run: >
+          cp /opt/epics/RELEASE configure/RELEASE &&
+          echo 'UHAL=$(TOP)/uhal' >> configure/RELEASE &&
+          echo 'UHAL_LIBS=$(UHAL)/lib' >> configure/RELEASE &&
+          echo 'STATIC_BUILD=YES' >> configure/CONFIG_SITE.local
+      - name: Build IOC
+        run: make -j$(nproc)
