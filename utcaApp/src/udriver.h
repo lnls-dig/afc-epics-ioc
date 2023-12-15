@@ -31,6 +31,7 @@ class UDriver: public asynPortDriver {
         first_channel_parameter = -1, last_channel_parameter = -1;
 
   protected:
+    static inline int p_read_only = 0;
     unsigned number_of_channels;
     int port_number;
 
@@ -64,12 +65,16 @@ class UDriver: public asynPortDriver {
 
         auto create_params = [this](auto const &nai, auto &first_param, auto &last_param) {
             for (auto &&[i, v]: enumerate(nai)) {
+                int p_tmp;
                 auto &&[str, p] = v;
 
-                createParam(str, asynParamInt32, &p);
+                /* if p is p_read_only, we use a temporary variable to avoid any
+                 * issues with simultaneous access to p_read_only */
+                int *pp = (&p != &p_read_only) ? &p : &p_tmp;
+                createParam(str, asynParamInt32, pp);
 
-                if (i == 0) first_param = p;
-                else if (i == nai.size() - 1) last_param = p;
+                if (i == 0) first_param = *pp;
+                else if (i == nai.size() - 1) last_param = *pp;
             }
         };
 
