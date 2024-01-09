@@ -41,21 +41,9 @@ class BPMSwap: public UDriver {
         int severities[], size_t, size_t *nIn)
     {
         const int function = pasynUser->reason;
-
-        if (function == p_mode) {
-            for (auto &&[i, name]: enumerate(ctl.mode_list)) {
-                strings[i] = epicsStrDup(name.data());
-                values[i] = i;
-                severities[i] = NO_ALARM;
-
-                *nIn = i+1;
-            }
-        } else {
-            *nIn = 0;
-            return asynError;
-        }
-
-        return asynSuccess;
+        if (function == p_mode)
+            return fill_enum(strings, values, severities, nIn, ctl.mode_list);
+        return asynError;
     }
 
     asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int, epicsInt32 value)

@@ -85,18 +85,12 @@ class AFCTiming: public UDriver {
     }
 
     asynStatus readEnum(asynUser *pasynUser, char *strings[], int values[],
-        int severities[], [[maybe_unused]] size_t nElements, size_t *nIn)
+        int severities[], size_t, size_t *nIn)
     {
         const int function = pasynUser->reason;
 
         if (function == p_ch_src) {
-            for (auto &&[i, name]: enumerate(ctl.sources_list)) {
-                strings[i] = epicsStrDup(name.data());
-                values[i] = i;
-                severities[i] = NO_ALARM;
-
-                *nIn = i+1;
-            }
+            return fill_enum(strings, values, severities, nIn, ctl.sources_list);
         } else if (function == p_refclock_lock || function >= p_rtm_lock && function <= p_gt0_lock_latch) {
             static const char *off_on[] = {"off", "on"};
             for (auto &&[i, name]: enumerate(off_on)) {
@@ -105,7 +99,6 @@ class AFCTiming: public UDriver {
                 severities[i] = i == 0 ? MAJOR_ALARM : NO_ALARM;
             }
         } else {
-            *nIn = 0;
             return asynError;
         }
 
