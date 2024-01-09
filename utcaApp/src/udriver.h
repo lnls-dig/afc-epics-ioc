@@ -23,6 +23,7 @@
 
 class UDriver: public asynPortDriver {
     RegisterDecoder *generic_decoder;
+    RegisterDecoderController *generic_decoder_controller;
 
     int p_scan_task, p_counter;
     unsigned scan_counter = 0;
@@ -31,17 +32,19 @@ class UDriver: public asynPortDriver {
         first_channel_parameter = -1, last_channel_parameter = -1;
 
   protected:
-    static inline int p_read_only = 0;
+    static inline int p_read_only = 0, p_decoder_controller = 0;
     unsigned number_of_channels;
     int port_number;
 
+    std::unordered_set<int> decoder_controller;
     std::unordered_set<int> write_only;
 
     UDriver(
         const char *name, int port_number, RegisterDecoder *generic_decoder,
         unsigned number_of_channels,
         const std::vector<std::tuple<const char *, int &>> &name_and_index,
-        const std::vector<std::tuple<const char *, int &>> &name_and_index_channel):
+        const std::vector<std::tuple<const char *, int &>> &name_and_index_channel,
+        RegisterDecoderController *generic_decoder_controller=nullptr):
       asynPortDriver(
           (std::string(name) + "-" + std::to_string(port_number)).c_str(),
           number_of_channels, /* channels */
@@ -49,6 +52,7 @@ class UDriver: public asynPortDriver {
           0, 1, 0, 0 /* no flags, auto connect, default priority and stack size */
       ),
       generic_decoder(generic_decoder),
+      generic_decoder_controller(generic_decoder_controller),
       number_of_channels(number_of_channels), port_number(port_number)
     {
         /* here, we don't call setIntegerParam to initialize these parameters:
@@ -68,10 +72,17 @@ class UDriver: public asynPortDriver {
                 int p_tmp;
                 auto &&[str, p] = v;
 
-                /* if p is p_read_only, we use a temporary variable to avoid any
-                 * issues with simultaneous access to p_read_only */
-                int *pp = (&p != &p_read_only) ? &p : &p_tmp;
+                /* if p is p_read_only or p_decoder_controller, we use a
+                 * temporary variable to avoid any issues with simultaneous
+                 * access to them */
+                bool use_tmp = &p == &p_read_only || &p == &p_decoder_controller;
+                int *pp = use_tmp ? &p_tmp : &p;
                 createParam(str, asynParamInt32, pp);
+
+                if (&p == &p_decoder_controller) {
+                    assert(this->generic_decoder_controller);
+                    decoder_controller.insert(p_tmp);
+                }
 
                 if (i == 0) first_param = *pp;
                 else if (i == nai.size() - 1) last_param = *pp;
@@ -181,7 +192,15 @@ class UDriver: public asynPortDriver {
         else return asynPortDriver::readInt32(pasynUser, value);
     }
 
-    virtual asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value) = 0;
+    virtual asynStatus writeInt32Impl(
+        [[maybe_unused]] asynUser *pasynUser,
+        [[maybe_unused]] const int function,
+        [[maybe_unused]] const int addr,
+        [[maybe_unused]] epicsInt32 value)
+    {
+        throw std::logic_error("this default implementation shouldn't be called");
+    }
+
     asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value) override final
     {
         const int function = pasynUser->reason;
@@ -200,6 +219,17 @@ class UDriver: public asynPortDriver {
                 "writeInt32: %s: general parameter with addr=%d (should be 0)", param_name, addr);
 
             return asynError;
+        }
+
+        if (decoder_controller.count(function)) try {
+            if (first_general_parameter >= 0 && function <= last_general_parameter)
+                generic_decoder_controller->write_general(param_name, value);
+            else
+                generic_decoder_controller->write_channel(param_name, addr, value);
+
+            return write_params(pasynUser, *generic_decoder_controller);
+        } catch (std::exception &e) {
+            fprintf(stderr, "bad decoder_controller write. param: %s. exception: %s\n", param_name, e.what());
         }
 
         return writeInt32Impl(pasynUser, function, addr, value);
