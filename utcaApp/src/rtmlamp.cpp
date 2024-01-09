@@ -12,15 +12,10 @@ namespace {
 }
 
 class RtmLamp: public UDriver {
-    lamp::CoreV2 dec;
-    lamp::ControllerV2 ctl;
+    lamp::Core dec;
+    lamp::Controller ctl;
 
-    int p_psstatus;
-    int p_ampstatus, p_ampstatus_latch,
-        p_pwrstate, p_opmode, p_trigen, p_reset_latch,
-        p_loopkp, p_loopti,
-        p_testwaveperiod, p_testlim_a, p_testlim_b,
-        p_pi_sp, p_dac, p_eff_adc, p_eff_dac, p_eff_sp;
+    int p_mode;
 
   public:
     RtmLamp(int port_number):
@@ -28,26 +23,27 @@ class RtmLamp: public UDriver {
           "RTMLAMP", port_number, &dec,
           ::number_of_channels,
           {
-              {"PS_STATUS", p_psstatus},
+              {"PS_STATUS", p_read_only},
           },
           {
-              {"AMP_STATUS", p_ampstatus},
-              {"AMP_STATUS_LATCH", p_ampstatus_latch},
-              {"AMP_EN", p_pwrstate},
-              {"MODE", p_opmode},
-              {"TRIG_EN", p_trigen},
-              {"RST_LATCH", p_reset_latch},
-              {"PI_KP", p_loopkp},
-              {"PI_TI", p_loopti},
-              {"CNT", p_testwaveperiod},
-              {"LIMIT_A", p_testlim_a},
-              {"LIMIT_B", p_testlim_b},
-              {"PI_SP", p_pi_sp},
-              {"DAC", p_dac},
-              {"ADC_INST", p_eff_adc},
-              {"DAC_EFF", p_eff_dac},
-              {"SP_EFF", p_eff_sp},
-          }),
+              {"AMP_STATUS", p_read_only},
+              {"AMP_STATUS_LATCH", p_read_only},
+              {"AMP_EN", p_decoder_controller},
+              {"MODE", p_mode},
+              {"TRIG_EN", p_decoder_controller},
+              {"RST_LATCH", p_decoder_controller},
+              {"PI_KP", p_decoder_controller},
+              {"PI_TI", p_decoder_controller},
+              {"CNT", p_decoder_controller},
+              {"LIMIT_A", p_decoder_controller},
+              {"LIMIT_B", p_decoder_controller},
+              {"PI_SP", p_decoder_controller},
+              {"DAC", p_decoder_controller},
+              {"ADC_INST", p_read_only},
+              {"DAC_EFF", p_read_only},
+              {"SP_EFF", p_read_only},
+          },
+          &ctl),
       dec(bars),
       ctl(bars)
     {
@@ -55,46 +51,18 @@ class RtmLamp: public UDriver {
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
 
-        /* XXX: initialize this one specifically to avoid an exception */
-        for (unsigned addr = 0; addr < number_of_channels; addr++) {
-            setIntegerParam(addr, p_opmode, 0);
-        }
-
-        write_only = {p_reset_latch};
+        decoder_controller.insert(p_mode);
 
         read_parameters();
     }
 
-    asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value)
+    asynStatus readEnum(asynUser *pasynUser, char *strings[], int values[],
+        int severities[], size_t, size_t *nIn)
     {
-        setIntegerParam(addr, function, value);
-
-        ctl.channel = addr;
-
-        auto write_param = [addr, this](auto fn, auto &ctl_value) {
-            epicsInt32 tmp;
-            /* we expect success, unless the parameter hasn't been initialized yet */
-            if (getIntegerParam(addr, fn, &tmp) == asynSuccess)
-                ctl_value = tmp;
-            else
-                ctl_value = 0;
-        };
-
-        write_param(p_pwrstate, ctl.amp_enable);
-        write_param(p_opmode, ctl.mode_numeric);
-        write_param(p_loopkp, ctl.pi_kp);
-        write_param(p_loopti, ctl.pi_ti);
-        write_param(p_testwaveperiod, ctl.cnt);
-        write_param(p_testlim_a, ctl.limit_a);
-        write_param(p_testlim_b, ctl.limit_b);
-        write_param(p_pi_sp, ctl.pi_sp);
-        write_param(p_dac, ctl.dac);
-        /* XXX: if someone writes 1 into trigen and it's not supported by the hardware,
-         * we'll error out continuously until zeroed-out again */
-        write_param(p_trigen, ctl.trigger_enable);
-        write_param(p_reset_latch, ctl.reset_latch);
-
-        return write_params(pasynUser, ctl);
+        const int function = pasynUser->reason;
+        if (function == p_mode)
+            return fill_enum(strings, values, severities, nIn, lamp::mode_list);
+        return asynError;
     }
 };
 
