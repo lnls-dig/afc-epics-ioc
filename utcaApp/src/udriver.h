@@ -8,8 +8,10 @@
 # define HAS_SOURCE_LOCATION
 #endif
 
+#include <alarm.h>
 #include <cantProceed.h>
 #include <epicsExport.h>
+#include <epicsString.h>
 #include <iocsh.h>
 
 #include <asynPortDriver.h>
@@ -177,6 +179,19 @@ class UDriver: public asynPortDriver {
         }
 
         read_parameters();
+
+        return asynSuccess;
+    }
+
+    asynStatus fill_enum(char *strings[], int values[], int severities[], size_t *nIn, const auto string_list)
+    {
+        for (auto &&[i, name]: enumerate(string_list)) {
+            strings[i] = epicsStrDup(name.data());
+            values[i] = i;
+            severities[i] = NO_ALARM;
+
+            *nIn = i+1;
+        }
 
         return asynSuccess;
     }
