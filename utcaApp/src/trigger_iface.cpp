@@ -26,8 +26,8 @@ class TriggerIface: public UDriver {
           {
               {"DIR", p_dir},
               {"DIR_POL", p_dir_pol},
-              {"RCV_COUNT_RST", p_rcv_count_rst},
-              {"TRANSM_COUNT_RST", p_transm_count_rst},
+              ParamInit{"RCV_COUNT_RST", p_rcv_count_rst}.set_wo(),
+              ParamInit{"TRANSM_COUNT_RST", p_transm_count_rst}.set_wo(),
               {"RCV_LEN", p_rcv_len},
               {"TRANSM_LEN", p_transm_len},
               {"RCV_COUNT", p_rcv_count},
@@ -39,8 +39,6 @@ class TriggerIface: public UDriver {
         auto v = find_device(port_number);
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
-
-        write_only = {p_rcv_count_rst, p_transm_count_rst};
 
         read_parameters();
     }

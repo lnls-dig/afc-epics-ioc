@@ -1,3 +1,4 @@
+#include <optional>
 #include <tuple>
 #include <unordered_set>
 #include <vector>
@@ -23,29 +24,60 @@
 #include "enumerate.h"
 #include "pcie-single.h"
 
+struct ParamInit {
+    const char *name;
+    int &parameter;
+    std::optional<unsigned> number_of_channels = std::nullopt;
+    asynParamType type;
+    bool write_only = false;
+
+    ParamInit(const char *name, int &parameter, asynParamType type = asynParamInt32):
+        name(name),
+        parameter(parameter),
+        type(type)
+    {
+    }
+
+    ParamInit set_nc(unsigned new_number_of_channels)
+    {
+        number_of_channels = new_number_of_channels;
+        return *this;
+    }
+
+    ParamInit set_wo()
+    {
+        write_only = true;
+        return *this;
+    }
+};
+
 class UDriver: public asynPortDriver {
     RegisterDecoder *generic_decoder;
     RegisterDecoderController *generic_decoder_controller;
 
     int p_scan_task, p_counter;
+    static const unsigned UDRIVER_PARAMS = 2;
     unsigned scan_counter = 0;
 
-    int first_general_parameter = -1, last_general_parameter = -1,
-        first_channel_parameter = -1, last_channel_parameter = -1;
-
   protected:
+    struct parameter_props {
+        unsigned number_of_channels;
+        asynParamType type;
+        bool is_general;
+        bool write_only;
+        bool write_decoder_controller;
+    };
+    std::vector<parameter_props> parameter_props;
+
     static inline int p_read_only = 0, p_decoder_controller = 0;
     unsigned number_of_channels;
     int port_number;
 
-    std::unordered_set<int> decoder_controller;
-    std::unordered_set<int> write_only;
-
     UDriver(
         const char *name, int port_number, RegisterDecoder *generic_decoder,
         unsigned number_of_channels,
-        const std::vector<std::tuple<const char *, int &>> &name_and_index,
-        const std::vector<std::tuple<const char *, int &>> &name_and_index_channel,
+        const std::vector<ParamInit> &name_and_index,
+        const std::vector<ParamInit> &name_and_index_channel,
         RegisterDecoderController *generic_decoder_controller=nullptr):
       asynPortDriver(
           (std::string(name) + "-" + std::to_string(port_number)).c_str(),
@@ -69,30 +101,37 @@ class UDriver: public asynPortDriver {
         createParam("COUNTER", asynParamInt32, &p_counter);
         setIntegerParam(p_counter, 0);
 
-        auto create_params = [this](auto const &nai, auto &first_param, auto &last_param) {
+        /* fill the positions from the first UDriver parameters */
+        parameter_props.resize(UDRIVER_PARAMS);
+
+        auto create_params = [this](auto const &nai, bool is_general) {
             for (auto &&[i, v]: enumerate(nai)) {
                 int p_tmp;
-                auto &&[str, p] = v;
+                auto &&[str, p, nc, t, wo] = v;
 
                 /* if p is p_read_only or p_decoder_controller, we use a
                  * temporary variable to avoid any issues with simultaneous
                  * access to them */
                 bool use_tmp = &p == &p_read_only || &p == &p_decoder_controller;
                 int *pp = use_tmp ? &p_tmp : &p;
-                createParam(str, asynParamInt32, pp);
+                createParam(str, t, pp);
 
-                if (&p == &p_decoder_controller) {
+                if (&p == &p_decoder_controller)
                     assert(this->generic_decoder_controller);
-                    decoder_controller.insert(p_tmp);
-                }
 
-                if (i == 0) first_param = *pp;
-                else if (i == nai.size() - 1) last_param = *pp;
+                assert((int)parameter_props.size() == *pp);
+                parameter_props.push_back({
+                    .number_of_channels = nc ? *nc : this->number_of_channels,
+                    .type = t,
+                    .is_general = is_general,
+                    .write_only = wo,
+                    .write_decoder_controller = (&p == &p_decoder_controller),
+                });
             }
         };
 
-        create_params(name_and_index, first_general_parameter, last_general_parameter);
-        create_params(name_and_index_channel, first_channel_parameter, last_channel_parameter);
+        create_params(name_and_index, true);
+        create_params(name_and_index_channel, false);
     }
 
     sdb_device_info find_device(int port_number)
@@ -107,28 +146,24 @@ class UDriver: public asynPortDriver {
     {
         generic_decoder->get_data(only_monitors);
 
-        auto get_params = [this](auto first_param, auto last_param, auto fn) {
-            if (first_param < 0) return;
+        for (const auto &&[p, prop]: enumerate(parameter_props)) {
+            if (p < UDRIVER_PARAMS) continue;
+            if (prop.write_only) continue;
 
-            for (int p = first_param; p <= last_param; p++) {
-                if (write_only.count(p)) continue;
+            const char *param_name;
+            getParamName(p, &param_name);
 
-                const char *param_name;
-                getParamName(p, &param_name);
+            auto get_and_set = [this, type=prop.type](int addr, int param, auto value) {
+                if (type == asynParamInt32)
+                    setIntegerParam(addr, param, std::get<int32_t>(value));
+            };
 
-                fn(p, param_name);
-            }
-        };
-
-        get_params(first_general_parameter, last_general_parameter,
-            [this](int p, const char *param_name)
-            { setIntegerParam(0, p, generic_decoder->get_general_data<int32_t>(param_name)); });
-        get_params(first_channel_parameter, last_channel_parameter,
-            [this](int p, const char *param_name)
-            {
-                for (unsigned addr = 0; addr < number_of_channels; addr++)
-                    setIntegerParam(addr, p, generic_decoder->get_channel_data<int32_t>(param_name, addr));
-            });
+            if (prop.is_general)
+                get_and_set(0, p, generic_decoder->get_generic_data(param_name));
+            else
+                for (unsigned addr = 0; addr < prop.number_of_channels; addr++)
+                    get_and_set(addr, p, generic_decoder->get_generic_data(param_name, addr));
+        }
 
         epicsInt32 counter;
         getIntegerParam(0, p_counter, &counter);
@@ -225,19 +260,19 @@ class UDriver: public asynPortDriver {
         getAddress(pasynUser, &addr);
         getParamName(function, &param_name);
 
-        if (function < p_scan_task) {
-            return asynPortDriver::writeInt32(pasynUser, value);
-        }
+        /* parameter we don't know about */
+        if ((unsigned)function >= parameter_props.size())
+            return writeInt32Impl(pasynUser, function, addr, value);
 
-        if (first_general_parameter >= 0 && addr != 0 && function <= last_general_parameter) {
+        if (parameter_props.at(function).is_general && addr != 0) {
             epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
                 "writeInt32: %s: general parameter with addr=%d (should be 0)", param_name, addr);
 
             return asynError;
         }
 
-        if (decoder_controller.count(function)) try {
-            if (first_general_parameter >= 0 && function <= last_general_parameter)
+        if (parameter_props.at(function).write_decoder_controller) try {
+            if (parameter_props.at(function).is_general)
                 generic_decoder_controller->write_general(param_name, value);
             else
                 generic_decoder_controller->write_channel(param_name, addr, value);
@@ -248,6 +283,7 @@ class UDriver: public asynPortDriver {
         }
 
         return writeInt32Impl(pasynUser, function, addr, value);
+        /* parameters which aren't using generic_decoder_controller */
     }
 };
 
