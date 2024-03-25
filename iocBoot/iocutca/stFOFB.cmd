@@ -14,6 +14,7 @@ pcie("${SLOT}")
 < "iocBoot/${IOC}/sysid.cmd"
 # fofb_processing has to be after rtmlamp
 < "iocBoot/${IOC}/fofb_processing.cmd"
+< "iocBoot/${IOC}/fofb_shaper_filt.cmd"
 < "iocBoot/${IOC}/triggers.cmd"
 
 < "iocBoot/${IOC}/autosave_pre.cmd"

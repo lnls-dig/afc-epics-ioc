@@ -51,7 +51,7 @@ class RtmLamp: public UDriver {
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
 
-        decoder_controller.insert(p_mode);
+        parameter_props.at(p_mode).write_decoder_controller = true;
 
         read_parameters();
     }

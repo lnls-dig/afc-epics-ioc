@@ -29,7 +29,7 @@ class FofbProcessing: public UDriver {
           "FOFB_PROCESSING", port_number, &dec,
           ::number_of_channels,
           {
-              {"INTLK_CTL_CLR", p_intlk_clr},
+              ParamInit{"INTLK_CTL_CLR", p_intlk_clr}.set_wo(),
               {"INTLK_CTL_SRC_EN_ORB_DISTORT", p_intlk_en_orb_distort},
               {"INTLK_CTL_SRC_EN_PACKET_LOSS", p_intlk_en_packet_loss},
               {"INTLK_STA", p_intlk_sta},
@@ -38,7 +38,8 @@ class FofbProcessing: public UDriver {
               {"SP_DECIM_RATIO_MAX", p_sp_decim_ratio_max},
           },
           {
-              {"CH_ACC_CTL_CLEAR", p_acc_clr},
+              ParamInit{"CH_ACC_CTL_CLEAR", p_acc_clr}.set_wo(),
+              {"CH_ACC_GAIN", p_acc_gain, asynParamFloat64},
               {"CH_ACC_CTL_FREEZE", p_acc_freeze},
               {"CH_ACC_LIMITS_MAX", p_sp_limits_max},
               {"CH_ACC_LIMITS_MIN", p_sp_limits_min},
@@ -55,25 +56,10 @@ class FofbProcessing: public UDriver {
         createParam("REF_ORBIT_X", asynParamInt32Array, &p_reforb_x);
         createParam("REF_ORBIT_Y", asynParamInt32Array, &p_reforb_y);
 
-        createParam("CH_ACC_GAIN", asynParamFloat64, &p_acc_gain);
         createParam("CH_COEFFS_X", asynParamFloat64Array, &p_coeffs_x);
         createParam("CH_COEFFS_Y", asynParamFloat64Array, &p_coeffs_y);
 
-        write_only = {p_intlk_clr, p_acc_clr};
-
         read_parameters();
-    }
-
-    asynStatus read_parameters(bool only_monitors=false)
-    {
-        UDriver::read_parameters(only_monitors);
-
-        for (unsigned addr = 0; addr < ::number_of_channels; addr++)
-            setDoubleParam(addr, p_acc_gain, dec.get_channel_data<double>("CH_ACC_GAIN", addr));
-
-        do_callbacks();
-
-        return asynSuccess;
     }
 
     asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value)
@@ -93,17 +79,10 @@ class FofbProcessing: public UDriver {
         return write_params(pasynUser, ctl);
     }
 
-    asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value)
+    asynStatus writeFloat64Impl(asynUser *pasynUser, const int function, const int addr, epicsFloat64 value)
     {
-        int function = pasynUser->reason, addr;
-        getAddress(pasynUser, &addr);
-
-        if (function == p_acc_gain) {
+        if (function == p_acc_gain)
             ctl.parameters[addr].acc_gain = value;
-
-        } else {
-            return asynPortDriver::writeFloat64(pasynUser, value);
-        }
 
         return write_params(pasynUser, ctl);
     }
