@@ -156,6 +156,8 @@ class UDriver: public asynPortDriver {
             auto get_and_set = [this, type=prop.type](int addr, int param, auto value) {
                 if (type == asynParamInt32)
                     setIntegerParam(addr, param, std::get<int32_t>(value));
+                else if (type == asynParamFloat64)
+                    setDoubleParam(addr, param, std::get<double>(value));
             };
 
             if (prop.is_general)
