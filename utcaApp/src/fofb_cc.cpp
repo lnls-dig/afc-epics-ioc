@@ -31,14 +31,14 @@ class FofbCc: public UDriver {
           "FOFB_CC", port_number, &dec,
           ::number_of_channels,
           {
-              {"ERR_CLR", p_err_clr},
+              ParamInit{"ERR_CLR", p_err_clr}.set_wo(),
               {"CC_ENABLE", p_cc_enable},
               {"TFS_OVERRIDE", p_tfs_override},
               {"TOA_RD_EN", p_toa_rd_en},
-              {"TOA_RD_STR", p_toa_rd_str},
+              ParamInit{"TOA_RD_STR", p_toa_rd_str}.set_wo(),
               {"TOA_DATA", p_toa_data},
               {"RCB_RD_EN", p_rcb_rd_en},
-              {"RCB_RD_STR", p_rcb_rd_str},
+              ParamInit{"RCB_RD_STR", p_rcb_rd_str}.set_wo(),
               {"RCB_DATA", p_rcb_data},
               {"BPM_ID", p_bpm_id},
               {"TIME_FRAME_LEN", p_time_frame_len},
@@ -69,8 +69,6 @@ class FofbCc: public UDriver {
         auto v = find_device(port_number);
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
-
-        write_only = {p_err_clr, p_toa_rd_str, p_rcb_rd_str};
 
         read_parameters();
     }

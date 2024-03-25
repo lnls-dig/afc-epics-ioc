@@ -24,12 +24,12 @@ class OrbitIntlk: public UDriver {
           1,
           {
               {"EN", p_enable},
-              {"CLR", p_clear},
+              ParamInit{"CLR", p_clear}.set_wo(),
               {"MIN_SUM_EN", p_min_sum_en},
               {"POS_EN", p_pos_en},
-              {"POS_CLR", p_pos_clear},
+              ParamInit{"POS_CLR", p_pos_clear}.set_wo(),
               {"ANG_EN", p_ang_en},
-              {"ANG_CLR", p_ang_clear},
+              ParamInit{"ANG_CLR", p_ang_clear}.set_wo(),
 
               {"POS_UPPER_X", p_read_only},
               {"POS_UPPER_Y", p_read_only},
@@ -72,8 +72,6 @@ class OrbitIntlk: public UDriver {
         auto v = find_device(port_number);
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
-
-        write_only = {p_clear, p_pos_clear, p_ang_clear};
 
         read_parameters();
     }

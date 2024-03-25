@@ -43,7 +43,7 @@ class AFCTiming: public UDriver {
               {"STA_LOCKED_AFC_LATCH", p_afc_lock_latch},
               {"STA_LOCKED_RTM_LATCH", p_rtm_lock_latch},
               {"STA_LOCKED_GT0_LATCH", p_gt0_lock_latch},
-              {"STA_LOCKED_RST_LATCH", p_lock_latch_rst},
+              ParamInit{"STA_LOCKED_RST_LATCH", p_lock_latch_rst}.set_wo(),
           },
           {
               {"RFREQ_HI", p_rfreq_hi},
@@ -64,7 +64,7 @@ class AFCTiming: public UDriver {
               {"CH_SRC", p_ch_src},
               {"CH_DIR", p_ch_dir},
               {"CH_PULSES", p_ch_pulses},
-              {"CH_COUNT_RST", p_ch_count_rst},
+              ParamInit{"CH_COUNT_RST", p_ch_count_rst}.set_wo(),
               {"CH_COUNT", p_ch_count},
               {"CH_EVT", p_ch_evt},
               {"CH_DLY", p_ch_dly},
@@ -78,8 +78,6 @@ class AFCTiming: public UDriver {
         ctl.set_devinfo(v);
 
         createParam("FREQ", asynParamFloat64, &p_freq);
-
-        write_only = {p_lock_latch_rst, p_ch_count_rst};
 
         read_parameters();
     }
