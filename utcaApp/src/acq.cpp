@@ -281,16 +281,14 @@ class Acq: public UDriver {
         return asynSuccess;
     }
 
-    asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value)
+    asynStatus writeFloat64Impl(asynUser *, const int function, const int, epicsFloat64 value)
     {
-        const int function = pasynUser->reason;
-
         if (parameters_to_store.count(function)) {
             setDoubleParam(function, value);
             return asynSuccess;
         }
 
-        return asynPortDriver::writeFloat64(pasynUser, value);
+        return asynError;
     }
 };
 

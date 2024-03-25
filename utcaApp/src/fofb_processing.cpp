@@ -79,17 +79,10 @@ class FofbProcessing: public UDriver {
         return write_params(pasynUser, ctl);
     }
 
-    asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value)
+    asynStatus writeFloat64Impl(asynUser *pasynUser, const int function, const int addr, epicsFloat64 value)
     {
-        int function = pasynUser->reason, addr;
-        getAddress(pasynUser, &addr);
-
-        if (function == p_acc_gain) {
+        if (function == p_acc_gain)
             ctl.parameters[addr].acc_gain = value;
-
-        } else {
-            return asynPortDriver::writeFloat64(pasynUser, value);
-        }
 
         return write_params(pasynUser, ctl);
     }

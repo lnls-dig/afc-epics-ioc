@@ -136,11 +136,8 @@ class AFCTiming: public UDriver {
         return write_params(pasynUser, ctl);
     }
 
-    asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value)
+    asynStatus writeFloat64Impl(asynUser *pasynUser, const int function, const int addr, epicsFloat64 value)
     {
-        int function = pasynUser->reason, addr;
-        getAddress(pasynUser, &addr);
-
         if (function == p_freq) {
             bool rv;
             if (addr == 0) rv = ctl.set_rtm_freq(value);
@@ -150,8 +147,6 @@ class AFCTiming: public UDriver {
 
             setDoubleParam(addr, function, value);
             callParamCallbacks(addr);
-        } else {
-            return asynPortDriver::writeFloat64(pasynUser, value);
         }
 
         return write_params(pasynUser, ctl);
