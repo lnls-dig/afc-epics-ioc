@@ -253,7 +253,17 @@ class UDriver: public asynPortDriver {
         throw std::logic_error("this default implementation shouldn't be called");
     }
 
-    asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value) override final
+    virtual asynStatus writeFloat64Impl(
+        [[maybe_unused]] asynUser *pasynUser,
+        [[maybe_unused]] const int function,
+        [[maybe_unused]] const int addr,
+        [[maybe_unused]] epicsFloat64 value)
+    {
+        throw std::logic_error("this default implementation shouldn't be called");
+    }
+
+    template <typename T>
+    asynStatus writeGeneral(asynUser *pasynUser, T value)
     {
         const int function = pasynUser->reason;
         int addr;
@@ -262,13 +272,22 @@ class UDriver: public asynPortDriver {
         getAddress(pasynUser, &addr);
         getParamName(function, &param_name);
 
+        auto call_write_impl = [this, pasynUser, function, addr, value]() -> asynStatus {
+            if constexpr (std::is_same_v<T, epicsInt32>)
+                return writeInt32Impl(pasynUser, function, addr, value);
+            else if constexpr (std::is_same_v<T, epicsFloat64>)
+                return writeFloat64Impl(pasynUser, function, addr, value);
+            else
+                static_assert(!sizeof(T));
+        };
+
         /* parameter we don't know about */
         if ((unsigned)function >= parameter_props.size())
-            return writeInt32Impl(pasynUser, function, addr, value);
+            return call_write_impl();
 
         if (parameter_props.at(function).is_general && addr != 0) {
             epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                "writeInt32: %s: general parameter with addr=%d (should be 0)", param_name, addr);
+                "writeGeneral: %s: general parameter with addr=%d (should be 0)", param_name, addr);
 
             return asynError;
         }
@@ -284,8 +303,18 @@ class UDriver: public asynPortDriver {
             fprintf(stderr, "bad decoder_controller write. param: %s. exception: %s\n", param_name, e.what());
         }
 
-        return writeInt32Impl(pasynUser, function, addr, value);
         /* parameters which aren't using generic_decoder_controller */
+        return call_write_impl();
+    }
+
+    asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value) override final
+    {
+        return writeGeneral(pasynUser, value);
+    }
+
+    asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value) override final
+    {
+        return writeGeneral(pasynUser, value);
     }
 };
 
