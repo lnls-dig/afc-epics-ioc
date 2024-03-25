@@ -39,6 +39,7 @@ class FofbProcessing: public UDriver {
           },
           {
               ParamInit{"CH_ACC_CTL_CLEAR", p_acc_clr}.set_wo(),
+              {"CH_ACC_GAIN", p_acc_gain, asynParamFloat64},
               {"CH_ACC_CTL_FREEZE", p_acc_freeze},
               {"CH_ACC_LIMITS_MAX", p_sp_limits_max},
               {"CH_ACC_LIMITS_MIN", p_sp_limits_min},
@@ -55,23 +56,10 @@ class FofbProcessing: public UDriver {
         createParam("REF_ORBIT_X", asynParamInt32Array, &p_reforb_x);
         createParam("REF_ORBIT_Y", asynParamInt32Array, &p_reforb_y);
 
-        createParam("CH_ACC_GAIN", asynParamFloat64, &p_acc_gain);
         createParam("CH_COEFFS_X", asynParamFloat64Array, &p_coeffs_x);
         createParam("CH_COEFFS_Y", asynParamFloat64Array, &p_coeffs_y);
 
         read_parameters();
-    }
-
-    asynStatus read_parameters(bool only_monitors=false)
-    {
-        UDriver::read_parameters(only_monitors);
-
-        for (unsigned addr = 0; addr < ::number_of_channels; addr++)
-            setDoubleParam(addr, p_acc_gain, dec.get_channel_data<double>("CH_ACC_GAIN", addr));
-
-        do_callbacks();
-
-        return asynSuccess;
     }
 
     asynStatus writeInt32Impl(asynUser *pasynUser, const int function, const int addr, epicsInt32 value)
