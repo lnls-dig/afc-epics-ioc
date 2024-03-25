@@ -43,19 +43,19 @@ class AFCTiming: public UDriver {
               {"STA_LOCKED_AFC_LATCH", p_afc_lock_latch},
               {"STA_LOCKED_RTM_LATCH", p_rtm_lock_latch},
               {"STA_LOCKED_GT0_LATCH", p_gt0_lock_latch},
-              {"STA_LOCKED_RST_LATCH", p_lock_latch_rst},
+              ParamInit{"STA_LOCKED_RST_LATCH", p_lock_latch_rst}.set_wo(),
           },
           {
-              {"RFREQ_HI", p_rfreq_hi},
-              {"RFREQ_LO", p_rfreq_lo},
-              {"N1", p_n1},
-              {"HS_DIV", p_hs_div},
-              {"FREQ_KP", p_freq_kp},
-              {"FREQ_KI", p_freq_ki},
-              {"PHASE_KP", p_phase_kp},
-              {"PHASE_KI", p_phase_ki},
-              {"MAF_NAVG", p_maf_navg},
-              {"MAF_DIV_EXP", p_maf_divexp},
+              ParamInit{"RFREQ_HI", p_rfreq_hi}.set_nc(2),
+              ParamInit{"RFREQ_LO", p_rfreq_lo}.set_nc(2),
+              ParamInit{"N1", p_n1}.set_nc(2),
+              ParamInit{"HS_DIV", p_hs_div}.set_nc(2),
+              ParamInit{"FREQ_KP", p_freq_kp}.set_nc(2),
+              ParamInit{"FREQ_KI", p_freq_ki}.set_nc(2),
+              ParamInit{"PHASE_KP", p_phase_kp}.set_nc(2),
+              ParamInit{"PHASE_KI", p_phase_ki}.set_nc(2),
+              ParamInit{"MAF_NAVG", p_maf_navg}.set_nc(2),
+              ParamInit{"MAF_DIV_EXP", p_maf_divexp}.set_nc(2),
 
               {"CH_EN", p_ch_en},
               {"CH_POL", p_ch_pol},
@@ -64,7 +64,7 @@ class AFCTiming: public UDriver {
               {"CH_SRC", p_ch_src},
               {"CH_DIR", p_ch_dir},
               {"CH_PULSES", p_ch_pulses},
-              {"CH_COUNT_RST", p_ch_count_rst},
+              ParamInit{"CH_COUNT_RST", p_ch_count_rst}.set_wo(),
               {"CH_COUNT", p_ch_count},
               {"CH_EVT", p_ch_evt},
               {"CH_DLY", p_ch_dly},
@@ -78,8 +78,6 @@ class AFCTiming: public UDriver {
         ctl.set_devinfo(v);
 
         createParam("FREQ", asynParamFloat64, &p_freq);
-
-        write_only = {p_lock_latch_rst, p_ch_count_rst};
 
         read_parameters();
     }
@@ -138,11 +136,8 @@ class AFCTiming: public UDriver {
         return write_params(pasynUser, ctl);
     }
 
-    asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value)
+    asynStatus writeFloat64Impl(asynUser *pasynUser, const int function, const int addr, epicsFloat64 value)
     {
-        int function = pasynUser->reason, addr;
-        getAddress(pasynUser, &addr);
-
         if (function == p_freq) {
             bool rv;
             if (addr == 0) rv = ctl.set_rtm_freq(value);
@@ -152,8 +147,6 @@ class AFCTiming: public UDriver {
 
             setDoubleParam(addr, function, value);
             callParamCallbacks(addr);
-        } else {
-            return asynPortDriver::writeFloat64(pasynUser, value);
         }
 
         return write_params(pasynUser, ctl);

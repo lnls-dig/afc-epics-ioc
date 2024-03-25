@@ -18,7 +18,7 @@ class BPMSwap: public UDriver {
           "BPM_SWAP", port_number, &dec,
           1,
           {
-              {"RESET", p_reset},
+              ParamInit{"RESET", p_reset}.set_wo(),
               {"MODE", p_mode},
               {"DIV_F_CNT_EN", p_swap_div_f_cnt_en},
               {"DIV_F", p_swap_div_f},
@@ -31,8 +31,6 @@ class BPMSwap: public UDriver {
         auto v = find_device(port_number);
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
-
-        write_only = {p_reset};
 
         read_parameters();
     }

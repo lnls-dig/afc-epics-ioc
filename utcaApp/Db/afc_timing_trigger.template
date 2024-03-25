@@ -5,7 +5,6 @@ record(bo, "$(P)$(R)$(S)$(C)State-Sel"){
   field(DESC, "$(S) trigger $(C) state")
   field(PINI, YES)
   field(OUT,"@asyn($(PORT),$(ADDR))CH_EN")
-  field(MASK, "1")
   field(ZNAM, "Dsbl")
   field(ONAM, "Enbl")
 }
@@ -23,7 +22,6 @@ record(bo, "$(P)$(R)$(S)$(C)Polarity-Sel"){
   field(DTYP, "asynInt32")
   field(DESC, "$(S) trigger $(C) Polarity")
   field(PINI, YES)
-  field(MASK, "1")
   field(OUT,"@asyn($(PORT),$(ADDR))CH_POL")
   field(ZNAM, "Normal")
   field(ONAM, "Inverse")
@@ -42,7 +40,6 @@ record(bo, "$(P)$(R)$(S)$(C)Log-Sel"){
   field(DTYP, "asynInt32")
   field(DESC, "$(S) trigger $(C) Time Log")
   field(PINI, YES)
-  field(MASK, "1")
   field(OUT,"@asyn($(PORT),$(ADDR))CH_LOG")
   field(ZNAM, "Dsbl")
   field(ONAM, "Enbl")
@@ -76,7 +73,6 @@ record(bo, "$(P)$(R)$(S)$(C)Dir-Sel"){
   field(DESC, "$(S) trigger $(C) direction")
   field(PINI, YES)
   field(OUT,"@asyn($(PORT),$(ADDR))CH_DIR")
-  field(MASK, "1")
   field(ZNAM, "Out")
   field(ONAM, "In")
 }
