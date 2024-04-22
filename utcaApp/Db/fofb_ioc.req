@@ -5,10 +5,22 @@ file "acq.req", P=${P}, R=${R}, ACQ_NAME=SYSID
 file "fofb_cc.req", P=${P}, R=${R}, FOFB_CC=DCCFMC
 file "fofb_cc.req", P=${P}, R=${R}, FOFB_CC=DCCP2P
 file "fofb_processing.req", P=${P}, R=${R}, S=${S}
-file "rtmlamp.req", S=${S}
 file "sysid.req", P=${P}, R=${R}
 file "trigger_iface.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER
 file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_LAMP
 file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_DCCFMC
 file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_DCCP2P
 file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_SYSID
+
+file "fofb_channel.req", S=${S}, RTM_CHAN=M1:PS-FCH:
+file "fofb_channel.req", S=${S}, RTM_CHAN=M1:PS-FCV:
+file "fofb_channel.req", S=${S}, RTM_CHAN=M2:PS-FCH:
+file "fofb_channel.req", S=${S}, RTM_CHAN=M2:PS-FCV:
+file "fofb_channel.req", S=${S}, RTM_CHAN=C2:PS-FCH:
+file "fofb_channel.req", S=${S}, RTM_CHAN=C2:PS-FCV:
+file "fofb_channel.req", S=${S}, RTM_CHAN=C3:PS-FCH:
+file "fofb_channel.req", S=${S}, RTM_CHAN=C3:PS-FCV:
+file "fofb_channel.req", S=${S}, RTM_CHAN=XX:PS-FC08:
+file "fofb_channel.req", S=${S}, RTM_CHAN=XX:PS-FC09:
+file "fofb_channel.req", S=${S}, RTM_CHAN=XX:PS-FC10:
+file "fofb_channel.req", S=${S}, RTM_CHAN=XX:PS-FC11:

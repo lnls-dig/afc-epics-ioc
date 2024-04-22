@@ -1,0 +1,2 @@
+file "fofb_processing_channel.req", S=${S}, RTM_CHAN=${RTM_CHAN}
+file "rtmlamp_channel.req", S=${S}, RTM_CHAN=${RTM_CHAN}
