@@ -83,7 +83,7 @@ class UDriver: public asynPortDriver {
           (std::string(name) + "-" + std::to_string(port_number)).c_str(),
           number_of_channels, /* channels */
           -1, -1, /* enable all interfaces and interrupts */
-          0, 1, 0, 0 /* no flags, auto connect, default priority and stack size */
+          ASYN_DESTRUCTIBLE, 1, 0, 0 /* no flags, auto connect, default priority and stack size */
       ),
       generic_decoder(generic_decoder),
       generic_decoder_controller(generic_decoder_controller),
@@ -138,8 +138,9 @@ class UDriver: public asynPortDriver {
     {
         if (auto v = read_sdb(&bars, generic_decoder->match_devinfo_lambda, port_number))
             return *v;
-        else
-            throw std::runtime_error("couldn't find module");
+
+        this->shutdown();
+        throw std::runtime_error("couldn't find module");
     }
 
     virtual asynStatus read_parameters(bool only_monitors=false)
@@ -338,7 +339,7 @@ class UDriverFn {
         try {
             new T(args[0].ival);
         } catch (std::exception &e) {
-            cantProceed("error creating %s: %s\n", name, e.what());
+            fprintf(stderr, "error creating %s: %s\n", name, e.what());
         }
     }
 };
