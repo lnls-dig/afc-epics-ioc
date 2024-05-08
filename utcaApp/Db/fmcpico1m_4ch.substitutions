@@ -1,0 +1,7 @@
+file db/fmcpico1m_4ch.template {
+    pattern {ADDR}
+	 {0}
+	 {1}
+	 {2}
+	 {3}
+}

@@ -1,0 +1,13 @@
+record(bo,"$(P)$(R)FMCPICORngR$(ADDR)-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set FMCPICO ADC range")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT),$(ADDR))RANGE")
+}
+
+record(bi,"$(P)$(R)FMCPICORngR$(ADDR)-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get FMCPICO ADC0 range")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))RANGE")
+}
