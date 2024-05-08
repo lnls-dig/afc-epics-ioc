@@ -1,0 +1,163 @@
+record(longout,"$(P)$(R)PosKx-SP"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))KX")
+    field(EGU, "nm")
+    field(ASG, "Interlock")
+}
+
+record(longin,"$(P)$(R)PosKx-RB"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))KX")
+    field(EGU, "nm")
+}
+
+record(longout,"$(P)$(R)PosKy-SP"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))KY")
+    field(EGU, "nm")
+    field(ASG, "Interlock")
+}
+
+record(longin,"$(P)$(R)PosKy-RB"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))KY")
+    field(EGU, "nm")
+}
+
+record(longout,"$(P)$(R)PosKq-SP"){
+    field(PINI,"YES")
+    field(EGU, "nm")
+}
+
+record(longin,"$(P)$(R)PosKq-RB"){
+    field(EGU, "nm")
+    field(INP, "$(P)$(R)PosKq-SP CP")
+}
+
+record(ao,"$(P)$(R)PosKsum-SP"){
+    field(DTYP,"asynFloat64")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))KSUM")
+    field(ASG, "Interlock")
+}
+
+record(ai,"$(P)$(R)PosKsum-RB"){
+    field(DTYP,"asynFloat64")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))KSUM")
+}
+
+record(longout,"$(P)$(R)PosXOffset-SP"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))OFFSET_X")
+    field(EGU, "nm")
+    field(ASG, "Interlock")
+}
+
+record(longin,"$(P)$(R)PosXOffset-RB"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))OFFSET_X")
+    field(EGU, "nm")
+}
+
+record(longout,"$(P)$(R)PosYOffset-SP"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))OFFSET_Y")
+    field(EGU, "nm")
+    field(ASG, "Interlock")
+}
+
+record(longin,"$(P)$(R)PosYOffset-RB"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))OFFSET_Y")
+    field(EGU, "nm")
+}
+
+record(longout,"$(P)$(R)PosQOffset-SP"){
+    field(PINI,"YES")
+    field(EGU, "nm")
+}
+
+record(longin,"$(P)$(R)PosQOffset-RB"){
+    field(INP,"$(P)$(R)PosQOffset-SP CP")
+    field(EGU, "nm")
+}
+
+record(bo,"$(P)$(R)FOFBPhaseSyncEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))FOFB_SYNC_EN")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+record(bi,"$(P)$(R)FOFBPhaseSyncEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))FOFB_SYNC_EN")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+
+record(bo,"$(P)$(R)FOFBPhaseDesyncCntRst-Cmd"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(MASK,"1")
+    field(HIGH,"1")
+    field(ZNAM, "nothing")
+    field(ONAM, "reset")
+    field(OUT,"@asyn($(PORT))FOFB_DESYNC_CNT_RST")
+}
+
+record(longin,"$(P)$(R)FOFBPhaseDesyncCnt-Mon"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))FOFB_DESYNC_CNT")
+}
+
+record(bo,"$(P)$(R)FOFBDataMaskEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))FOFB_DATA_MASK_EN")
+}
+record(bi,"$(P)$(R)FOFBDataMaskEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))FOFB_DATA_MASK_EN")
+}
+
+record(longout,"$(P)$(R)FOFBDataMaskSamples-SP"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))FOFB_DATA_MASK_SAMPLES")
+}
+record(longin,"$(P)$(R)FOFBDataMaskSamples-RB"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))FOFB_DATA_MASK_SAMPLES")
+}
+
+record(bo, "$(P)$(R)TestDataEn-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Output measurements or counter data")
+    field(PINI, YES)
+    field(VAL, 0)
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+    field(OUT, "@asyn($(PORT))TEST_DATA")
+}
+record(bi, "$(P)$(R)TestDataEn-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Output measurements or counter data")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+    field(INP, "@asyn($(PORT))TEST_DATA")
+}
