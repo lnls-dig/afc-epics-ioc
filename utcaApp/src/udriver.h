@@ -301,6 +301,7 @@ class UDriver: public asynPortDriver {
             return write_params(pasynUser, *generic_decoder_controller);
         } catch (std::exception &e) {
             fprintf(stderr, "bad decoder_controller write. param: %s. exception: %s\n", param_name, e.what());
+            return asynError;
         }
 
         /* parameters which aren't using generic_decoder_controller */
