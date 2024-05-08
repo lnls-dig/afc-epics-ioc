@@ -1,0 +1,87 @@
+record(bo,"$(P)$(R)$(RATE)PhaseSyncEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set $(RATE) Tag Enable")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT),$(ADDR))SYNC_EN")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+record(bi,"$(P)$(R)$(RATE)PhaseSyncEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get $(RATE) Tag Enable")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))SYNC_EN")
+    field(ZNAM, "disable")
+    field(ONAM, "enable")
+}
+
+record(longout,"$(P)$(R)$(RATE)PhaseSyncDly-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set $(RATE) Tag Delay")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT),$(ADDR))SYNC_DLY")
+}
+record(longin,"$(P)$(R)$(RATE)PhaseSyncDly-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get $(RATE) Tag Delay")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))SYNC_DLY")
+}
+
+record(bo,"$(P)$(R)$(RATE)PhaseDesyncCntRst-Cmd"){
+    field(DTYP,"asynInt32")
+    field(PINI,"YES")
+    field(MASK,"1")
+    field(HIGH,"1")
+    field(ZNAM, "nothing")
+    field(ONAM, "reset")
+    field(OUT,"@asyn($(PORT),$(ADDR))DESYNC_CNT_RST")
+}
+
+record(longin,"$(P)$(R)$(RATE)PhaseDesyncCnt-Mon"){
+    field(DTYP,"asynInt32")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))DESYNC_CNT")
+}
+
+record(bo,"$(P)$(R)$(RATE)DataMaskEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set TBT Data Mask Enable")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT),$(ADDR))DATA_MASK_EN")
+}
+
+record(bi,"$(P)$(R)$(RATE)DataMaskEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get TBT Data Mask Enable")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))DATA_MASK_EN")
+}
+
+record(longout,"$(P)$(R)$(RATE)DataMaskSamplesBeg-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set Data Mask Samples Beg.")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT),$(ADDR))DATA_MASK_SAMPLES_BEG")
+}
+
+record(longin,"$(P)$(R)$(RATE)DataMaskSamplesBeg-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get Data Mask Samples Beg.")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))DATA_MASK_SAMPLES_BEG")
+}
+
+record(longout,"$(P)$(R)$(RATE)DataMaskSamplesEnd-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Set Data Mask Samples End.")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT),$(ADDR))DATA_MASK_SAMPLES_END")
+}
+
+record(longin,"$(P)$(R)$(RATE)DataMaskSamplesEnd-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Get Data Mask Samples End.")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))DATA_MASK_SAMPLES_END")
+}

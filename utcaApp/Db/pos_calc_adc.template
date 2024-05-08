@@ -1,0 +1,66 @@
+record(ao,"$(P)$(R)SwInvGain$(ADC)-SP"){
+    field(DTYP,"asynFloat64")
+    field(DESC,"set Amplitude Gain Ch$(ADDR)")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(DRVH,"0.9999999403953552")
+    field(OUT,"@asyn($(PORT),$(ADDR))ADC_SWCLK_INV_GAIN")
+    field(ASG, "Interlock")
+}
+record(ai,"$(P)$(R)SwInvGain$(ADC)-RB"){
+    field(DTYP,"asynFloat64")
+    field(DESC,"get Amplitude Gain Ch$(ADDR)")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))ADC_SWCLK_INV_GAIN")
+}
+
+record(ao,"$(P)$(R)SwDirGain$(ADC)-SP"){
+    field(DTYP,"asynFloat64")
+    field(DESC,"set Amplitude Gain Ch$(ADDR)")
+    field(PINI,"YES")
+    field(SCAN,"Passive")
+    field(DRVH,"0.9999999403953552")
+    field(OUT,"@asyn($(PORT),$(ADDR))ADC_SWCLK_DIR_GAIN")
+    field(ASG, "Interlock")
+}
+record(ai,"$(P)$(R)SwDirGain$(ADC)-RB"){
+    field(DTYP,"asynFloat64")
+    field(DESC,"get Amplitude Gain Ch$(ADDR)")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))ADC_SWCLK_DIR_GAIN")
+}
+
+record(longout,"$(P)$(R)SwInvOffset$(ADC)-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set Amplitude Offset Ch$(ADDR)")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT),$(ADDR))ADC_SWCLK_INV_OFFSET")
+    field(ASG, "Interlock")
+}
+record(longin,"$(P)$(R)SwInvOffset$(ADC)-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get Amplitude Offset Ch$(ADDR)")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))ADC_SWCLK_INV_OFFSET")
+}
+
+record(longout,"$(P)$(R)SwDirOffset$(ADC)-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set Amplitude Offset Ch$(ADDR)")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT),$(ADDR))ADC_SWCLK_DIR_OFFSET")
+    field(ASG, "Interlock")
+}
+record(longin,"$(P)$(R)SwDirOffset$(ADC)-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get Amplitude Offset Ch$(ADDR)")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))ADC_SWCLK_DIR_OFFSET")
+}
+
+record(longin,"$(P)$(R)Ampl$(ADC)-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"Monitoring Amplitude $(ADC)")
+    field(INP,"@asyn($(PORT),$(ADDR))AMPFIFO_MONIT_AMP")
+    field(EGU, "au")
+}
