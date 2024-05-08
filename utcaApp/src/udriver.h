@@ -250,7 +250,7 @@ class UDriver: public asynPortDriver {
         [[maybe_unused]] const int addr,
         [[maybe_unused]] epicsInt32 value)
     {
-        throw std::logic_error("this default implementation shouldn't be called");
+        throw std::logic_error("this default writeInt32Impl shouldn't be called");
     }
 
     virtual asynStatus writeFloat64Impl(
@@ -259,7 +259,7 @@ class UDriver: public asynPortDriver {
         [[maybe_unused]] const int addr,
         [[maybe_unused]] epicsFloat64 value)
     {
-        throw std::logic_error("this default implementation shouldn't be called");
+        throw std::logic_error("this default writeFloat64Impl shouldn't be called");
     }
 
     template <typename T>
