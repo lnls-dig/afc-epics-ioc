@@ -95,6 +95,7 @@ class AFCTiming: public UDriver {
                 strings[i] = epicsStrDup(name);
                 values[i] = i;
                 severities[i] = i == 0 ? MAJOR_ALARM : NO_ALARM;
+                *nIn = i+1;
             }
         } else {
             return asynError;
