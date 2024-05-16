@@ -8,8 +8,9 @@ CRATE=$(./getCrate.sh)
 VSLOT=$(./getSlot.sh $SLOT)
 
 cmd=
-case "$(decode-reg build_info -q --slot ${SLOT})" in
-    bpm-gw-*-sirius*)
+synthesis="$(decode-reg build_info -q --slot ${SLOT})"
+case "$synthesis" in
+    bpm-gw-*-sirius*|pbpm-gw*)
         CRATE=${CRATE#0}
 
         . ./bpm-slot-mapping
@@ -28,6 +29,14 @@ case "$(decode-reg build_info -q --slot ${SLOT})" in
         eval "export DEVICE_PREFIX_2=\$${val_name}"
 
         cmd=BPM
+        case "$synthesis" in
+            bpm*)
+                cmd=BPM
+                ;;
+            pbpm*)
+                cmd=PBPM
+                ;;
+        esac
         ;;
     afc-tim-receive*)
         CRATE=${CRATE#0}
