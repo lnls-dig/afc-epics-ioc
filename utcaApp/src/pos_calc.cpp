@@ -1,3 +1,8 @@
+#include <thread>
+
+#include <epicsEvent.h>
+#include <epicsThread.h>
+
 #include <modules/pos_calc.h>
 
 #include "pcie-single.h"
@@ -7,9 +12,15 @@ namespace {
     const unsigned number_of_channels = 4;
 }
 
-class PosCalc: public UDriver {
+class PosCalc: public UDriver, public epicsThreadRunable {
     pos_calc::Core dec;
     pos_calc::Controller ctl;
+
+    int p_monit_amp, p_ampfifo;
+    int p_update_time;
+
+    epicsEvent thread_kill_event;
+    epicsThread thread;
 
   public:
     PosCalc(int port_number):
@@ -44,13 +55,63 @@ class PosCalc: public UDriver {
           },
           &ctl),
       dec(bars),
-      ctl(bars)
+      ctl(bars),
+      thread(*this, (std::string(portName) + "-monit").c_str(), epicsThreadGetStackSize(epicsThreadStackMedium), epicsThreadPriorityHigh)
     {
         auto v = find_device(port_number);
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
 
+        createParam("AMPFIFO_MONIT_AMP", asynParamInt32, &p_monit_amp);
+        createParam("AMPFIFO", asynParamInt32, &p_ampfifo);
+
+        createParam("UPDATE_TIME", asynParamFloat64, &p_update_time);
+
         read_parameters();
+
+        thread.start();
+    }
+
+    ~PosCalc()
+    {
+        thread_kill_event.trigger();
+    }
+
+    asynStatus writeFloat64Impl(asynUser *pasynUser, const int, const int, epicsFloat64 value)
+    {
+        return asynPortDriver::writeFloat64(pasynUser, value);
+    }
+
+    void run()
+    {
+        uint32_t ampfifo = 1;
+
+        auto get_update_time = [this]() {
+            std::lock_guard g(*this);
+            double update_time;
+            getDoubleParam(p_update_time, &update_time);
+            return update_time;
+        };
+
+        auto put_fifo_amps = [this, &ampfifo]() {
+            std::lock_guard g(*this);
+
+            for (unsigned addr = 0; addr < this->number_of_channels; addr++)
+                setIntegerParam(addr, p_monit_amp, std::get<int32_t>(dec.get_generic_data("AMPFIFO_MONIT_AMP", addr)));
+
+            setIntegerParam(p_ampfifo, ampfifo++);
+            callParamCallbacks(0);
+        };
+
+        while (true) {
+            while (dec.fifo_empty()) {
+                if (thread_kill_event.tryWait()) return;
+                epicsThreadSleep(get_update_time());
+            }
+            dec.get_fifo_amps();
+
+            put_fifo_amps();
+        }
     }
 };
 
