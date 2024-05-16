@@ -63,4 +63,5 @@ record(longin,"$(P)$(R)Ampl$(ADC)-Mon"){
     field(DESC,"Monitoring Amplitude $(ADC)")
     field(INP,"@asyn($(PORT),$(ADDR))AMPFIFO_MONIT_AMP")
     field(EGU, "au")
+    field(MDEL, -1)
 }

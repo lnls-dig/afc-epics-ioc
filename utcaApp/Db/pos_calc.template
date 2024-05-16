@@ -111,6 +111,71 @@ record(longin,"$(P)$(R)PosQOffset-RB"){
     field(EGU, "nm")
 }
 
+record(longin, "$(P)$(R)AmpFIFOEvent"){
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))AMPFIFO")
+    field(FLNK, "$(P)$(R)AmpFIFOCalc PP")
+}
+
+record(aSub, "$(P)$(R)AmpFIFOCalc"){
+    field(SNAM, "asub_pos_calc")
+    field(INPA, "$(P)$(R)AmplA-Mon PP")
+    field(FTA, "LONG")
+    field(INPB, "$(P)$(R)AmplB-Mon PP")
+    field(FTB, "LONG")
+    field(INPC, "$(P)$(R)AmplC-Mon PP")
+    field(FTC, "LONG")
+    field(INPD, "$(P)$(R)AmplD-Mon PP")
+    field(FTD, "LONG")
+    field(INPE, "$(P)$(R)PosXOffset-RB")
+    field(FTE, "LONG")
+    field(INPF, "$(P)$(R)PosKx-RB")
+    field(FTF, "DOUBLE")
+    field(INPG, "$(P)$(R)PosYOffset-RB")
+    field(FTG, "LONG")
+    field(INPH, "$(P)$(R)PosKy-RB")
+    field(FTH, "DOUBLE")
+    field(INPI, "$(P)$(R)PosKsum-RB")
+    field(FTI, "DOUBLE")
+    field(INPJ, "$(P)$(R)PosQOffset-RB")
+    field(FTJ, "DOUBLE")
+    field(INPK, "$(P)$(R)PosKq-RB")
+    field(FTK, "DOUBLE")
+    field(OUTA, "$(P)$(R)PosX-Mon PP")
+    field(FTVA, "DOUBLE")
+    field(OUTB, "$(P)$(R)PosY-Mon PP")
+    field(FTVB, "DOUBLE")
+    field(OUTC, "$(P)$(R)Sum-Mon PP")
+    field(FTVC, "DOUBLE")
+    field(OUTD, "$(P)$(R)PosQ-Mon PP")
+    field(FTVD, "DOUBLE")
+}
+
+record(ai,"$(P)$(R)PosX-Mon"){
+    field(DESC,"Monitoring Position X")
+    field(EGU, "nm")
+    field(MDEL, -1)
+}
+
+record(ai,"$(P)$(R)PosY-Mon"){
+    field(DESC,"Monitoring Position Y")
+    field(EGU, "nm")
+    field(MDEL, -1)
+}
+
+record(ai,"$(P)$(R)PosQ-Mon"){
+    field(DESC,"Monitoring Position Q")
+    field(EGU, "nm")
+    field(MDEL, -1)
+}
+
+record(ai,"$(P)$(R)Sum-Mon"){
+    field(DESC,"Monitoring Sum")
+    field(EGU, "au")
+    field(MDEL, -1)
+}
+
 record(bo,"$(P)$(R)FOFBPhaseSyncEn-Sel"){
     field(DTYP,"asynInt32")
     field(PINI,"YES")
