@@ -7,6 +7,7 @@ record(aao, "$(S)$(RTM_CHAN)FOFBAccFilter-SP"){
     field(NELM, 50)
     field(FTVL, "DOUBLE")
     field(OUT, "@asyn($(PORT),$(ADDR))COEFF")
+    field(PREC, 5)
 }
 record(aai, "$(S)$(RTM_CHAN)FOFBAccFilter-RB"){
     field(DESC, "In-series biquads: b0,b1,b2,a1,a2 (a0=1)")
@@ -15,4 +16,5 @@ record(aai, "$(S)$(RTM_CHAN)FOFBAccFilter-RB"){
     field(FTVL, "DOUBLE")
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),$(ADDR))COEFF")
+    field(PREC, 5)
 }

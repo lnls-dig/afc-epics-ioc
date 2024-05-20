@@ -122,6 +122,7 @@ record(calc, "$(S)$(RTM_CHAN)FOFBAcc-Mon"){
 record(ao, "$(S)$(RTM_CHAN)FOFBAccGain-SP"){
     field(DESC, "Accumulator gain")
     field(PINI, "YES")
+    field(PREC, 5)
 }
 record(calc, "$(S)$(RTM_CHAN)FOFBAccGain-RB"){
     field(DESC, "Accumulator gain")
@@ -129,12 +130,14 @@ record(calc, "$(S)$(RTM_CHAN)FOFBAccGain-RB"){
     field(INPB, "$(S)$(RTM_CHAN)FOFBAccFilterGain-SP CP")
     field(INPC, "$(S)$(RTM_CHAN)FOFBAccHwGain-Mon CP")
     field(CALC, "B==0?A:C/B")
+    field(PREC, 5)
 }
 
 record(ao, "$(S)$(RTM_CHAN)FOFBAccFilterGain-SP"){
     field(DESC, "Shaper filter gain")
     field(VAL, 1)
     field(PINI, "YES")
+    field(PREC, 5)
 }
 record(calc, "$(S)$(RTM_CHAN)FOFBAccFilterGain-RB"){
     field(DESC, "Shaper filter gain")
@@ -142,6 +145,7 @@ record(calc, "$(S)$(RTM_CHAN)FOFBAccFilterGain-RB"){
     field(INPB, "$(S)$(RTM_CHAN)FOFBAccGain-SP CP")
     field(INPC, "$(S)$(RTM_CHAN)FOFBAccHwGain-Mon CP")
     field(CALC, "B==0?A:C/B")
+    field(PREC, 5)
 }
 
 record(calcout, "$(S)$(RTM_CHAN)FOFBAccGainCalc"){
@@ -155,12 +159,14 @@ record(ao, "$(S)$(RTM_CHAN)FOFBAccHwGain-RB"){
     field(DTYP, "asynFloat64")
     field(DESC, "Accumulator gain in hw.")
     field(OUT, "@asyn($(PORT),$(ADDR))CH_ACC_GAIN")
+    field(PREC, 5)
 }
 record(ai, "$(S)$(RTM_CHAN)FOFBAccHwGain-Mon"){
     field(DESC, "Accumulator gain in hw.")
     field(DTYP, "asynFloat64")
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),$(ADDR))CH_ACC_GAIN")
+    field(PREC, 5)
 }
 
 record(bo, "$(S)$(RTM_CHAN)FOFBAccFreeze-Sel"){
