@@ -1,4 +1,3 @@
-$(P)$(R)$(ACQ_NAME)DataType
 $(P)$(R)$(ACQ_NAME)SamplesPre-SP
 $(P)$(R)$(ACQ_NAME)SamplesPost-SP
 $(P)$(R)$(ACQ_NAME)Shots-SP
