@@ -23,13 +23,24 @@ namespace {
 
     const auto acq_task_sleep = 100ms;
 
+    enum class data_type {raw, lamp, sysid, last};
+    const char *data_type_names[(int)data_type::last] = {"raw", "lamp", "sysid"};
+    data_type get_type_from_name(std::string type)
+    {
+        if (type == data_type_names[(unsigned)data_type::raw])
+            return data_type::raw;
+        else if (type == data_type_names[(unsigned)data_type::lamp])
+            return data_type::lamp;
+        else if (type == data_type_names[(unsigned)data_type::sysid])
+            return data_type::sysid;
+        else
+            throw std::runtime_error("bad data_type name");
+    }
+
     struct enum_info {
         const char *const name;
         const int severity = NO_ALARM;
     };
-
-    enum class data_type {raw, lamp, sysid, last};
-    const enum_info data_type_info[(int)data_type::last] = {{"raw"}, {"lamp"}, {"sysid"}};
 
     enum class polarity {positive, negative, last};
     const enum_info polarity_info[(int)polarity::last] = {{"positive"}, {"negative"}};
@@ -70,7 +81,6 @@ namespace {
     /* message format for the queue */
     struct AcqMessage {
         acq_command command;
-        data_type type;
     };
     constexpr unsigned queue_len = 10;
 }
@@ -91,7 +101,7 @@ class AcqWorker: public epicsThreadRunable {
     asynStatus do_callbacks(auto &, int, int);
 
     /* forward processing to other proc_* functions */
-    asynStatus proc_data(data_type);
+    asynStatus proc_data();
     asynStatus proc_raw();
     asynStatus proc_lamp();
     asynStatus proc_sysid();
@@ -110,6 +120,8 @@ class Acq: public UDriver {
     std::mutex ctl_lock;
     acq::Controller ctl;
 
+    data_type type;
+
     int p_trigger_type;
 
     int p_polarity, p_data_trigger_sel, p_data_trigger_filt,
@@ -117,7 +129,7 @@ class Acq: public UDriver {
         p_pre_samples, p_post_samples, p_channel, p_data_trigger_channel;
 
     /* custom logic parameters */
-    int p_channel_rb, p_event, p_repetitive, p_update_time, p_data_type, p_status, p_count;
+    int p_channel_rb, p_event, p_repetitive, p_update_time, p_status, p_count;
     /* parameters for data storage */
     int p_raw_data, p_lamp_current_data, p_lamp_voltage_data, p_lamp_current_sp_data,
         p_pos_x, p_pos_y, p_setpoint, p_timeframe, p_prbs;
@@ -131,7 +143,7 @@ class Acq: public UDriver {
     friend AcqWorker;
 
   public:
-    Acq(int port_number):
+    Acq(int port_number, const char *type):
       UDriver(
           "ACQ", port_number, &dec,
           ::number_of_channels,
@@ -150,6 +162,7 @@ class Acq: public UDriver {
           { }),
       dec(bars),
       ctl(bars),
+      type(get_type_from_name(type)),
       thread(worker, (std::string(portName) + "-worker").c_str(), epicsThreadGetStackSize(epicsThreadStackMedium), epicsThreadPriorityMedium)
     {
         auto v = find_device(port_number);
@@ -163,26 +176,34 @@ class Acq: public UDriver {
         createParam("EVENT", asynParamInt32, &p_event);
         createParam("REPETITIVE", asynParamInt32, &p_repetitive);
         createParam("UPDATE_TIME", asynParamFloat64, &p_update_time);
-        createParam("TYPE", asynParamInt32, &p_data_type);
         createParam("STATUS", asynParamInt32, &p_status);
         createParam("COUNT", asynParamInt32, &p_count);
         /* have to be initialized for the worker thread to work properly */
         setIntegerParam(p_repetitive, (int)repetitive_trigger::normal);
         setDoubleParam(p_update_time, 0);
-        setIntegerParam(p_data_type, (int)data_type::raw);
         setIntegerParam(p_status, (int)acq_status::idle);
         setIntegerParam(p_count, 0);
 
-        createParam("RAW", asynParamInt32Array, &p_raw_data);
-        createParam("LAMP_I", asynParamInt16Array, &p_lamp_current_data);
-        createParam("LAMP_V", asynParamInt16Array, &p_lamp_voltage_data);
-        createParam("LAMP_I_SP", asynParamInt16Array, &p_lamp_current_sp_data);
-        createParam("POS_X", asynParamInt32Array, &p_pos_x);
-        createParam("POS_Y", asynParamInt32Array, &p_pos_y);
-        createParam("SETPOINT", asynParamInt16Array, &p_setpoint);
-        /* it's an unsigned 16-bit type, so we need signed 32-bit to store/display it */
-        createParam("TIMEFRAME", asynParamInt32Array, &p_timeframe);
-        createParam("PRBS", asynParamInt8Array, &p_prbs);
+        switch (this->type) {
+            case data_type::raw:
+                createParam("RAW", asynParamInt32Array, &p_raw_data);
+                break;
+            case data_type::lamp:
+                createParam("LAMP_I", asynParamInt16Array, &p_lamp_current_data);
+                createParam("LAMP_V", asynParamInt16Array, &p_lamp_voltage_data);
+                createParam("LAMP_I_SP", asynParamInt16Array, &p_lamp_current_sp_data);
+                break;
+            case data_type::sysid:
+                createParam("POS_X", asynParamInt32Array, &p_pos_x);
+                createParam("POS_Y", asynParamInt32Array, &p_pos_y);
+                createParam("SETPOINT", asynParamInt16Array, &p_setpoint);
+                /* it's an unsigned 16-bit type, so we need signed 32-bit to store/display it */
+                createParam("TIMEFRAME", asynParamInt32Array, &p_timeframe);
+                createParam("PRBS", asynParamInt8Array, &p_prbs);
+                break;
+            default:
+                break;
+        }
 
         thread.start();
 
@@ -191,7 +212,6 @@ class Acq: public UDriver {
             /* used for custom logic */
             p_repetitive,
             p_update_time,
-            p_data_type,
         };
 
         read_parameters();
@@ -212,17 +232,26 @@ class Acq: public UDriver {
             }
         };
 
-        if (function == p_data_type) {
-            set_enum(data_type_info);
-        } else if (function == p_polarity) {
+        if (function == p_polarity) {
             set_enum(polarity_info);
-        } else if (function == p_data_trigger_channel) {
-            set_enum(channel_info[(int)channel_organizations::lamp]);
-        } else if (function == p_channel || function == p_channel_rb) {
-            /* TODO: make this more generic; perhaps take into account data_type,
-             * using a callback from writeInt32Impl */
-            if (port_number == 0) set_enum(channel_info[(int)channel_organizations::lamp]);
-            else if (port_number == 1) set_enum(channel_info[(int)channel_organizations::sysid]);
+        } else if (function == p_data_trigger_channel || function == p_channel || function == p_channel_rb) {
+            switch (type) {
+                case data_type::lamp:
+                    set_enum(channel_info[(int)channel_organizations::lamp]);
+                    break;
+                case data_type::sysid:
+                    set_enum(channel_info[(int)channel_organizations::sysid]);
+                    break;
+                /* if we don't have specific names, allow all of them to be selected */
+                default:
+                    for (size_t i = 0; i < nElements; i++) {
+                        strings[i] = epicsStrDup(("chan" + std::to_string(i)).c_str());
+                        values[i] = i;
+                        severities[i] = NO_ALARM;
+
+                        *nIn = i+1;
+                    }
+            }
         } else if (function == p_trigger_type) {
             set_enum(trigger_info);
         } else if (function == p_event) {
@@ -266,10 +295,7 @@ class Acq: public UDriver {
         if (function == p_event) {
             acq_command command = (acq_command)value;
 
-            epicsInt32 data_type_v;
-            getIntegerParam(p_data_type, &data_type_v);
-
-            AcqMessage msg{command, (data_type)data_type_v};
+            AcqMessage msg{command};
             worker.queue.send(&msg, sizeof msg);
         }
 
@@ -371,7 +397,7 @@ void AcqWorker::run()
         if (ongoing && acq.ctl.get_acq_status() == acq::acq_status::success) {
             ongoing = false;
 
-            asynStatus result_status = proc_data(msg.type);
+            asynStatus result_status = proc_data();
 
             epicsInt32 repetitive, counter;
             epicsFloat64 update_time;
@@ -405,9 +431,9 @@ void AcqWorker::run()
     }
 }
 
-asynStatus AcqWorker::proc_data(data_type type)
+asynStatus AcqWorker::proc_data()
 {
-    switch (type) {
+    switch (acq.type) {
         case data_type::raw:
             return proc_raw();
         case data_type::lamp:
@@ -506,14 +532,33 @@ asynStatus AcqWorker::proc_sysid()
 }
 
 namespace {
-    constexpr char name[] = "Acq";
-    UDriverFn<Acq, name> iocsh_init;
-}
+    constexpr iocshArg init_arg0 {"portNumber", iocshArgInt};
+    constexpr iocshArg init_arg1 {"dataType", iocshArgString};
+    constexpr iocshArg const *init_args[2] = {&init_arg0, &init_arg1};
+
+    constexpr iocshFuncDef init_func_def {
+        "Acq",
+        2,
+        init_args
+#ifdef IOCSHFUNCDEF_HAS_USAGE
+        ,"Create Acq port with specified data type\n"
+#endif
+    };
+
+    static void init_call_func(const iocshArgBuf *args)
+    {
+        try {
+            new Acq(args[0].ival, args[1].sval);
+        } catch (std::exception &e) {
+            cantProceed("error creating Acq: %s\n", e.what());
+        }
+    }
+};
 
 extern "C" {
     static void registerAcq()
     {
-        iocshRegister(&iocsh_init.init_func_def, iocsh_init.init_call_func);
+        iocshRegister(&init_func_def, init_call_func);
     }
 
     epicsExportRegistrar(registerAcq);

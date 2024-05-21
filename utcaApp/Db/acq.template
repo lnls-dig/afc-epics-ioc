@@ -1,12 +1,5 @@
 # ACQ records
 
-record (mbbo, "$(P)$(R)$(ACQ_NAME)DataType"){
-    field(DTYP, "asynInt32")
-    field(SCAN, "Passive")
-    field(OUT, "@asyn($(PORT))TYPE")
-    field(PINI, "YES")
-}
-
 record(longout,"$(P)$(R)$(ACQ_NAME)SamplesPre-SP"){
     field(DTYP,"asynInt32")
     field(DESC,"Number of pre-trigger samples")
