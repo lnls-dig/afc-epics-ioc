@@ -1,3 +1,23 @@
+record(ao,"$(P)$(R)MONITUpdtTime-SP"){
+    field(DTYP, "asynFloat64")
+    field(DESC,"set MONIT AMP/POS update time")
+    field(PINI,"YES")
+    field(DRVH,"1")
+    field(DRVL,"0.001")
+    field(PREC,"3")
+    field(EGU, "s")
+    field(VAL, "0.005")
+    field(OUT, "@asyn($(PORT))UPDATE_TIME")
+}
+record(ai,"$(P)$(R)MONITUpdtTime-RB"){
+    field(DTYP, "asynFloat64")
+    field(DESC,"get MONIT AMP/POS update time")
+    field(SCAN, "I/O Intr")
+    field(PREC,"3")
+    field(EGU, "s")
+    field(INP, "@asyn($(PORT))UPDATE_TIME")
+}
+
 record(longout,"$(P)$(R)PosKx-SP"){
     field(DTYP,"asynInt32")
     field(PINI,"YES")
