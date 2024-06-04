@@ -31,3 +31,5 @@ jobs:
           echo 'STATIC_BUILD=YES' >> configure/CONFIG_SITE.local
       - name: Build IOC
         run: make -j$(nproc)
+      - name: Run tests
+        run: make -s tapfiles && make test-results
