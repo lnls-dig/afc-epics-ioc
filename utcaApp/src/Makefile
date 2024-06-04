@@ -57,6 +57,13 @@ utca_SRCS_vxWorks += -nil-
 # Finally link IOC to the EPICS Base libraries
 utca_LIBS += $(EPICS_BASE_IOC_LIBS)
 
+TESTPROD_HOST += asubRoutinesTest
+asubRoutinesTest_SRCS += asub-routines-test.cpp
+asubRoutinesTest_LIBS += asyn $(EPICS_BASE_IOC_LIBS)
+TESTS += asubRoutinesTest
+
+TESTSCRIPTS_HOST += $(TESTS:%=%.t)
+
 include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD EXTRA GNUMAKE RULES BELOW HERE
