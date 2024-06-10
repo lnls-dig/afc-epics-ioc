@@ -23,8 +23,8 @@ namespace {
 
     const auto acq_task_sleep = 100ms;
 
-    enum class data_type {raw, lamp, sysid, last};
-    const char *data_type_names[(int)data_type::last] = {"raw", "lamp", "sysid"};
+    enum class data_type {raw, lamp, sysid, bpm, last};
+    const char *data_type_names[(int)data_type::last] = {"raw", "lamp", "sysid", "bpm"};
     data_type get_type_from_name(std::string type)
     {
         if (type == data_type_names[(unsigned)data_type::raw])
@@ -33,6 +33,8 @@ namespace {
             return data_type::lamp;
         else if (type == data_type_names[(unsigned)data_type::sysid])
             return data_type::sysid;
+        else if (type == data_type_names[(unsigned)data_type::bpm])
+            return data_type::bpm;
         else
             throw std::runtime_error("bad data_type name");
     }
@@ -45,13 +47,17 @@ namespace {
     enum class polarity {positive, negative, last};
     const enum_info polarity_info[(int)polarity::last] = {{"positive"}, {"negative"}};
 
-    enum class channel_organizations {lamp, sysid, sysid_applied, sysid_filtered, last};
+    enum class fofb_channel_organizations {lamp, sysid, sysid_applied, sysid_filtered, last};
     const enum_info invalid_channel = {"invalid", MINOR_ALARM};
-    const enum_info channel_info[][(int)channel_organizations::last] = {
+    const enum_info fofb_channel_info[][(int)fofb_channel_organizations::last] = {
         {{"lamp"}, invalid_channel, invalid_channel, invalid_channel},
         {invalid_channel, {"sysid"}, {"sysid_applied"}, {"sysid_filtered"}},
     };
 
+    enum class bpm_channel_organizations {adc, adc_swap, tbt, tbt_pha, fofb, fofb_pha, facq, last};
+    const enum_info bpm_channel_info[(unsigned)bpm_channel_organizations::last] = {
+        {"adc"}, {"adc_swap"}, {"tbt"}, {"tbt_pha"}, {"fofb"}, {"fofb_pha"}, {"facq"},
+    };
     enum class trigger {now, external, data, software, last};
     const enum_info trigger_info[(int)trigger::last] = {{"now"}, {"external"}, {"data"}, {"software"}};
 
@@ -105,6 +111,7 @@ class AcqWorker: public epicsThreadRunable {
     asynStatus proc_raw();
     asynStatus proc_lamp();
     asynStatus proc_sysid();
+    asynStatus proc_bpm();
 
   public:
     AcqWorker(Acq &acq): acq(acq) { }
@@ -132,7 +139,7 @@ class Acq: public UDriver {
     int p_channel_rb, p_event, p_repetitive, p_update_time, p_status, p_count;
     /* parameters for data storage */
     int p_raw_data, p_lamp_current_data, p_lamp_voltage_data, p_lamp_current_sp_data,
-        p_pos_x, p_pos_y, p_setpoint, p_timeframe, p_prbs;
+        p_pos_x, p_pos_y, p_setpoint, p_timeframe, p_prbs, p_adc_data;
 
     /* contains the parameters which should be written to the parameter list */
     std::unordered_set<int> parameters_to_store;
@@ -201,6 +208,9 @@ class Acq: public UDriver {
                 createParam("TIMEFRAME", asynParamInt32Array, &p_timeframe);
                 createParam("PRBS", asynParamInt8Array, &p_prbs);
                 break;
+            case data_type::bpm:
+                createParam("ADC", asynParamInt32Array, &p_adc_data);
+                break;
             default:
                 break;
         }
@@ -237,10 +247,13 @@ class Acq: public UDriver {
         } else if (function == p_data_trigger_channel || function == p_channel || function == p_channel_rb) {
             switch (type) {
                 case data_type::lamp:
-                    set_enum(channel_info[(int)channel_organizations::lamp]);
+                    set_enum(fofb_channel_info[(int)fofb_channel_organizations::lamp]);
                     break;
                 case data_type::sysid:
-                    set_enum(channel_info[(int)channel_organizations::sysid]);
+                    set_enum(fofb_channel_info[(int)fofb_channel_organizations::sysid]);
+                    break;
+                case data_type::bpm:
+                    set_enum(bpm_channel_info);
                     break;
                 /* if we don't have specific names, allow all of them to be selected */
                 default:
@@ -283,7 +296,7 @@ class Acq: public UDriver {
             if (function == p_number_shots) ctl.number_shots = value;
             if (function == p_pre_samples) ctl.pre_samples = value;
             if (function == p_post_samples) ctl.post_samples = value;
-            if (function == p_channel) {ctl.channel = value; setIntegerParam(addr, p_channel_rb, value);}
+            if (function == p_channel) {ctl.channel = get_hardware_channel(value); setIntegerParam(addr, p_channel_rb, value);}
             if (function == p_data_trigger_channel) ctl.data_trigger_channel = value;
         }
 
@@ -312,6 +325,33 @@ class Acq: public UDriver {
         }
 
         return asynError;
+    }
+
+    unsigned get_hardware_channel(epicsInt32 channel)
+    {
+        /* only the BPM has a complicated channel map */
+        if (type != data_type::bpm)
+            return channel;
+
+        switch ((bpm_channel_organizations)channel) {
+            using enum bpm_channel_organizations;
+            case adc:
+                return 0;
+            case adc_swap:
+                return 1;
+            case tbt:
+                return 6;
+            case tbt_pha:
+                return 7;
+            case fofb:
+                return 11;
+            case fofb_pha:
+                return 12;
+            case facq:
+                return 14;
+            case last:
+                throw std::logic_error("unsupported acq channel");
+        }
     }
 };
 
@@ -440,6 +480,8 @@ asynStatus AcqWorker::proc_data()
             return proc_lamp();
         case data_type::sysid:
             return proc_sysid();
+        case data_type::bpm:
+            return proc_bpm();
         case data_type::last:
             return asynError;
     }
@@ -527,6 +569,27 @@ asynStatus AcqWorker::proc_sysid()
     }
     do_callbacks(i32scratch, acq.p_timeframe, 0);
     do_callbacks(i8scratch, acq.p_prbs, 0);
+
+    return asynSuccess;
+}
+
+asynStatus AcqWorker::proc_bpm()
+{
+    auto channel_properties = get_channel_properties();
+    if (!(channel_properties.atom_width == 16 || channel_properties.atom_width == 32) ||
+        channel_properties.num_atoms < 4)
+        return asynError;
+
+    auto rv = acq.ctl.get_result<int32_t>();
+
+    auto len = rv.size() / channel_properties.num_atoms;
+    i32scratch.resize(len);
+    for (int addr = 0; addr < 4; addr++) {
+        for (size_t i = 0; i < len; i++) {
+            i32scratch[i] = rv[addr + i * channel_properties.num_atoms];
+        }
+        do_callbacks(i32scratch, acq.p_adc_data, addr);
+    }
 
     return asynSuccess;
 }
