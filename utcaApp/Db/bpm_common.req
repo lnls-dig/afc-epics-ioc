@@ -1,0 +1,18 @@
+file "trigger_iface.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER
+file "orbit_intlk.req", P=${P}, R=${R}
+
+file "acq.req", P=${P1}, R=${R1}, ACQ_NAME=GEN
+file "acq.req", P=${P2}, R=${R2}, ACQ_NAME=GEN
+file "acq.req", P=${P1}, R=${R1}, ACQ_NAME=PM
+file "acq.req", P=${P2}, R=${R2}, ACQ_NAME=PM
+
+file "trigger_mux.req", P=${P1}, R=${R1}, TRIGGER_NAME=TRIGGER_GEN
+file "trigger_mux.req", P=${P2}, R=${R2}, TRIGGER_NAME=TRIGGER_GEN
+file "trigger_mux.req", P=${P1}, R=${R1}, TRIGGER_NAME=TRIGGER_PM
+file "trigger_mux.req", P=${P2}, R=${R2}, TRIGGER_NAME=TRIGGER_PM
+
+file "bpm_swap.req", P=${P1}, R=${R1}
+file "bpm_swap.req", P=${P2}, R=${R2}
+
+file "pos_calc.req", P=${P1}, R=${R1}
+file "pos_calc.req", P=${P2}, R=${R2}

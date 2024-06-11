@@ -1,0 +1,4 @@
+file "bpm_common.req", P=${P}, R=${R}, P1=${P1}, R1=${R1}, P2=${P2}, R2=${R2}
+
+file "bpm_pico.req", P=${P1}, R=${R1}
+file "bpm_pico.req", P=${P2}, R=${R2}
