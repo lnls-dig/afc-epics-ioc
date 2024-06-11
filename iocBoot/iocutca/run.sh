@@ -10,7 +10,7 @@ VSLOT=$(./getSlot.sh $SLOT)
 cmd=
 synthesis="$(decode-reg build_info -q --slot ${SLOT})"
 case "$synthesis" in
-    bpm-gw-*-sirius*|pbpm-gw*)
+    bpm-gw-*-siriu*|pbpm-gw*)
         CRATE=${CRATE#0}
 
         . ./bpm-slot-mapping
