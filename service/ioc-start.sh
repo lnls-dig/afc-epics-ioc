@@ -13,7 +13,7 @@ for slot in /sys/bus/pci/slots/* ; do
 done
 
 case "$(decode-reg build_info -q --slot ${devslot})" in
-    afc-tim-receive*|afcv4_fofb_ctrl*)
+    afc-tim-receive*|afcv4_fofb_ctrl*|pbpm-gw*)
         systemctl restart afc-ioc@${devslot}.service
         ;;
 esac
