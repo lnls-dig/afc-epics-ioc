@@ -29,6 +29,7 @@ reAddAlias "${P1}${R1}(TRIGGER[[:digit:]].*)" "${P2}${R2}$1"
 < "iocBoot/${IOC}/bpm_acq.cmd"
 < "iocBoot/${IOC}/bpm_swap.cmd"
 < "iocBoot/${IOC}/bpm_pos.cmd"
+< "iocBoot/${IOC}/bpm_fmc250m_4ch.cmd"
 
 iocInit
 
