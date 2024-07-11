@@ -1,0 +1,6 @@
+$(P)$(R)ADCClkSel-Sel
+$(P)$(R)ADCSi57xOe-Sel
+$(P)$(R)ADCSi57xFreq-SP
+$(P)$(R)ADCAD9510ADiv-SP
+$(P)$(R)ADCAD9510BDiv-SP
+$(P)$(R)ADCAD9510RDiv-SP

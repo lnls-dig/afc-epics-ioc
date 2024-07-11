@@ -1,0 +1,2 @@
+file "fmc_active_clk.req", P=${P}, R=${R}
+file "fmc_adc_common.req", P=${P}, R=${R}

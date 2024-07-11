@@ -31,6 +31,11 @@ reAddAlias "${P1}${R1}(TRIGGER[[:digit:]].*)" "${P2}${R2}$1"
 < "iocBoot/${IOC}/bpm_pos.cmd"
 < "iocBoot/${IOC}/bpm_fmc250m_4ch.cmd"
 
+< "iocBoot/${IOC}/autosave_pre.cmd"
+
 iocInit
 
 < "iocBoot/${IOC}/apply_asg.cmd"
+
+create_monitor_set("ebpm_ioc.req", 30, "P=${P}, R=${R}, P1=${P1}, R1=${R1}, P2=${P2}, R2=${R2}")
+set_savefile_name("ebpm_ioc.req", "${P}${R}_settings.sav")
