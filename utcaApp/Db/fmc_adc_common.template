@@ -1,0 +1,69 @@
+record(bi,"$(P)$(R)MMCMLocked-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC MMCM locked status")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))MMCM_LOCKED")
+    field(ZNAM,"not_locked")
+    field(ONAM,"locked")
+}
+
+record(bo,"$(P)$(R)MMCMRst-Cmd"){
+    field(DTYP,"asynInt32")
+    field(DESC,"reset ADC MMCM")
+    field(OUT,"@asyn($(PORT))MMCM_RST")
+    field(MASK, 1)
+    field(HIGH, 1)
+    field(ZNAM,"nothing")
+    field(ONAM,"reset")
+}
+
+record(bo,"$(P)$(R)ADCTrigDir-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC trigger direction")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))DIR")
+    field(ZNAM,"output")
+    field(ONAM,"input")
+}
+record(bi,"$(P)$(R)ADCTrigDir-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC trigger direction")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))DIR")
+    field(ZNAM,"output")
+    field(ONAM,"input")
+}
+
+record(bo,"$(P)$(R)ADCTrigTerm-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC trigger 50ohm termination")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))TERM")
+    field(ZNAM,"disable")
+    field(ONAM,"enable")
+}
+record(bi,"$(P)$(R)ADCTrigTerm-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC trigger 50ohm termination")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))TERM")
+    field(ZNAM,"disable")
+    field(ONAM,"enable")
+}
+
+record(bo,"$(P)$(R)ADCTestDataEn-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC test ramp data")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))TEST_DATA_EN")
+    field(ZNAM,"disable")
+    field(ONAM,"enable")
+}
+record(bi,"$(P)$(R)ADCTestDataEn-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC test ramp data")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))TEST_DATA_EN")
+    field(ZNAM,"disable")
+    field(ONAM,"enable")
+}
