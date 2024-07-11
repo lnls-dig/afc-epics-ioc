@@ -4,6 +4,7 @@ registrar("registerPcie")
 registrar("registerSerial")
 
 registrar("registerAcq")
+registrar("registerAD9510")
 registrar("registerAfcTiming")
 registrar("registerBpmSwap")
 registrar("registerOrbitIntlk")
