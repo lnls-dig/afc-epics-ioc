@@ -1,0 +1,19 @@
+record(ao,"$(P)$(R)ADCSi57xFreq-SP"){
+    field(DTYP,"asynFloat64")
+    field(DESC,"set si57x frequency")
+    field(PINI,"YES")
+    field(PREC, "3")
+    field(OUT,"@asyn($(PORT))FREQ")
+    field(EGU, "Hz")
+    alias("$(P)$(R)INFOClkFreq-SP")
+}
+
+record(ai,"$(P)$(R)ADCSi57xFreq-RB"){
+    field(DTYP,"asynFloat64")
+    field(DESC,"get si57x frequency")
+    field(PREC, "3")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))FREQ")
+    field(EGU, "Hz")
+    alias("$(P)$(R)INFOClkFreq-RB")
+}
