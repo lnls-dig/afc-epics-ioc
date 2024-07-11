@@ -8,6 +8,7 @@ DB += build_info.template
 
 DB += scan_task.template
 DB += acq.template raw_data.template acq.substitutions
+DB += ad9510.template
 DB += afc_timing.template afc_timing_clock.template afc_timing_trigger.template afc_timing.substitutions
 DB += bpm_data.template bpm_data.substitutions
 DB += bpm_swap.template bpm_swap.substitutions

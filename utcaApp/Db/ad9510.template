@@ -1,0 +1,38 @@
+record(longout,"$(P)$(R)ADCAD9510ADiv-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC AD9510 A divider")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))A_DIV")
+}
+record(longin,"$(P)$(R)ADCAD9510ADiv-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC AD9510 A divider")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))A_DIV")
+}
+
+record(longout,"$(P)$(R)ADCAD9510BDiv-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC AD9510 B divider")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))B_DIV")
+}
+record(longin,"$(P)$(R)ADCAD9510BDiv-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC AD9510 B divider")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))B_DIV")
+}
+
+record(longout,"$(P)$(R)ADCAD9510RDiv-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC AD9510 R divider")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))R_DIV")
+}
+record(longin,"$(P)$(R)ADCAD9510RDiv-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC AD9510 R divider")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))R_DIV")
+}
