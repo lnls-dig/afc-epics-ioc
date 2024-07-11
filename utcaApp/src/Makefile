@@ -26,6 +26,7 @@ utca_DBD += retools.dbd
 utca_SRCS += pcie-single.cpp acq.cpp afc_timing.cpp bpm_swap.cpp build_info.cpp fmcpico1m_4ch.cpp fofb_cc.cpp fofb_processing.cpp fofb_shaper_filt.cpp orbit_intlk.cpp pos_calc.cpp rtmlamp.cpp trigger_iface.cpp trigger_mux.cpp si57x_ctrl.cpp sysid.cpp
 utca_SRCS += fmc_adc_common.cpp
 utca_SRCS += fmc_active_clk.cpp
+utca_SRCS += ad9510.cpp
 utca_DBD += drivers.dbd
 
 utca_SRCS += asub-routines.cpp
