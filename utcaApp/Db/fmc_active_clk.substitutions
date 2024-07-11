@@ -1,0 +1,7 @@
+file db/scan_task.template {
+    {}
+}
+
+file db/fmc_active_clk.template {
+    {}
+}

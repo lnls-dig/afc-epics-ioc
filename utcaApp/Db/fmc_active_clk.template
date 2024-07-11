@@ -1,0 +1,60 @@
+record(bo,"$(P)$(R)ADCSi57xOe-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set Si57x output enable")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))SI571_OE")
+    field(ZNAM,"disable")
+    field(ONAM,"enable")
+}
+record(bi,"$(P)$(R)ADCSi57xOe-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get Si57x output enable")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))SI571_OE")
+    field(ZNAM,"disable")
+    field(ONAM,"enable")
+}
+
+
+record(bo,"$(P)$(R)ADCAD9510PllFunc-SP"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC AD9510 PLL function")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))PLL_FUNCTION")
+    field(ZNAM,"nothing")
+    field(ONAM,"reset")
+}
+record(bi,"$(P)$(R)ADCAD9510PllFunc-RB"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC AD9510 PLL function")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))PLL_FUNCTION")
+    field(ZNAM,"nothing")
+    field(ONAM,"reset")
+}
+
+record(bi,"$(P)$(R)ADCAD9510PllStatus-Mon"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC AD9510 PLL Status")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))PLL_STATUS")
+    field(ZNAM,"not_locked")
+    field(ONAM,"locked")
+}
+
+record(bo,"$(P)$(R)ADCClkSel-Sel"){
+    field(DTYP,"asynInt32")
+    field(DESC,"set ADC reference clock")
+    field(PINI,"YES")
+    field(OUT,"@asyn($(PORT))CLK_SEL")
+    field(ZNAM,"external")
+    field(ONAM,"fmc_conn")
+}
+record(bi,"$(P)$(R)ADCClkSel-Sts"){
+    field(DTYP,"asynInt32")
+    field(DESC,"get ADC reference clock")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))CLK_SEL")
+    field(ZNAM,"external")
+    field(ONAM,"fmc_conn")
+}

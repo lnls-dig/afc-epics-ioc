@@ -11,6 +11,7 @@ DB += acq.template raw_data.template acq.substitutions
 DB += afc_timing.template afc_timing_clock.template afc_timing_trigger.template afc_timing.substitutions
 DB += bpm_data.template bpm_data.substitutions
 DB += bpm_swap.template bpm_swap.substitutions
+DB += fmc_active_clk.template fmc_active_clk.substitutions
 DB += fmcpico1m_4ch.template fmcpico1m_4ch.substitutions
 DB += fofb_cc.template fofb_cc_channel.template fofb_cc.substitutions
 DB += fofb_processing.template fofb_processing_channel.template fofb_processing.substitutions
