@@ -134,9 +134,9 @@ class UDriver: public asynPortDriver {
         create_params(name_and_index_channel, false);
     }
 
-    sdb_device_info find_device(int port_number)
+    sdb_device_info find_device(int port_number, std::function<bool(const struct sdb_device_info &)> match_fn=nullptr)
     {
-        if (auto v = read_sdb(&bars, generic_decoder->match_devinfo_lambda, port_number))
+        if (auto v = read_sdb(&bars, match_fn ? match_fn : generic_decoder->match_devinfo_lambda, port_number))
             return *v;
         else
             throw std::runtime_error("couldn't find module");
