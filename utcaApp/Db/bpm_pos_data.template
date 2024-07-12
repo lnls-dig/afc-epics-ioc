@@ -1,0 +1,65 @@
+record(aai,"$(P)$(R)$(ACQ_NAME)PosXData") {
+    field(EGU, "nm")
+    field(NELM, "$(NELM)")
+    field(FTVL, "DOUBLE")
+}
+
+record(aai,"$(P)$(R)$(ACQ_NAME)PosYData") {
+    field(EGU, "nm")
+    field(NELM, "$(NELM)")
+    field(FTVL, "DOUBLE")
+}
+
+record(aai,"$(P)$(R)$(ACQ_NAME)SumData") {
+    field(EGU, "au")
+    field(NELM, "$(NELM)")
+    field(FTVL, "DOUBLE")
+}
+
+record(aai,"$(P)$(R)$(ACQ_NAME)PosQData") {
+    field(EGU, "nm")
+    field(NELM, "$(NELM)")
+    field(FTVL, "DOUBLE")
+}
+
+record(aSub, "$(P)$(R)$(ACQ_NAME)Calc"){
+    field(SNAM, "asub_pos_calc")
+    field(INPA, "$(P)$(R)$(ACQ_NAME)AmplAData")
+    field(FTA, "LONG")
+    field(NOA, "$(NELM)")
+    field(INPB, "$(P)$(R)$(ACQ_NAME)AmplBData")
+    field(FTB, "LONG")
+    field(NOB, "$(NELM)")
+    field(INPC, "$(P)$(R)$(ACQ_NAME)AmplCData")
+    field(FTC, "LONG")
+    field(NOC, "$(NELM)")
+    field(INPD, "$(P)$(R)$(ACQ_NAME)AmplDData CP")
+    field(FTD, "LONG")
+    field(NOD, "$(NELM)")
+    field(INPE, "$(P)$(R)PosXOffset-RB")
+    field(FTE, "LONG")
+    field(INPF, "$(P)$(R)PosKx-RB")
+    field(FTF, "DOUBLE")
+    field(INPG, "$(P)$(R)PosYOffset-RB")
+    field(FTG, "LONG")
+    field(INPH, "$(P)$(R)PosKy-RB")
+    field(FTH, "DOUBLE")
+    field(INPI, "$(P)$(R)PosKsum-RB")
+    field(FTI, "DOUBLE")
+    field(INPJ, "$(P)$(R)PosQOffset-RB")
+    field(FTJ, "DOUBLE")
+    field(INPK, "$(P)$(R)PosKq-RB")
+    field(FTK, "DOUBLE")
+    field(OUTA, "$(P)$(R)$(ACQ_NAME)PosXData PP")
+    field(FTVA, "DOUBLE")
+    field(NOVA, "$(NELM)")
+    field(OUTB, "$(P)$(R)$(ACQ_NAME)PosYData PP")
+    field(FTVB, "DOUBLE")
+    field(NOVB, "$(NELM)")
+    field(OUTC, "$(P)$(R)$(ACQ_NAME)SumData PP")
+    field(FTVC, "DOUBLE")
+    field(NOVC, "$(NELM)")
+    field(OUTD, "$(P)$(R)$(ACQ_NAME)PosQData PP")
+    field(FTVD, "DOUBLE")
+    field(NOVD, "$(NELM)")
+}

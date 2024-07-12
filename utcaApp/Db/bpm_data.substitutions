@@ -5,3 +5,7 @@ file db/bpm_data.template {
     {"C", 2}
     {"D", 3}
 }
+
+file db/bpm_pos_data.template {
+    {}
+}
