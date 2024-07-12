@@ -106,6 +106,8 @@ static long asub_pos_calc(aSubRecord *prec)
     /* write NORD field in output */
     prec->neva = elements;
     prec->nevb = elements;
+    prec->nevc = elements;
+    prec->nevd = elements;
 
     double x_off, x_gain, y_off, y_gain, s_gain, q_off, q_gain;
     get_scalar(x_off, prec->e, prec->fte);
