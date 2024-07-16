@@ -246,3 +246,57 @@ record(bi, "$(P)$(R)TestDataEn-Sts"){
     field(ONAM, "enable")
     field(INP, "@asyn($(PORT))TEST_DATA")
 }
+
+record(longout,"$(P)$(R)INFOHarmonicNumber-SP"){
+    field(DESC,"set accelerator harmonic number")
+    field(PINI,"YES")
+}
+record(longin,"$(P)$(R)INFOHarmonicNumber-RB"){
+    field(DESC,"get accelerator harmonic number")
+    field(INP,"$(P)$(R)INFOHarmonicNumber-SP CP")
+}
+
+record(longout,"$(P)$(R)INFOADCRate-SP"){
+    field(DESC,"set ADC rate factor")
+    field(PINI,"YES")
+}
+record(longin,"$(P)$(R)INFOADCRate-RB"){
+    field(DESC,"get ADC rate factor")
+    field(INP,"$(P)$(R)INFOADCRate-SP CP")
+}
+
+record(longout,"$(P)$(R)INFOTbTRate-SP"){
+    field(DESC,"set TbT rate factor")
+    field(PINI,"YES")
+}
+record(longin,"$(P)$(R)INFOTbTRate-RB"){
+    field(DESC,"get TbT rate factor")
+    field(INP,"$(P)$(R)INFOTbTRate-SP CP")
+}
+
+record(longout,"$(P)$(R)INFOFOFBRate-SP"){
+    field(DESC,"set FOFB rate factor")
+    field(PINI,"YES")
+}
+record(longin,"$(P)$(R)INFOFOFBRate-RB"){
+    field(DESC,"get FOFB rate factor")
+    field(INP,"$(P)$(R)INFOFOFBRate-SP CP")
+}
+
+record(longout,"$(P)$(R)INFOMONITRate-SP"){
+    field(DESC,"set MONIT rate factor")
+    field(PINI,"YES")
+}
+record(longin,"$(P)$(R)INFOMONITRate-RB"){
+    field(DESC,"get MONIT rate factor")
+    field(INP,"$(P)$(R)INFOMONITRate-SP CP")
+}
+
+record(longout,"$(P)$(R)INFOFAcqRate-SP"){
+    field(DESC,"set FAcq rate factor")
+    field(PINI,"YES")
+}
+record(longin,"$(P)$(R)INFOFAcqRate-RB"){
+    field(DESC,"get FAcq rate factor")
+    field(INP,"$(P)$(R)INFOFAcqRate-SP CP")
+}
