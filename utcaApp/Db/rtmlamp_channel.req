@@ -1,5 +1,5 @@
 $(S)$(RTM_CHAN)CurrLoopKp-SP
-$(S)$(RTM_CHAN)CurrLoopTi-SP
+$(S)$(RTM_CHAN)CurrLoopKi-SP
 $(S)$(RTM_CHAN)CurrGain-SP
 $(S)$(RTM_CHAN)CurrOffset-SP
 $(S)$(RTM_CHAN)VoltGain-SP

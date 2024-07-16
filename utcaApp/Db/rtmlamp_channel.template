@@ -94,18 +94,18 @@ record(longin,"$(S)$(RTM_CHAN)CurrLoopKp-RB"){
     field(INP,"@asyn($(PORT),$(ADDR))PI_KP")
 }
 
-record(longout,"$(S)$(RTM_CHAN)CurrLoopTi-SP"){
+record(longout,"$(S)$(RTM_CHAN)CurrLoopKi-SP"){
     field(DTYP,"asynInt32")
-    field(DESC,"set PI Ti parameter")
+    field(DESC,"set PI Ki parameter")
     field(SCAN,"Passive")
     field(OUT,"@asyn($(PORT),$(ADDR))PI_TI")
     field(PINI,"YES")
     field(DRVH,"67108863")
     field(DRVL,"0")
 }
-record(longin,"$(S)$(RTM_CHAN)CurrLoopTi-RB"){
+record(longin,"$(S)$(RTM_CHAN)CurrLoopKi-RB"){
     field(DTYP,"asynInt32")
-    field(DESC,"get PI Ti parameter")
+    field(DESC,"get PI Ki parameter")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT),$(ADDR))PI_TI")
 }
