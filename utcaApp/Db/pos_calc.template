@@ -63,12 +63,14 @@ record(ao,"$(P)$(R)PosKsum-SP"){
     field(PINI,"YES")
     field(OUT,"@asyn($(PORT))KSUM")
     field(ASG, "Interlock")
+    field(PREC, 8)
 }
 
 record(ai,"$(P)$(R)PosKsum-RB"){
     field(DTYP,"asynFloat64")
     field(SCAN,"I/O Intr")
     field(INP,"@asyn($(PORT))KSUM")
+    field(PREC, 8)
 }
 
 record(longout,"$(P)$(R)PosXOffset-SP"){
