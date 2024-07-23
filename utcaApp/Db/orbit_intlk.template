@@ -283,6 +283,7 @@ record(bi,"$(P)$(R)IntlkLtc-Mon"){
 record(longout, "$(P)$(R)IntlkLmtMinSum-SP"){
     field(DTYP, "asynInt32")
     field(DESC, "Set interlock minimum sum threshold")
+    field(PINI, YES)
     field(OUT,  "@asyn($(PORT))MIN_SUM")
     field(ASG, "Interlock")
 }
