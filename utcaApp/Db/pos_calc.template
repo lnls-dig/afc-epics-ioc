@@ -302,3 +302,45 @@ record(longin,"$(P)$(R)INFOFAcqRate-RB"){
     field(DESC,"get FAcq rate factor")
     field(INP,"$(P)$(R)INFOFAcqRate-SP CP")
 }
+
+record(bo,"$(P)$(R)XYPosCal-Sel") {
+    field(DESC, "Set position XY calibration")
+    field(PINI, "YES")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+}
+record(bi,"$(P)$(R)XYPosCal-Sts") {
+    field(DESC, "Get position XY calibration")
+    field(INP, "$(P)$(R)XYPosCal-Sel CP")
+    field(SCAN, "Passive")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+}
+
+record(bo,"$(P)$(R)QPosCal-Sel") {
+    field(DESC, "Set position Q calibration")
+    field(PINI, "YES")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+}
+record(bi,"$(P)$(R)QPosCal-Sts") {
+    field(DESC, "Get position Q calibration")
+    field(INP, "$(P)$(R)QPosCal-Sel CP")
+    field(SCAN, "Passive")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+}
+
+record(bo,"$(P)$(R)SumPosCal-Sel") {
+    field(DESC, "Set position Sum calibration")
+    field(PINI, "YES")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+}
+record(bi,"$(P)$(R)SumPosCal-Sts") {
+    field(DESC, "Get position Sum calibration")
+    field(INP, "$(P)$(R)SumPosCal-Sel CP")
+    field(SCAN, "Passive")
+    field(ZNAM, "Off")
+    field(ONAM, "On")
+}

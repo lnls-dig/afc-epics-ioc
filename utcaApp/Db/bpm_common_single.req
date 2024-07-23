@@ -1,5 +1,7 @@
 file "acq.req", P=${P}, R=${R}, ACQ_NAME=GEN
+file "bpm_pos_data.req", P=${P}, R=${R}, ACQ_NAME=GEN
 file "acq.req", P=${P}, R=${R}, ACQ_NAME=PM
+file "bpm_pos_data.req", P=${P}, R=${R}, ACQ_NAME=PM
 
 file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_GEN
 file "trigger_mux.req", P=${P}, R=${R}, TRIGGER_NAME=TRIGGER_PM
