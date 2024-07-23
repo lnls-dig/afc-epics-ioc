@@ -4,23 +4,25 @@
 #include "asub-routines.cpp"
 
 class PosCalcSelfTest {
-    aSubRecord prec;
+    aSubRecord prec{};
 
     /* inputs */
     epicsInt32 a, b, c, d;
     epicsFloat64 x_off, x_gain, y_off, y_gain, s_gain, q_off, q_gain;
+    epicsEnum16 poly;
 
     /* outputs */
     epicsFloat64 x, y, s, q;
 
+    void set_field (auto &value, auto type, auto &value_field, auto &size_field, auto &type_field)
+    {
+        value_field = &value;
+        size_field = 1;
+        type_field = type;
+    }
+
     void initialize_record()
     {
-        auto set_field = [](auto &value, auto type, auto &value_field, auto &size_field, auto &type_field) {
-            value_field = &value;
-            size_field = 1;
-            type_field = type;
-        };
-
         set_field(a, menuFtypeLONG, prec.a, prec.nea, prec.fta);
         set_field(b, menuFtypeLONG, prec.b, prec.neb, prec.ftb);
         set_field(c, menuFtypeLONG, prec.c, prec.nec, prec.ftc);
@@ -40,7 +42,7 @@ class PosCalcSelfTest {
         set_field(q, menuFtypeDOUBLE, prec.vald, prec.novd, prec.ftvd);
     }
 
-    void set_values()
+    void set_values_no_poly()
     {
         a = 100;
         b = 210;
@@ -56,9 +58,17 @@ class PosCalcSelfTest {
         q_gain = 170;
     }
 
-    void check_outputs()
+    void set_values_poly(epicsEnum16 p)
     {
-        asub_pos_calc(&prec);
+        poly = p;
+        set_field(poly, menuFtypeENUM, prec.l, prec.nel, prec.ftl);
+        set_field(poly, menuFtypeENUM, prec.m, prec.nem, prec.ftm);
+        set_field(poly, menuFtypeENUM, prec.n, prec.nen, prec.ftn);
+    }
+
+    void check_outputs_no_poly()
+    {
+        testOk(asub_pos_calc(&prec) == 0, "check_outputs_no_poly asub_pos_calc");
         auto compare_expected_results = [](auto value, auto expected, auto name) {
             testOk(std::abs(value - expected) < .01, "PosCalc verification for %s", name);
         };
@@ -73,14 +83,18 @@ class PosCalcSelfTest {
     PosCalcSelfTest()
     {
         initialize_record();
-        set_values();
-        check_outputs();
+
+        set_values_no_poly();
+        check_outputs_no_poly();
+
+        set_values_poly(0);
+        check_outputs_no_poly();
     }
 };
 
 MAIN(asubRoutinesTest)
 {
-    testPlan(4);
+    testPlan(10);
 
     PosCalcSelfTest();
 }
