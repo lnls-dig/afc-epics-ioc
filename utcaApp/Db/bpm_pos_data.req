@@ -1,0 +1,4 @@
+$(P)$(R)$(ACQ_NAME)_PolyXArrayCoeff-SP
+$(P)$(R)$(ACQ_NAME)_PolyYArrayCoeff-SP
+$(P)$(R)$(ACQ_NAME)_PolySUMArrayCoeff-SP
+$(P)$(R)$(ACQ_NAME)_PolyQArrayCoeff-SP

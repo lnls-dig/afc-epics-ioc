@@ -45,3 +45,6 @@ $(P)$(R)INFOTbTRate-SP
 $(P)$(R)INFOFOFBRate-SP
 $(P)$(R)INFOMONITRate-SP
 $(P)$(R)INFOFAcqRate-SP
+$(P)$(R)XYPosCal-Sel
+$(P)$(R)SumPosCal-Sel
+$(P)$(R)QPosCal-Sel

@@ -22,6 +22,50 @@ record(aai,"$(P)$(R)$(ACQ_NAME)PosQData") {
     field(FTVL, "DOUBLE")
 }
 
+record(aao,"$(P)$(R)$(ACQ_NAME)_PolyXArrayCoeff-SP") {
+    field(NELM, "15")
+    field(FTVL, "DOUBLE")
+    field(PINI, YES)
+}
+record(aai,"$(P)$(R)$(ACQ_NAME)_PolyXArrayCoeff-RB") {
+    field(NELM, "15")
+    field(FTVL, "DOUBLE")
+    field(INP, "$(P)$(R)$(ACQ_NAME)_PolyXArrayCoeff-SP CP")
+}
+
+record(aao,"$(P)$(R)$(ACQ_NAME)_PolyYArrayCoeff-SP") {
+    field(NELM, "15")
+    field(FTVL, "DOUBLE")
+    field(PINI, YES)
+}
+record(aai,"$(P)$(R)$(ACQ_NAME)_PolyYArrayCoeff-RB") {
+    field(NELM, "15")
+    field(FTVL, "DOUBLE")
+    field(INP, "$(P)$(R)$(ACQ_NAME)_PolyYArrayCoeff-SP CP")
+}
+
+record(aao,"$(P)$(R)$(ACQ_NAME)_PolyQArrayCoeff-SP") {
+    field(NELM, "9")
+    field(FTVL, "DOUBLE")
+    field(PINI, YES)
+}
+record(aai,"$(P)$(R)$(ACQ_NAME)_PolyQArrayCoeff-RB") {
+    field(NELM, "9")
+    field(FTVL, "DOUBLE")
+    field(INP, "$(P)$(R)$(ACQ_NAME)_PolyQArrayCoeff-SP CP")
+}
+
+record(aao,"$(P)$(R)$(ACQ_NAME)_PolySUMArrayCoeff-SP") {
+    field(NELM, "16")
+    field(FTVL, "DOUBLE")
+    field(PINI, YES)
+}
+record(aai,"$(P)$(R)$(ACQ_NAME)_PolySUMArrayCoeff-RB") {
+    field(NELM, "16")
+    field(FTVL, "DOUBLE")
+    field(INP, "$(P)$(R)$(ACQ_NAME)_PolySUMArrayCoeff-SP CP")
+}
+
 record(aSub, "$(P)$(R)$(ACQ_NAME)Calc"){
     field(SNAM, "asub_pos_calc")
     field(INPA, "$(P)$(R)$(ACQ_NAME)AmplAData")
@@ -50,6 +94,24 @@ record(aSub, "$(P)$(R)$(ACQ_NAME)Calc"){
     field(FTJ, "DOUBLE")
     field(INPK, "$(P)$(R)PosKq-RB")
     field(FTK, "DOUBLE")
+    field(INPL, "$(P)$(R)XYPosCal-Sts")
+    field(FTL, "ENUM")
+    field(INPM, "$(P)$(R)SumPosCal-Sts")
+    field(FTM, "ENUM")
+    field(INPN, "$(P)$(R)QPosCal-Sts")
+    field(FTN, "ENUM")
+    field(INPO, "$(P)$(R)$(ACQ_NAME)_PolyXArrayCoeff-RB")
+    field(FTO, "DOUBLE")
+    field(NOO, "15")
+    field(INPP, "$(P)$(R)$(ACQ_NAME)_PolyYArrayCoeff-RB")
+    field(FTP, "DOUBLE")
+    field(NOP, "15")
+    field(INPQ, "$(P)$(R)$(ACQ_NAME)_PolySUMArrayCoeff-RB")
+    field(FTQ, "DOUBLE")
+    field(NOQ, "16")
+    field(INPR, "$(P)$(R)$(ACQ_NAME)_PolyQArrayCoeff-RB")
+    field(FTR, "DOUBLE")
+    field(NOR, "9")
     field(OUTA, "$(P)$(R)$(ACQ_NAME)PosXData PP")
     field(FTVA, "DOUBLE")
     field(NOVA, "$(NELM)")
