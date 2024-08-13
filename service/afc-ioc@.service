@@ -3,7 +3,6 @@ Description=AFC EPICS IOC %i
 
 [Service]
 User=iocs
-Group=iocs
 
 MemoryAccounting=yes
 
