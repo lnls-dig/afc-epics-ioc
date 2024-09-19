@@ -13,7 +13,7 @@ jobs:
       image: ghcr.io/cnpem/lnls-alpine-3.18-epics-7:v0.6.0
     steps:
       - name: Install dependencies
-        run: apk add --no-cache boost-dev git meson
+        run: apk add --no-cache git meson
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
