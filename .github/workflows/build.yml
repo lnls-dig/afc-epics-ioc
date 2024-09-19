@@ -32,4 +32,4 @@ jobs:
       - name: Build IOC
         run: make -j$(nproc)
       - name: Run tests
-        run: make -s tapfiles && make test-results
+        run: make -j tapfiles && make -s test-results
