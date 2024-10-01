@@ -35,9 +35,6 @@ ASYN = $(EPICS_BASE)/../asyn
 AUTOSAVE = $(EPICS_BASE)/../autosave
 RETOOLS = $(EPICS_BASE)/../retools
 
-UHAL = $(EPICS_BASE)/../uhal
-UHAL_LIBS = $(UHAL)/lib
-
 # Set RULES here if you want to use build rules from somewhere
 # other than EPICS_BASE:
 #RULES = $(MODULES)/build-rules

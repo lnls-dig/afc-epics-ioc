@@ -34,11 +34,9 @@ utca_DBD += aSubRoutines.dbd
 
 utca_DBD += menuScan.dbd
 
-utca_LIBS += uhal-modules uhal-utilities
-uhal-utilities_DIR = $(UHAL_LIBS)
-uhal-modules_DIR = $(UHAL_LIBS)
+utca_SYS_LIBS += uhal-modules uhal-utilities
 
-OP_SYS_INCLUDES += -I$(UHAL)/include/uhal
+OP_SYS_INCLUDES += -I/usr/local/include/uhal
 USR_CXXFLAGS += -std=c++20 -Wall -Wextra
 
 # Build the IOC application
