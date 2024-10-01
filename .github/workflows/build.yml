@@ -1,35 +1,21 @@
-name: Build IOC
+name: IOC build and release
+permissions:
+  contents: write
 on:
   push:
-    branches:
-      - master
-
+    tags:
+      - v*
   pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/cnpem/lnls-alpine-3.18-epics-7:v0.6.0
     steps:
-      - name: Install dependencies
-        run: apk add --no-cache git meson
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - name: Build
+        run: cd build/ && docker compose up
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          repository: lnls-dig/uhal
-          submodules: true
-          ref: master
-          path: uhal-src
-      - name: Build uhal
-        run: cd uhal-src && LDFLAGS=-static meson setup --prefix $PWD/../uhal build && ninja -C build install
-      - name: Configure IOC
-        run: >
-          cp /opt/epics/RELEASE configure/RELEASE &&
-          echo 'UHAL=$(TOP)/uhal' >> configure/RELEASE &&
-          echo 'UHAL_LIBS=$(UHAL)/lib' >> configure/RELEASE &&
-          echo 'STATIC_BUILD=YES' >> configure/CONFIG_SITE.local
-      - name: Build IOC
-        run: make -j$(nproc)
-      - name: Run tests
-        run: make -j tapfiles && make -s test-results
+          files: afc-epics-ioc-*.tar.gz
