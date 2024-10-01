@@ -8,3 +8,5 @@ configure/*.local
 # clangd
 .cache/
 compile_commands.json
+
+*.tar.gz
