@@ -14,7 +14,7 @@ cd /tmp/uhal
 git checkout $UHAL_VERSION
 
 if [ ! -d build/ ]; then
-	LDFLAGS=-static meson setup --buildtype debugoptimized --optimization 2 -Dpcie_opt=true build/
+	LDFLAGS=-static meson setup --buildtype debugoptimized -Dpcie_opt=true build/
 fi
 
 samu -C build/
