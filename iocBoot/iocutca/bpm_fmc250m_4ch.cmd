@@ -17,3 +17,9 @@ dbLoadTemplate("db/fmc_adc_common.substitutions", "P=${P1}, R=${R1}, PORT=FMC_AD
 
 FMCADCCommon(1)
 dbLoadTemplate("db/fmc_adc_common.substitutions", "P=${P2}, R=${R2}, PORT=FMC_ADC_COMMON-1")
+
+FMC250M(0)
+dbLoadRecords("db/fmc250m.template", "P=${P1}, R=${R1}, PORT=FMC250M-0")
+
+FMC250M(1)
+dbLoadRecords("db/fmc250m.template", "P=${P2}, R=${R2}, PORT=FMC250M-1")
