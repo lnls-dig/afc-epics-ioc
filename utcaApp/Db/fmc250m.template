@@ -1,0 +1,37 @@
+record(bo, "$(P)$(R)ADCRst-Cmd"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Reset ADCs")
+  field(OUT, "@asyn($(PORT))RST_ADCS")
+  field(MASK, "1")
+  field(HIGH, "1")
+  field(ZNAM, "nothing")
+  field(ONAM, "reset")
+}
+
+record(bo, "$(P)$(R)ADCDivRst-Cmd"){
+  field(DTYP, "asynInt32")
+  field(DESC, "Reset ADC divisors")
+  field(OUT, "@asyn($(PORT))RST_DIV_ADCS")
+  field(MASK, "1")
+  field(HIGH, "1")
+  field(ZNAM, "nothing")
+  field(ONAM, "reset")
+}
+
+record(calcout, "$(P)$(R)ADCRstCalc") {
+  field(INPA, "$(P)$(R)ClksLocked-Mon CP")
+  field(CALC, "A")
+  field(OOPT, "Transition To Non-zero")
+  field(OUT, "$(P)$(R)ADCRstSeq PP")
+}
+
+record(seq, "$(P)$(R)ADCRstSeq") {
+  field(SELM, "All")
+  field(LNK0, "$(P)$(R)ADCRst-Cmd PP")
+  field(DOL0, "1")
+  field(LNK1, "$(P)$(R)ADCDivRst-Cmd PP")
+  field(DOL1, "1")
+  field(DLY2, ".5") # guarantee time for ADCs to be reset
+  field(LNK2, "$(P)$(R)MMCMRst-Cmd PP")
+  field(DOL2, "1")
+}
