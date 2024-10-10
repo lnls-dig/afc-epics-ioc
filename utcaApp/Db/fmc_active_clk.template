@@ -42,6 +42,20 @@ record(bi,"$(P)$(R)ADCAD9510PllStatus-Mon"){
     field(ONAM,"locked")
 }
 
+# combining state with fmc_adc_common
+record(bi,"$(P)$(R)ClksLocked-Mon"){
+    field(DESC, "state of PLL and MMCM clocks")
+    field(ZNAM, "not_locked")
+    field(ONAM, "locked")
+}
+record(calcout,"$(P)$(R)ClksLockedCalc"){
+    field(ASG, "Readonly")
+    field(INPA, "$(P)$(R)ADCAD9510PllStatus-Mon CP")
+    field(INPB, "$(P)$(R)MMCMLocked-Mon CP")
+    field(CALC, "A & B")
+    field(OUT, "$(P)$(R)ClksLocked-Mon PP")
+}
+
 record(bo,"$(P)$(R)ADCClkSel-Sel"){
     field(DTYP,"asynInt32")
     field(DESC,"set ADC reference clock")
