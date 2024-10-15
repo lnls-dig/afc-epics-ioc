@@ -19,7 +19,7 @@ record(mbbi, "$(P)$(R)LinkStatus-Mon"){
     field(DTYP, "asynInt32")
     field(DESC, "Get link status")
     field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))STA_LINK")
+    field(INP,"@asyn($(PORT))LINK")
     field(NOBT,"1")
     field(ZRVL,"0")
     field(ONVL,"1")
@@ -31,7 +31,7 @@ record(mbbi, "$(P)$(R)RxEnStatus-Mon"){
     field(DTYP, "asynInt32")
     field(DESC, "Get RX Enable Status")
     field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))STA_RXEN")
+    field(INP,"@asyn($(PORT))RXEN")
     field(NOBT,"1")
     field(ZRVL,"0")
     field(ONVL,"1")
@@ -39,47 +39,78 @@ record(mbbi, "$(P)$(R)RxEnStatus-Mon"){
     field(ONST,"on")
 }
 
-record(bi, "$(P)$(R)RefClkLocked-Mon"){
+record(bi, "$(P)$(R)AFCFreqLocked-Mon"){
     field(DTYP, "asynInt32")
-    field(DESC, "AFC Clock Locked Status")
+    field(DESC, "AFC Frequency Locked Status")
     field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))STA_REFCLKLOCK")
+    field(INP,"@asyn($(PORT))LOCKED_AFC_FREQ")
     alias("$(P)$(R)AFCClkLocked-Mon")
+    alias("$(P)$(R)RefClkLocked-Mon")
 }
-record(bi, "$(P)$(R)RTMClkLocked-Mon"){
+record(bi, "$(P)$(R)AFCPhaseLocked-Mon"){
     field(DTYP, "asynInt32")
-    field(DESC, "RTM Clock Locked Status")
+    field(DESC, "AFC Phase Locked Status")
     field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))STA_LOCKED_RTM")
+    field(INP,"@asyn($(PORT))LOCKED_AFC_PHASE")
 }
+record(bi, "$(P)$(R)AFCFreqLockedLtc-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "AFC Frequency Locked Latch")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))LOCKED_AFC_FREQ_LTC")
+    alias("$(P)$(R)AFCClkLockedLtc-Mon")
+}
+record(bi, "$(P)$(R)AFCPhaseLockedLtc-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "AFC Phase Locked Latch")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))LOCKED_AFC_PHASE_LTC")
+}
+
+record(bi, "$(P)$(R)RTMFreqLocked-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "RTM Frequency Locked Status")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))LOCKED_RTM_FREQ")
+    alias("$(P)$(R)RTMClkLocked-Mon")
+}
+record(bi, "$(P)$(R)RTMPhaseLocked-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "RTM Phase Locked Status")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))LOCKED_RTM_PHASE")
+}
+record(bi, "$(P)$(R)RTMFreqLockedLtc-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "RTM Frequency Locked Latch")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))LOCKED_RTM_FREQ_LTC")
+    alias("$(P)$(R)RTMClkLockedLtc-Mon")
+}
+record(bi, "$(P)$(R)RTMPhaseLockedLtc-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "RTM Phase Locked Latch")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT))LOCKED_RTM_PHASE_LTC")
+}
+
 record(bi, "$(P)$(R)GT0ClkLocked-Mon"){
     field(DTYP, "asynInt32")
     field(DESC, "GT0 Clock Locked Status")
     field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))STA_LOCKED_GT0")
-}
-record(bi, "$(P)$(R)AFCClkLockedLtc-Mon"){
-    field(DTYP, "asynInt32")
-    field(DESC, "AFC Latched Clock Locked Status")
-    field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))STA_LOCKED_AFC_LATCH")
-}
-record(bi, "$(P)$(R)RTMClkLockedLtc-Mon"){
-    field(DTYP, "asynInt32")
-    field(DESC, "RTM Latched Clock Locked Status")
-    field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))STA_LOCKED_RTM_LATCH")
+    field(INP,"@asyn($(PORT))LOCKED_GT0")
 }
 record(bi, "$(P)$(R)GT0ClkLockedLtc-Mon"){
     field(DTYP, "asynInt32")
     field(DESC, "GT0 Latched Clock Locked Status")
     field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))STA_LOCKED_GT0_LATCH")
+    field(INP,"@asyn($(PORT))LOCKED_GT0_LTC")
 }
+
 record(bo, "$(P)$(R)ClkLockedLtcRst-Cmd"){
   field(DTYP, "asynInt32")
   field(DESC, "Reset Clock Locked Latches")
-  field(OUT,"@asyn($(PORT))STA_LOCKED_RST_LATCH")
+  field(OUT,"@asyn($(PORT))RST_LOCKED_LTCS")
   field(MASK, "1")
   field(HIGH, "1")
   field(ZNAM, "nothing")
@@ -92,7 +123,7 @@ record(bo, "$(P)$(R)DevEnbl-Sel"){
     field(PINI, YES)
     field(ZNAM, "Dsbl")
     field(ONAM, "Enbl")
-    field(OUT,"@asyn($(PORT))STA_EVREN")
+    field(OUT,"@asyn($(PORT))EVREN")
 }
 
 record(bi, "$(P)$(R)DevEnbl-Sts"){
@@ -100,7 +131,7 @@ record(bi, "$(P)$(R)DevEnbl-Sts"){
     field(ZNAM, "Dsbl")
     field(ONAM, "Enbl")
     field(DESC, "Event Receiver state status")
-    field(INP,"@asyn($(PORT))STA_EVREN")
+    field(INP,"@asyn($(PORT))EVREN")
     field(SCAN,"I/O Intr")
 }
 
