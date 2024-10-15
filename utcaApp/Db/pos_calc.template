@@ -64,6 +64,7 @@ record(ao,"$(P)$(R)PosKsum-SP"){
     field(OUT,"@asyn($(PORT))KSUM")
     field(ASG, "Interlock")
     field(PREC, 8)
+    field(HIHI, 1)
 }
 
 record(ai,"$(P)$(R)PosKsum-RB"){
