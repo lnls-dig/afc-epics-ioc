@@ -29,7 +29,7 @@ class RtmLamp: public UDriver {
               {"AMP_STATUS", p_read_only},
               {"AMP_STATUS_LATCH", p_read_only},
               {"AMP_EN", p_decoder_controller},
-              {"MODE", p_mode},
+              ParamInit{"MODE", p_mode}.set_dc(),
               {"TRIG_EN", p_decoder_controller},
               {"RST_LATCH", p_decoder_controller},
               {"PI_KP", p_decoder_controller},
@@ -50,8 +50,6 @@ class RtmLamp: public UDriver {
         auto v = find_device(port_number);
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
-
-        parameter_props.at(p_mode).write_decoder_controller = true;
 
         read_parameters();
     }

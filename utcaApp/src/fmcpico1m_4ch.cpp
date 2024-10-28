@@ -20,7 +20,7 @@ class FMCPico: public UDriver {
           ::number_of_channels,
           { },
           {
-              {"RANGE", p_range},
+              ParamInit{"RANGE", p_range}.set_dc(),
           },
           &ctl),
       dec(bars),
@@ -29,8 +29,6 @@ class FMCPico: public UDriver {
         auto v = find_device(port_number);
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
-
-        parameter_props.at(p_range).write_decoder_controller = true;
 
         read_parameters();
     }

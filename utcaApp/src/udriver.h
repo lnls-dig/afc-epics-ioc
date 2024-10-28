@@ -24,18 +24,45 @@
 #include "enumerate.h"
 #include "pcie-single.h"
 
+namespace {
+struct read_only_struct {} const p_read_only;
+struct decoder_controller_struct {} const p_decoder_controller;
+}
+
 struct ParamInit {
     const char *name;
-    int &parameter;
+    int *parameter = nullptr;
     std::optional<unsigned> number_of_channels = std::nullopt;
     asynParamType type;
+    bool decoder_controller = false;
+    bool read_only = false;
     bool write_only = false;
 
     ParamInit(const char *name, int &parameter, asynParamType type = asynParamInt32):
         name(name),
-        parameter(parameter),
+        parameter(&parameter),
         type(type)
     {
+    }
+
+    ParamInit(const char *name, const decoder_controller_struct &, asynParamType type = asynParamInt32):
+        name(name),
+        type(type),
+        decoder_controller(true)
+    {
+    }
+
+    ParamInit(const char *name, const read_only_struct &, asynParamType type = asynParamInt32):
+        name(name),
+        type(type),
+        read_only(true)
+    {
+    }
+
+    ParamInit set_dc()
+    {
+        decoder_controller = true;
+        return *this;
     }
 
     ParamInit set_nc(unsigned new_number_of_channels)
@@ -59,17 +86,17 @@ class UDriver: public asynPortDriver {
     static const unsigned UDRIVER_PARAMS = 2;
     unsigned scan_counter = 0;
 
-  protected:
     struct parameter_props {
         unsigned number_of_channels;
         asynParamType type;
         bool is_general;
+        bool read_only;
         bool write_only;
         bool write_decoder_controller;
     };
     std::vector<parameter_props> parameter_props;
 
-    static inline int p_read_only = 0, p_decoder_controller = 0;
+  protected:
     unsigned number_of_channels;
     int port_number;
 
@@ -105,18 +132,13 @@ class UDriver: public asynPortDriver {
         parameter_props.resize(UDRIVER_PARAMS);
 
         auto create_params = [this](auto const &nai, bool is_general) {
-            for (auto &&[i, v]: enumerate(nai)) {
+            for (auto &[str, p, nc, t, dc, ro, wo]: nai) {
                 int p_tmp;
-                auto &&[str, p, nc, t, wo] = v;
 
-                /* if p is p_read_only or p_decoder_controller, we use a
-                 * temporary variable to avoid any issues with simultaneous
-                 * access to them */
-                bool use_tmp = &p == &p_read_only || &p == &p_decoder_controller;
-                int *pp = use_tmp ? &p_tmp : &p;
+                int *pp = p ? p : &p_tmp;
                 createParam(str, t, pp);
 
-                if (&p == &p_decoder_controller)
+                if (dc)
                     assert(this->generic_decoder_controller);
 
                 assert((int)parameter_props.size() == *pp);
@@ -124,8 +146,9 @@ class UDriver: public asynPortDriver {
                     .number_of_channels = nc ? *nc : this->number_of_channels,
                     .type = t,
                     .is_general = is_general,
+                    .read_only = ro,
                     .write_only = wo,
-                    .write_decoder_controller = (&p == &p_decoder_controller),
+                    .write_decoder_controller = dc,
                 });
             }
         };
@@ -284,6 +307,13 @@ class UDriver: public asynPortDriver {
         /* parameter we don't know about */
         if ((unsigned)function >= parameter_props.size())
             return call_write_impl();
+
+        if (parameter_props.at(function).read_only) {
+            epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
+                "writeGeneral: %s: read-only parameter", param_name);
+
+            return asynError;
+        }
 
         if (parameter_props.at(function).is_general && addr != 0) {
             epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,

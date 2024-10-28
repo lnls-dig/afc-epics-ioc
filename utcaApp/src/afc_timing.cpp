@@ -56,7 +56,7 @@ class AFCTiming: public UDriver {
               {"CH_POL", p_decoder_controller},
               {"CH_LOG", p_decoder_controller},
               {"CH_ITL", p_decoder_controller},
-              {"CH_SRC", p_ch_src},
+              ParamInit{"CH_SRC", p_ch_src}.set_dc(),
               {"CH_DIR", p_decoder_controller},
               {"CH_PULSES", p_decoder_controller},
               ParamInit{"CH_COUNT_RST", p_decoder_controller}.set_wo(),
@@ -71,8 +71,6 @@ class AFCTiming: public UDriver {
         auto v = find_device(port_number);
         dec.set_devinfo(v);
         ctl.set_devinfo(v);
-
-        parameter_props.at(p_ch_src).write_decoder_controller = true;
 
         createParam("FREQ", asynParamFloat64, &p_freq);
 
