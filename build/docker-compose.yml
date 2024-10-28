@@ -9,4 +9,4 @@ services:
     command: bash -c "build/uhal.sh && lnls-build-static-ioc afc-epics-ioc"
     environment:
       SKIP_CLEAN: 1
-      UHAL_VERSION: v0.8.1
+      UHAL_VERSION: v0.9.0
