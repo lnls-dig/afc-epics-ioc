@@ -39,6 +39,13 @@ class AFCTiming: public UDriver {
               {"LOCKED_GT0_LTC", p_last_lock},
               {"ALIVE", p_read_only},
               ParamInit{"RST_LOCKED_LTCS", p_decoder_controller}.set_wo(),
+              {"DBG_EN", p_decoder_controller},
+              ParamInit{"DBG_COUNTER_RST", p_decoder_controller}.set_wo(),
+              {"DBG_EVT_DS_START", p_decoder_controller},
+              {"DBG_EVT_US", p_decoder_controller},
+              {"DBG_EVT_SPACING", p_decoder_controller},
+              {"DBG_EVT_REPS", p_decoder_controller},
+              {"DBG_COUNTER", p_read_only},
           },
           {
               ParamInit{"RFREQ_HI", p_read_only}.set_nc(2),
