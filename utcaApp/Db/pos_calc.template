@@ -113,6 +113,27 @@ record(longin,"$(P)$(R)PosQOffset-RB"){
     field(EGU, "nm")
 }
 
+record(aai, "$(P)$(R)TableLabels-Cte"){
+    field(FTVL, STRING)
+    field(NELM, 8)
+    field(INP, {const: [
+        "Amplitude A",
+        "Amplitude B",
+        "Amplitude C",
+        "Amplitude D",
+        "Q",
+        "Sum",
+        "Position X",
+        "Position Y"
+    ]})
+    info(Q:group, {
+        "$(P)$(R)Monit-Mon": {
+            labels: {+type: "plain", +channel: "VAL"},
+            descriptor: {+type: "const", +const: "monit-rate data"}
+        },
+    })
+}
+
 record(longin, "$(P)$(R)AmpFIFOEvent"){
     field(DTYP, "asynInt32")
     field(SCAN, "I/O Intr")
@@ -158,24 +179,45 @@ record(ai,"$(P)$(R)PosX-Mon"){
     field(DESC,"Monitoring Position X")
     field(EGU, "nm")
     field(MDEL, -1)
+    info(Q:group, {
+        "$(P)$(R)Monit-Mon": {
+            "value.X": {+type: "plain", +channel: "VAL"}
+        }
+    })
 }
 
 record(ai,"$(P)$(R)PosY-Mon"){
     field(DESC,"Monitoring Position Y")
     field(EGU, "nm")
     field(MDEL, -1)
+    info(Q:group, {
+        "$(P)$(R)Monit-Mon": {
+            "value.Y": {+type: "plain", +channel: "VAL"}
+        }
+    })
 }
 
 record(ai,"$(P)$(R)PosQ-Mon"){
     field(DESC,"Monitoring Position Q")
     field(EGU, "nm")
     field(MDEL, -1)
+    info(Q:group, {
+        "$(P)$(R)Monit-Mon": {
+            "value.Q": {+type: "plain", +channel: "VAL", +trigger: "*"},
+            "": {+type: "meta", +channel: "VAL"}
+        }
+    })
 }
 
 record(ai,"$(P)$(R)Sum-Mon"){
     field(DESC,"Monitoring Sum")
     field(EGU, "au")
     field(MDEL, -1)
+    info(Q:group, {
+        "$(P)$(R)Monit-Mon": {
+            "value.S": {+type: "plain", +channel: "VAL"}
+        }
+    })
 }
 
 record(bo,"$(P)$(R)FOFBPhaseSyncEn-Sel"){

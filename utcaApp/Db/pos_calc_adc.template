@@ -64,4 +64,9 @@ record(longin,"$(P)$(R)Ampl$(ADC)-Mon"){
     field(INP,"@asyn($(PORT),$(ADDR))AMPFIFO_MONIT_AMP")
     field(EGU, "au")
     field(MDEL, -1)
+    info(Q:group, {
+        "$(P)$(R)Monit-Mon": {
+            "value.$(ADC)": {+type: "plain", +channel: "VAL"}
+        }
+    })
 }
