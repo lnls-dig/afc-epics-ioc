@@ -4,4 +4,9 @@ record(aai, "$(P)$(R)$(ACQ_NAME)Ampl$(ADC)Data"){
     field(FTVL, "LONG")
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),$(ADDR))ADC")
+    info(Q:group, {
+        "$(P)$(R)$(ACQ_NAME)Data-Mon": {
+            "value.$(ADC)": {+type: "plain", +channel: "VAL"}
+        }
+    })
 }

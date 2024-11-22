@@ -131,6 +131,16 @@ record(aai, "$(P)$(R)TableLabels-Cte"){
             labels: {+type: "plain", +channel: "VAL"},
             descriptor: {+type: "const", +const: "monit-rate data"}
         },
+        "$(P)$(R)GENData-Mon": {
+            +id: "epics:nt/NTTable:1.0",
+            labels: {+type: "plain", +channel: "VAL"},
+            descriptor: {+type: "const", +const: "general acquisition core data"}
+        },
+        "$(P)$(R)PMData-Mon": {
+            +id: "epics:nt/NTTable:1.0",
+            labels: {+type: "plain", +channel: "VAL"},
+            descriptor: {+type: "const", +const: "post-mortem acquisition core data"}
+        },
     })
 }
 
