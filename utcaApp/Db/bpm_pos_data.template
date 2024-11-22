@@ -2,24 +2,45 @@ record(aai,"$(P)$(R)$(ACQ_NAME)PosXData") {
     field(EGU, "nm")
     field(NELM, "$(NELM)")
     field(FTVL, "DOUBLE")
+    info(Q:group, {
+        "$(P)$(R)$(ACQ_NAME)Data-Mon": {
+            "value.X": {+type: "plain", +channel: "VAL"}
+        }
+    })
 }
 
 record(aai,"$(P)$(R)$(ACQ_NAME)PosYData") {
     field(EGU, "nm")
     field(NELM, "$(NELM)")
     field(FTVL, "DOUBLE")
+    info(Q:group, {
+        "$(P)$(R)$(ACQ_NAME)Data-Mon": {
+            "value.Y": {+type: "plain", +channel: "VAL"}
+        }
+    })
 }
 
 record(aai,"$(P)$(R)$(ACQ_NAME)SumData") {
     field(EGU, "au")
     field(NELM, "$(NELM)")
     field(FTVL, "DOUBLE")
+    info(Q:group, {
+        "$(P)$(R)$(ACQ_NAME)Data-Mon": {
+            "value.S": {+type: "plain", +channel: "VAL"}
+        }
+    })
 }
 
 record(aai,"$(P)$(R)$(ACQ_NAME)PosQData") {
     field(EGU, "nm")
     field(NELM, "$(NELM)")
     field(FTVL, "DOUBLE")
+    info(Q:group, {
+        "$(P)$(R)$(ACQ_NAME)Data-Mon": {
+            "value.Q": {+type: "plain", +channel: "VAL", +trigger: "*"},
+            "": {+type: "meta", +channel: "VAL"}
+        }
+    })
 }
 
 record(aao,"$(P)$(R)$(ACQ_NAME)_PolyXArrayCoeff-SP") {
