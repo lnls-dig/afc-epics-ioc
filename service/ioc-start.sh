@@ -14,7 +14,13 @@ done
 
 start_afc_ioc=false
 
-case "$(decode-reg build_info -q --slot ${devslot})" in
+synthesis="$(decode-reg build_info -q --slot ${devslot})"
+if [ -z "$synthesis" ]; then
+    decode-reg reset --slot ${devslot}
+    synthesis="$(decode-reg build_info -q --slot ${devslot})"
+fi
+
+case "$synthesis" in
     afc-tim-receive*|afcv4_fofb_ctrl*|pbpm-gw*)
         start_afc_ioc=true
         ;;
