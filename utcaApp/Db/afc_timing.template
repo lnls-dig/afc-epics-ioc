@@ -141,3 +141,91 @@ record(longin, "$(P)$(R)Alive-Mon"){
     field(INP,"@asyn($(PORT))ALIVE")
     field(SCAN,"I/O Intr")
 }
+
+record(bo, "$(P)$(R)UpstreamDebugEn-Sel"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Enable upstream debug")
+    field(PINI, YES)
+    field(ZNAM, "Dsbl")
+    field(ONAM, "Enbl")
+    field(OUT, "@asyn($(PORT))DBG_EN")
+}
+record(bi, "$(P)$(R)UpstreamDebugEn-Sts"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Enable upstream debug")
+    field(PINI, YES)
+    field(ZNAM, "Dsbl")
+    field(ONAM, "Enbl")
+    field(INP, "@asyn($(PORT))DBG_EN")
+    field(SCAN, "I/O Intr")
+}
+
+record(bo, "$(P)$(R)UpstreamDebugCounterRst-Cmd"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Reset debug counter")
+    field(OUT, "@asyn($(PORT))DBG_COUNTER_RST")
+    field(PINI, YES)
+    field(MASK, 1)
+    field(HIGH, 1)
+    field(ZNAM, nothing)
+    field(ONAM, reset)
+}
+
+record(longout, "$(P)$(R)UpstreamDebugEvtIn-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Downstream start event")
+    field(PINI, YES)
+    field(OUT, "@asyn($(PORT))DBG_EVT_DS_START")
+}
+record(longin, "$(P)$(R)UpstreamDebugEvtIn-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Downstream start event")
+    field(INP, "@asyn($(PORT))DBG_EVT_DS_START")
+    field(SCAN, "I/O Intr")
+}
+
+record(longout, "$(P)$(R)UpstreamDebugEvtOut-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Upstream event")
+    field(PINI, YES)
+    field(OUT, "@asyn($(PORT))DBG_EVT_US")
+}
+record(longin, "$(P)$(R)UpstreamDebugEvtOut-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Upstream event")
+    field(INP, "@asyn($(PORT))DBG_EVT_US")
+    field(SCAN, "I/O Intr")
+}
+
+record(longout, "$(P)$(R)UpstreamDebugSpacing-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Spacing between upstream events")
+    field(PINI, YES)
+    field(OUT, "@asyn($(PORT))DBG_EVT_SPACING")
+}
+record(longin, "$(P)$(R)UpstreamDebugSpacing-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Spacing between upstream events")
+    field(INP, "@asyn($(PORT))DBG_EVT_SPACING")
+    field(SCAN, "I/O Intr")
+}
+
+record(longout, "$(P)$(R)UpstreamDebugReps-SP"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Upstream event repetitions")
+    field(PINI, YES)
+    field(OUT, "@asyn($(PORT))DBG_EVT_REPS")
+}
+record(longin, "$(P)$(R)UpstreamDebugReps-RB"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Upstream event repetitions")
+    field(INP, "@asyn($(PORT))DBG_EVT_REPS")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)$(R)UpstreamDebugCounter-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Debug procedure counter")
+    field(INP, "@asyn($(PORT))DBG_COUNTER")
+    field(SCAN, "I/O Intr")
+}
