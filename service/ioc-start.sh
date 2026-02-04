@@ -3,6 +3,10 @@ set -eu
 
 DEV=$1
 
+setpci -s $DEV COMMAND=0x2
+
+chmod 666 /sys/bus/pci/devices/$DEV/resource*
+
 devslot=
 for slot in /sys/bus/pci/slots/* ; do
     ADDR=$(cat ${slot}/address)
