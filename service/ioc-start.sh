@@ -5,7 +5,29 @@ DEV=$1
 
 setpci -s $DEV COMMAND=0x2
 
-chmod 666 /sys/bus/pci/devices/$DEV/resource*
+resource_files=""
+for suffix in 0 2 2_wc 4; do
+    resource_files="$resource_files /sys/bus/pci/devices/$DEV/resource$suffix"
+done
+resource_files_exist() {
+    for f in $resource_files; do
+        if [ ! -f $f ]; then
+            return 1
+        fi
+    done
+
+    return 0
+}
+
+count=0
+until resource_files_exist; do
+    if [ $count -eq 10 ]; then
+        exit 1
+    fi
+    count=$((count + 1))
+    sleep .1
+done
+chmod 666 $resource_files
 
 devslot=
 for slot in /sys/bus/pci/slots/* ; do
