@@ -1,5 +1,7 @@
 [Unit]
 Description=AFC EPICS IOC %i
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 User=iocs
