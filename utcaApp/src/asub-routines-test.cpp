@@ -3,7 +3,7 @@
 
 #include "asub-routines.cpp"
 
-class PosCalcSelfTest {
+class EBPMPosCalcSelfTest {
     aSubRecord prec{};
 
     /* inputs */
@@ -68,7 +68,7 @@ class PosCalcSelfTest {
 
     void check_outputs_no_poly()
     {
-        testOk(asub_pos_calc(&prec) == 0, "check_outputs_no_poly asub_pos_calc");
+        testOk(asub_ebpm_pos_calc(&prec) == 0, "check_outputs_no_poly asub_ebpm_pos_calc");
         auto compare_expected_results = [](auto value, auto expected, auto name) {
             testOk(std::abs(value - expected) < .01, "PosCalc verification for %s", name);
         };
@@ -80,7 +80,7 @@ class PosCalcSelfTest {
     }
 
   public:
-    PosCalcSelfTest()
+    EBPMPosCalcSelfTest()
     {
         initialize_record();
 
@@ -96,5 +96,5 @@ MAIN(asubRoutinesTest)
 {
     testPlan(10);
 
-    PosCalcSelfTest();
+    EBPMPosCalcSelfTest();
 }
