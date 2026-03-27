@@ -219,7 +219,7 @@ static inline void q_apply_poly(double x1, double y1, double q1, const double *c
  * And will write its output to:
  * - X,Y,Sum,Q in OUTA,OUTB,OUTC,OUTD, respectively
  */
-static long asub_pos_calc(aSubRecord *prec)
+static long asub_ebpm_pos_calc(aSubRecord *prec)
 {
     /* sanity checking: these input elements were provided */
     if (prec->nea < 1 || prec->neb < 1 || prec->nec < 1 || prec->ned < 1 ||
@@ -348,4 +348,4 @@ static long asub_pos_calc(aSubRecord *prec)
 }
 
 epicsRegisterFunction(asub_goff);
-epicsRegisterFunction(asub_pos_calc);
+epicsRegisterFunction(asub_ebpm_pos_calc);
