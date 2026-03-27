@@ -88,7 +88,7 @@ record(aai,"$(P)$(R)$(ACQ_NAME)_PolySUMArrayCoeff-RB") {
 }
 
 record(aSub, "$(P)$(R)$(ACQ_NAME)Calc"){
-    field(SNAM, "asub_pos_calc")
+    field(SNAM, "asub_ebpm_pos_calc")
     field(INPA, "$(P)$(R)$(ACQ_NAME)AmplAData")
     field(FTA, "LONG")
     field(NOA, "$(NELM)")

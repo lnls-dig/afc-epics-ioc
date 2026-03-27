@@ -152,7 +152,7 @@ record(longin, "$(P)$(R)AmpFIFOEvent"){
 }
 
 record(aSub, "$(P)$(R)AmpFIFOCalc"){
-    field(SNAM, "asub_pos_calc")
+    field(SNAM, "asub_ebpm_pos_calc")
     field(INPA, "$(P)$(R)AmplA-Mon PP")
     field(FTA, "LONG")
     field(INPB, "$(P)$(R)AmplB-Mon PP")
