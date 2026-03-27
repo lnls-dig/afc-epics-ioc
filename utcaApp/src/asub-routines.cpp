@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <limits>
+#include <Eigen/Dense>
 
 #include <aSubRecord.h>
 #include <menuFtype.h>
@@ -219,7 +220,7 @@ static inline void q_apply_poly(double x1, double y1, double q1, const double *c
  * And will write its output to:
  * - X,Y,Sum,Q in OUTA,OUTB,OUTC,OUTD, respectively
  */
-static long asub_pos_calc(aSubRecord *prec)
+static long asub_ebpm_pos_calc(aSubRecord *prec)
 {
     /* sanity checking: these input elements were provided */
     if (prec->nea < 1 || prec->neb < 1 || prec->nec < 1 || prec->ned < 1 ||
@@ -347,5 +348,70 @@ static long asub_pos_calc(aSubRecord *prec)
     return 0;
 }
 
+/** This array subroutine is used to calculate PBPM position using readings from
+ * BPM ADCs and calibrated Suppression Matrix and coefficients.
+ *
+ * This function expects as input:
+ * - antennas A,B,C,D in fields A,B,C,D, respectively
+ * - offset and gain for X in fields E,F, respectively
+ * - offset and gain for Y in fields G,H, respectively
+ *
+ * And will write its output to:
+ * - X and Y in OUTA and OUTB respectively
+ */
+using Eigen::Matrix4d;
+using Eigen::Vector4d;
+
+static long asub_pbpm_pos_calc(aSubRecord *prec) {
+    /* sanity checking: these input elements were provided */
+    if (prec->nea < 1 || prec->neb < 1 || prec->nec < 1 || prec->ned < 1 ||
+        prec->nee != 1 || prec->nef != 1 || prec->neg != 1 || prec->neh != 1 || prec -> nei != 1)
+        return 1;
+    /* sanity checking: these have the same length */
+    if (prec->neb != prec->nea || prec->nec != prec->nea || prec->ned != prec->nea)
+        return 2;
+    /* sanity checking: data types */
+    if (prec->fta != menuFtypeLONG || prec->ftb != menuFtypeLONG || prec->ftc != menuFtypeLONG || 
+        prec->ftd != menuFtypeLONG || prec->ftva != menuFtypeDOUBLE || prec->ftvb != menuFtypeDOUBLE)
+        return 3;
+    /* sanity checking: the output arrays are big enough */
+    if (prec->nova < prec->nea || prec->novb < prec->nea)
+        return 4;
+
+    double x_off, x_gain, y_off, y_gain;
+    get_scalar(x_off, prec->e, prec->fte);
+    get_scalar(x_gain, prec->f, prec->ftf);
+    get_scalar(y_off, prec->g, prec->ftg);
+    get_scalar(y_gain, prec->h, prec->fth);
+    
+    auto *a = (epicsFloat64 *)prec->a;
+    auto *b = (epicsFloat64 *)prec->b;
+    auto *c = (epicsFloat64 *)prec->c;
+    auto *d = (epicsFloat64 *)prec->d;
+
+    /* Suppression Matrix */
+    auto *i = (epicsFloat64 *)prec->i;
+
+    const epicsUInt32 elements = prec->nea;
+    Eigen::Map<Matrix4d> supmat(i);
+    Vector4d readings;
+    
+    auto *x = (epicsFloat64 *)prec->vala;
+    auto *y = (epicsFloat64 *)prec->valb;
+    
+    for (epicsUInt32 i = 0; i < elements; ++i) {
+        readings << a[i], b[i], c[i], d[i];
+        auto pos = supmat * readings;
+        auto xVal = pos[0]/pos[1];
+        auto yVal = pos[2]/pos[3];
+
+        x[i] = xVal * x_gain + x_off;
+        y[i] = yVal * y_gain + y_off;
+    }
+
+    return 0;
+}
+
 epicsRegisterFunction(asub_goff);
-epicsRegisterFunction(asub_pos_calc);
+epicsRegisterFunction(asub_ebpm_pos_calc);
+epicsRegisterFunction(asub_pbpm_pos_calc);
