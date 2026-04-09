@@ -1,0 +1,54 @@
+record(aai,"$(P)$(R)$(ACQ_NAME)PosXData") {
+    field(EGU, "nm")
+    field(NELM, "$(NELM)")
+    field(FTVL, "DOUBLE")
+    info(Q:group, {
+        "$(P)$(R)$(ACQ_NAME)Data-Mon": {
+            "value.X": {+type: "plain", +channel: "VAL"}
+        }
+    })
+}
+
+record(aai,"$(P)$(R)$(ACQ_NAME)PosYData") {
+    field(EGU, "nm")
+    field(NELM, "$(NELM)")
+    field(FTVL, "DOUBLE")
+    info(Q:group, {
+        "$(P)$(R)$(ACQ_NAME)Data-Mon": {
+            "value.Y": {+type: "plain", +channel: "VAL"}
+        }
+    })
+}
+
+record(aSub, "$(P)$(R)$(ACQ_NAME)Calc") {
+    field(SNAM, "asub_pbpm_pos_calc")
+    field(INPA, "$(P)$(R)$(ACQ_NAME)AmplAData")
+    field(FTA, "DOUBLE")
+    field(NOA, "$(NELM)")
+    field(INPB, "$(P)$(R)$(ACQ_NAME)AmplBData")
+    field(FTB, "DOUBLE")
+    field(NOB, "$(NELM)")
+    field(INPC, "$(P)$(R)$(ACQ_NAME)AmplCData")
+    field(FTC, "DOUBLE")
+    field(NOC, "$(NELM)")
+    field(INPD, "$(P)$(R)$(ACQ_NAME)AmplDData")
+    field(FTD, "DOUBLE")
+    field(NOD, "$(NELM)")
+    field(INPE, "$(P)$(R)PosXOffset-RB")
+    field(FTE, "DOUBLE")
+    field(INPF, "$(P)$(R)PosKx-RB")
+    field(FTF, "DOUBLE")
+    field(INPG, "$(P)$(R)PosYOffset-RB")
+    field(FTG, "DOUBLE")
+    field(INPH, "$(P)$(R)PosKy-RB")
+    field(FTH, "DOUBLE")
+    field(INPI, "$(P)$(R)SupMat-RB")
+    field(FTI, "DOUBLE")
+    field(NOI, "16")
+    field(OUTA, "$(P)$(R)$(ACQ_NAME)PosXData PP")
+    field(FTVA, "DOUBLE")
+    field(NOVA, "$(NELM)")
+    field(OUTB, "$(P)$(R)$(ACQ_NAME)PosYData PP")
+    field(FTVB, "DOUBLE")
+    field(NOVB, "$(NELM)")
+}

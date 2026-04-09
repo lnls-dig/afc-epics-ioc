@@ -1,0 +1,107 @@
+record(aao, "$(P)$(R)SupMat-SP") {
+    field(NELM, "16")
+    field(FTVL, "DOUBLE")
+    field(PINI, YES)
+}
+
+record(aai, "$(P)$(R)SupMat-RB") {
+    field(INP, "$(P)$(R)SupMat-SP CP")
+    field(NELM, "16")
+    field(FTVL, "DOUBLE")
+}
+
+record(ao, "$(P)$(R)PosXOffset-SP") {
+    field(EGU, "um")
+    field(PINI, "YES")
+}
+
+record(ai, "$(P)$(R)PosXOffset-RB") {
+    field(EGU, "um")
+    field(INP, "$(P)$(R)PosOffset-SP CP")
+}
+
+record(ao, "$(P)$(R)PosYOffset-SP") {
+    field(EGU, "um")
+    field(PINI, "YES")
+}
+
+record(ai, "$(P)$(R)PosYOffset-RB") {
+    field(EGU, "um")
+    field(INP, "$(P)$(R)PosYOffset-SP CP")
+}
+
+record(ao, "$(P)$(R)PosKx-SP") {
+    field(EGU, "um")
+    field(PINI, "YES")
+}
+
+record(ai, "$(P)$(R)PosKx-RB") {
+    field(EGU, "um")
+    field(INP, "$(P)$(R)PosKx-SP CP")
+}
+
+record(ao, "$(P)$(R)PosKy-SP") {
+    field(EGU, "um")
+    field(PINI, "YES")
+}
+
+record(ai, "$(P)$(R)PosKy-RB") {
+    field(EGU, "um")
+    field(INP, "$(P)$(R)PosKy-SP CP")
+}
+
+record(longin, "$(P)$(R)AmpFIFOEvent"){
+    field(DTYP, "asynInt32")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT))AMPFIFO")
+    field(FLNK, "$(P)$(R)AmpFIFOCalc PP")
+}
+
+record(aSub, "$(P)$(R)AmpFIFOCalc") {
+    field(SNAM, "asub_pbpm_pos_calc")
+    field(INPA, "$(P)$(R)AmplA-Mon")
+    field(FTA, "DOUBLE")
+    field(INPB, "$(P)$(R)AmplB-Mon")
+    field(FTB, "DOUBLE")
+    field(INPC, "$(P)$(R)AmplC-Mon")
+    field(FTC, "DOUBLE")
+    field(INPD, "$(P)$(R)AmplD-Mon")
+    field(FTD, "DOUBLE")
+    field(INPE, "$(P)$(R)PosXOffset-RB")
+    field(FTE, "DOUBLE")
+    field(INPF, "$(P)$(R)PosKx-RB")
+    field(FTF, "DOUBLE")
+    field(INPG, "$(P)$(R)PosYOffset-RB")
+    field(FTG, "DOUBLE")
+    field(INPH, "$(P)$(R)PosKy-RB")
+    field(FTH, "DOUBLE")
+    field(INPI, "$(P)$(R)SupMat-RB")
+    field(FTI, "DOUBLE")
+    field(NOI, "16")
+    field(OUTA, "$(P)$(R)$(ACQ_NAME)PosX-Mon PP")
+    field(FTVA, "DOUBLE")
+    field(OUTB, "$(P)$(R)$(ACQ_NAME)PosY-Mon PP")
+    field(FTVB, "DOUBLE")
+}
+
+record(ai,"$(P)$(R)PosX-Mon"){
+    field(DESC,"Monitoring Position X")
+    field(EGU, "um")
+    field(MDEL, -1)
+    info(Q:group, {
+        "$(P)$(R)Monit-Mon": {
+            "value.X": {+type: "plain", +channel: "VAL"}
+        }
+    })
+}
+
+record(ai,"$(P)$(R)PosY-Mon"){
+    field(DESC,"Monitoring Position Y")
+    field(EGU, "um")
+    field(MDEL, -1)
+    info(Q:group, {
+        "$(P)$(R)Monit-Mon": {
+            "value.Y": {+type: "plain", +channel: "VAL"}
+        }
+    })
+}

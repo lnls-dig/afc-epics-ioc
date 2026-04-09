@@ -1,0 +1,33 @@
+file db/bpm_data.template {
+    pattern {ADC, Afile db/scan_task.template {
+    {}
+}
+
+file db/pos_calc.template {
+    {}
+}
+
+file db/pos_calc_adc.template {
+    pattern {ADC, ADDR}
+    {"A", 0}
+    {"B", 1}
+    {"C", 2}
+    {"D", 3}
+}
+
+file db/pos_calc_rate.template {
+    pattern {RATE, ADDR}
+    {"TbT", 0}
+    {"FAcq", 1}
+    {"Monit", 2}
+}
+DDR}
+    {"A", 0}
+    {"B", 1}
+    {"C", 2}
+    {"D", 3}
+}
+
+file db/pbpm_pos_data.template {
+    {}
+}
