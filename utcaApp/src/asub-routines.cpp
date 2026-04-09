@@ -389,11 +389,12 @@ static long asub_pbpm_pos_calc(aSubRecord *prec) {
     auto *c = (epicsFloat64 *)prec->c;
     auto *d = (epicsFloat64 *)prec->d;
 
+    const epicsUInt32 elements = prec->nea;
+
     /* Suppression Matrix */
     auto *i = (epicsFloat64 *)prec->i;
-
-    const epicsUInt32 elements = prec->nea;
     Eigen::Map<Matrix4d> supmat(i);
+    
     Vector4d readings;
     
     auto *x = (epicsFloat64 *)prec->vala;
