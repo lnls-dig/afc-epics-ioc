@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <limits>
+#include <eigen3/Eigen/Dense>
 
 #include <aSubRecord.h>
 #include <menuFtype.h>
@@ -347,5 +348,88 @@ static long asub_ebpm_pos_calc(aSubRecord *prec)
     return 0;
 }
 
+/** This array subroutine is used to calculate PBPM position using readings from
+ * PBPM ADCs and calibrated suppression matrix and coefficients.
+ *
+ * The suppression matrix is used as below:
+ *
+ *     SupMat * [ A, B, C, D ] = [ Δx, Σx, Δy, Σy ]
+ *
+ * This function expects as input:
+ * - antennas A,B,C,D in fields A,B,C,D, respectively
+ * - offset and gain for X in fields E,F, respectively
+ * - offset and gain for Y in fields G,H, respectively
+ * - 16-element suppression matrix in field I
+ *
+ * And will write its output to:
+ * - X and Y in OUTA and OUTB respectively
+ */
+using Eigen::Matrix;
+using Eigen::Vector;
+
+static long asub_pbpm_pos_calc(aSubRecord *prec) {
+    /* sanity checking: these input elements were provided */
+    if (prec->nea < 1 || prec->neb < 1 || prec->nec < 1 || prec->ned < 1 ||
+        prec->nee != 1 || prec->nef != 1 || prec->neg != 1 || prec->neh != 1 ||
+        prec->nei != 16)
+        return 1;
+    /* sanity checking: these have the same length */
+    if (prec->neb != prec->nea || prec->nec != prec->nea || prec->ned != prec->nea)
+        return 2;
+    /* sanity checking: data types */
+    if (prec->fta != menuFtypeLONG || prec->ftb != menuFtypeLONG || prec->ftc != menuFtypeLONG ||
+        prec->ftd != menuFtypeLONG || prec->fti != menuFtypeDOUBLE ||
+        prec->ftva != menuFtypeDOUBLE || prec->ftvb != menuFtypeDOUBLE)
+        return 3;
+    /* sanity checking: the output arrays are big enough */
+    if (prec->nova < prec->nea || prec->novb < prec->nea)
+        return 4;
+
+    auto *a = (epicsInt32 *)prec->a;
+    auto *b = (epicsInt32 *)prec->b;
+    auto *c = (epicsInt32 *)prec->c;
+    auto *d = (epicsInt32 *)prec->d;
+
+    double x_off, x_gain, y_off, y_gain;
+    get_scalar(x_off, prec->e, prec->fte);
+    get_scalar(x_gain, prec->f, prec->ftf);
+    get_scalar(y_off, prec->g, prec->ftg);
+    get_scalar(y_gain, prec->h, prec->fth);
+
+    auto *lin_matrix = (epicsFloat64 *)prec->i;
+
+    const epicsUInt32 elements = prec->nea;
+
+    /* write NORD field in output */
+    prec->neva = elements;
+    prec->nevb = elements;
+
+    auto *x = (epicsFloat64 *)prec->vala;
+    auto *y = (epicsFloat64 *)prec->valb;
+
+    /* we use an Eigen::Map and Vector4 to avoid any allocations while running
+     * this function */
+    Eigen::Map<Matrix<epicsFloat64, 4, 4, Eigen::RowMajor>> suppression_matrix(lin_matrix);
+    Vector<epicsFloat64, 4> readings, result;
+
+    auto goff = [](auto raw, auto off, auto gain) {
+        return raw * gain - off;
+    };
+
+    for (epicsUInt32 i = 0; i < elements; i++) {
+        readings << a[i], b[i], c[i], d[i];
+
+        result = suppression_matrix * readings;
+        auto raw_x = result[0] / result[1];
+        auto raw_y = result[2] / result[3];
+
+        x[i] = goff(raw_x, x_off, x_gain);
+        y[i] = goff(raw_y, y_off, y_gain);
+    }
+
+    return 0;
+}
+
 epicsRegisterFunction(asub_goff);
 epicsRegisterFunction(asub_ebpm_pos_calc);
+epicsRegisterFunction(asub_pbpm_pos_calc);
