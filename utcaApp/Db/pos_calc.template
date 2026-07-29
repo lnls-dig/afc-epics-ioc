@@ -18,132 +18,6 @@ record(ai,"$(P)$(R)MONITUpdtTime-RB"){
     field(INP, "@asyn($(PORT))UPDATE_TIME")
 }
 
-record(longout,"$(P)$(R)PosKx-SP"){
-    field(DTYP,"asynInt32")
-    field(PINI,"YES")
-    field(OUT,"@asyn($(PORT))KX")
-    field(EGU, "nm")
-    field(ASG, "Interlock")
-}
-
-record(longin,"$(P)$(R)PosKx-RB"){
-    field(DTYP,"asynInt32")
-    field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))KX")
-    field(EGU, "nm")
-}
-
-record(longout,"$(P)$(R)PosKy-SP"){
-    field(DTYP,"asynInt32")
-    field(PINI,"YES")
-    field(OUT,"@asyn($(PORT))KY")
-    field(EGU, "nm")
-    field(ASG, "Interlock")
-}
-
-record(longin,"$(P)$(R)PosKy-RB"){
-    field(DTYP,"asynInt32")
-    field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))KY")
-    field(EGU, "nm")
-}
-
-record(longout,"$(P)$(R)PosKq-SP"){
-    field(PINI,"YES")
-    field(EGU, "nm")
-}
-
-record(longin,"$(P)$(R)PosKq-RB"){
-    field(EGU, "nm")
-    field(INP, "$(P)$(R)PosKq-SP CP")
-}
-
-record(ao,"$(P)$(R)PosKsum-SP"){
-    field(DTYP,"asynFloat64")
-    field(PINI,"YES")
-    field(OUT,"@asyn($(PORT))KSUM")
-    field(ASG, "Interlock")
-    field(PREC, 8)
-}
-
-record(ai,"$(P)$(R)PosKsum-RB"){
-    field(DTYP,"asynFloat64")
-    field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))KSUM")
-    field(PREC, 8)
-}
-
-record(longout,"$(P)$(R)PosXOffset-SP"){
-    field(DTYP,"asynInt32")
-    field(PINI,"YES")
-    field(OUT,"@asyn($(PORT))OFFSET_X")
-    field(EGU, "nm")
-    field(ASG, "Interlock")
-}
-
-record(longin,"$(P)$(R)PosXOffset-RB"){
-    field(DTYP,"asynInt32")
-    field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))OFFSET_X")
-    field(EGU, "nm")
-}
-
-record(longout,"$(P)$(R)PosYOffset-SP"){
-    field(DTYP,"asynInt32")
-    field(PINI,"YES")
-    field(OUT,"@asyn($(PORT))OFFSET_Y")
-    field(EGU, "nm")
-    field(ASG, "Interlock")
-}
-
-record(longin,"$(P)$(R)PosYOffset-RB"){
-    field(DTYP,"asynInt32")
-    field(SCAN,"I/O Intr")
-    field(INP,"@asyn($(PORT))OFFSET_Y")
-    field(EGU, "nm")
-}
-
-record(longout,"$(P)$(R)PosQOffset-SP"){
-    field(PINI,"YES")
-    field(EGU, "nm")
-}
-
-record(longin,"$(P)$(R)PosQOffset-RB"){
-    field(INP,"$(P)$(R)PosQOffset-SP CP")
-    field(EGU, "nm")
-}
-
-record(aai, "$(P)$(R)TableLabels-Cte"){
-    field(FTVL, STRING)
-    field(NELM, 8)
-    field(INP, {const: [
-        "Amplitude A",
-        "Amplitude B",
-        "Amplitude C",
-        "Amplitude D",
-        "Q",
-        "Sum",
-        "Position X",
-        "Position Y"
-    ]})
-    info(Q:group, {
-        "$(P)$(R)Monit-Mon": {
-            labels: {+type: "plain", +channel: "VAL"},
-            descriptor: {+type: "const", +const: "monit-rate data"}
-        },
-        "$(P)$(R)GENData-Mon": {
-            +id: "epics:nt/NTTable:1.0",
-            labels: {+type: "plain", +channel: "VAL"},
-            descriptor: {+type: "const", +const: "general acquisition core data"}
-        },
-        "$(P)$(R)PMData-Mon": {
-            +id: "epics:nt/NTTable:1.0",
-            labels: {+type: "plain", +channel: "VAL"},
-            descriptor: {+type: "const", +const: "post-mortem acquisition core data"}
-        },
-    })
-}
-
 record(longin, "$(P)$(R)AmpFIFOEvent"){
     field(DTYP, "asynInt32")
     field(SCAN, "I/O Intr")
@@ -151,8 +25,7 @@ record(longin, "$(P)$(R)AmpFIFOEvent"){
     field(FLNK, "$(P)$(R)AmpFIFOCalc PP")
 }
 
-record(aSub, "$(P)$(R)AmpFIFOCalc"){
-    field(SNAM, "asub_ebpm_pos_calc")
+record(aSub, "$(P)$(R)AmpFIFOCalc") {
     field(INPA, "$(P)$(R)AmplA-Mon PP")
     field(FTA, "LONG")
     field(INPB, "$(P)$(R)AmplB-Mon PP")
@@ -161,73 +34,6 @@ record(aSub, "$(P)$(R)AmpFIFOCalc"){
     field(FTC, "LONG")
     field(INPD, "$(P)$(R)AmplD-Mon PP")
     field(FTD, "LONG")
-    field(INPE, "$(P)$(R)PosXOffset-RB")
-    field(FTE, "LONG")
-    field(INPF, "$(P)$(R)PosKx-RB")
-    field(FTF, "DOUBLE")
-    field(INPG, "$(P)$(R)PosYOffset-RB")
-    field(FTG, "LONG")
-    field(INPH, "$(P)$(R)PosKy-RB")
-    field(FTH, "DOUBLE")
-    field(INPI, "$(P)$(R)PosKsum-RB")
-    field(FTI, "DOUBLE")
-    field(INPJ, "$(P)$(R)PosQOffset-RB")
-    field(FTJ, "DOUBLE")
-    field(INPK, "$(P)$(R)PosKq-RB")
-    field(FTK, "DOUBLE")
-    field(OUTA, "$(P)$(R)PosX-Mon PP")
-    field(FTVA, "DOUBLE")
-    field(OUTB, "$(P)$(R)PosY-Mon PP")
-    field(FTVB, "DOUBLE")
-    field(OUTC, "$(P)$(R)Sum-Mon PP")
-    field(FTVC, "DOUBLE")
-    field(OUTD, "$(P)$(R)PosQ-Mon PP")
-    field(FTVD, "DOUBLE")
-}
-
-record(ai,"$(P)$(R)PosX-Mon"){
-    field(DESC,"Monitoring Position X")
-    field(EGU, "nm")
-    field(MDEL, -1)
-    info(Q:group, {
-        "$(P)$(R)Monit-Mon": {
-            "value.X": {+type: "plain", +channel: "VAL"}
-        }
-    })
-}
-
-record(ai,"$(P)$(R)PosY-Mon"){
-    field(DESC,"Monitoring Position Y")
-    field(EGU, "nm")
-    field(MDEL, -1)
-    info(Q:group, {
-        "$(P)$(R)Monit-Mon": {
-            "value.Y": {+type: "plain", +channel: "VAL"}
-        }
-    })
-}
-
-record(ai,"$(P)$(R)PosQ-Mon"){
-    field(DESC,"Monitoring Position Q")
-    field(EGU, "nm")
-    field(MDEL, -1)
-    info(Q:group, {
-        "$(P)$(R)Monit-Mon": {
-            "value.Q": {+type: "plain", +channel: "VAL", +trigger: "*"},
-            "": {+type: "meta", +channel: "VAL"}
-        }
-    })
-}
-
-record(ai,"$(P)$(R)Sum-Mon"){
-    field(DESC,"Monitoring Sum")
-    field(EGU, "au")
-    field(MDEL, -1)
-    info(Q:group, {
-        "$(P)$(R)Monit-Mon": {
-            "value.S": {+type: "plain", +channel: "VAL"}
-        }
-    })
 }
 
 record(bo,"$(P)$(R)FOFBPhaseSyncEn-Sel"){
@@ -353,46 +159,4 @@ record(longout,"$(P)$(R)INFOFAcqRate-SP"){
 record(longin,"$(P)$(R)INFOFAcqRate-RB"){
     field(DESC,"get FAcq rate factor")
     field(INP,"$(P)$(R)INFOFAcqRate-SP CP")
-}
-
-record(bo,"$(P)$(R)XYPosCal-Sel") {
-    field(DESC, "Set position XY calibration")
-    field(PINI, "YES")
-    field(ZNAM, "Off")
-    field(ONAM, "On")
-}
-record(bi,"$(P)$(R)XYPosCal-Sts") {
-    field(DESC, "Get position XY calibration")
-    field(INP, "$(P)$(R)XYPosCal-Sel CP")
-    field(SCAN, "Passive")
-    field(ZNAM, "Off")
-    field(ONAM, "On")
-}
-
-record(bo,"$(P)$(R)QPosCal-Sel") {
-    field(DESC, "Set position Q calibration")
-    field(PINI, "YES")
-    field(ZNAM, "Off")
-    field(ONAM, "On")
-}
-record(bi,"$(P)$(R)QPosCal-Sts") {
-    field(DESC, "Get position Q calibration")
-    field(INP, "$(P)$(R)QPosCal-Sel CP")
-    field(SCAN, "Passive")
-    field(ZNAM, "Off")
-    field(ONAM, "On")
-}
-
-record(bo,"$(P)$(R)SumPosCal-Sel") {
-    field(DESC, "Set position Sum calibration")
-    field(PINI, "YES")
-    field(ZNAM, "Off")
-    field(ONAM, "On")
-}
-record(bi,"$(P)$(R)SumPosCal-Sts") {
-    field(DESC, "Get position Sum calibration")
-    field(INP, "$(P)$(R)SumPosCal-Sel CP")
-    field(SCAN, "Passive")
-    field(ZNAM, "Off")
-    field(ONAM, "On")
 }
