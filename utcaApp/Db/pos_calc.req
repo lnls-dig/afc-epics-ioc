@@ -39,4 +39,4 @@ $(P)$(R)INFOFOFBRate-SP
 $(P)$(R)INFOMONITRate-SP
 $(P)$(R)INFOFAcqRate-SP
 
-file "ebpm_pos_calc.req", P=${P}, R=${R}
+file "${BPMTYPE}_pos_calc.req", P=${P}, R=${R}

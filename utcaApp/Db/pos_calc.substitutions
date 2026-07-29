@@ -6,7 +6,7 @@ file db/pos_calc.template {
     {}
 }
 
-file db/ebpm_pos_calc.template {
+file "db/${BPMTYPE}_pos_calc.template" {
     {}
 }
 

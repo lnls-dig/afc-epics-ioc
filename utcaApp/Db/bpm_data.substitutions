@@ -6,6 +6,6 @@ file db/bpm_data.template {
     {"D", 3}
 }
 
-file db/ebpm_pos_data.template {
+file "db/${BPMTYPE}_pos_data.template" {
     {}
 }
