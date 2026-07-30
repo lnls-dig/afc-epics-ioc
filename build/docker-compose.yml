@@ -1,6 +1,6 @@
 services:
   build-static-ioc:
-    image: ghcr.io/cnpem/lnls-alpine-3-epics-7:v0.11.0
+    image: ghcr.io/cnpem/lnls-alpine-3-epics-7:v0.16.0
     volumes:
       - type: bind
         source: ../
@@ -9,4 +9,5 @@ services:
     command: bash -c "build/uhal.sh && lnls-build-static-ioc afc-epics-ioc"
     environment:
       SKIP_CLEAN: 1
+      SKIP_TESTS: 0
       UHAL_VERSION: v0.10.1
