@@ -1,10 +1,3 @@
-$(P)$(R)PosKx-SP
-$(P)$(R)PosKy-SP
-$(P)$(R)PosKq-SP
-$(P)$(R)PosKsum-SP
-$(P)$(R)PosXOffset-SP
-$(P)$(R)PosYOffset-SP
-$(P)$(R)PosQOffset-SP
 $(P)$(R)SwDirGainA-SP
 $(P)$(R)SwDirGainB-SP
 $(P)$(R)SwDirGainC-SP
@@ -45,6 +38,5 @@ $(P)$(R)INFOTbTRate-SP
 $(P)$(R)INFOFOFBRate-SP
 $(P)$(R)INFOMONITRate-SP
 $(P)$(R)INFOFAcqRate-SP
-$(P)$(R)XYPosCal-Sel
-$(P)$(R)SumPosCal-Sel
-$(P)$(R)QPosCal-Sel
+
+file "${BPMTYPE}_pos_calc.req", P=${P}, R=${R}

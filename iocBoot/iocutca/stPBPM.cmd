@@ -13,6 +13,8 @@ epicsEnvSet("R2", "${DEVICE_PREFIX_2}")
 epicsEnvSet("P", "${P1}")
 epicsEnvSet("R", "${R1}")
 
+epicsEnvSet("BPMTYPE", "pbpm")
+
 asSetSubstitutions("P=$(P),R=$(R)")
 
 < "iocBoot/$(IOC)/build_info.cmd"

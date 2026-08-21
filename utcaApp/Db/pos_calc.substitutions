@@ -6,6 +6,10 @@ file db/pos_calc.template {
     {}
 }
 
+file "db/${BPMTYPE}_pos_calc.template" {
+    {}
+}
+
 file db/pos_calc_adc.template {
     pattern {ADC, ADDR}
     {"A", 0}
