@@ -5,7 +5,7 @@ set -eux
 OLD_PWD=$PWD
 
 if [ ! -d /tmp/uhal/ ]; then
-	git clone --recursive --jobs $(nproc) https://github.com/lnls-dig/uhal.git /tmp/uhal
+	git clone https://github.com/lnls-dig/uhal.git /tmp/uhal
 else
 	git -C /tmp/uhal fetch
 fi
