@@ -24,10 +24,10 @@ reAddAlias "${P1}${R1}(GwInfo.*)" "${P2}${R2}$1"
 reAddAlias "${P1}${R1}(Intlk.*)" "${P2}${R2}$1"
 reAddAlias "${P1}${R1}(TRIGGER[[:digit:]].*)" "${P2}${R2}$1"
 
-< "iocBoot/${IOC}/bpm_acq.cmd"
+< "iocBoot/${IOC}/pbpm_acq.cmd"
 < "iocBoot/${IOC}/bpm_swap.cmd"
 < "iocBoot/${IOC}/bpm_pico.cmd"
-< "iocBoot/${IOC}/bpm_pos.cmd"
+< "iocBoot/${IOC}/pbpm_pos.cmd"
 
 < "iocBoot/${IOC}/autosave_pre.cmd"
 

@@ -20,6 +20,7 @@ DB += fofb_cc.template fofb_cc_channel.template fofb_cc.substitutions
 DB += fofb_processing.template fofb_processing_channel.template fofb_processing.substitutions
 DB += fofb_shaper_filt.template fofb_shaper_filt_channel.template fofb_shaper_filt.substitutions
 DB += orbit_intlk.template orbit_intlk.substitutions
+DB += pbpm_pos_data.template pbpm_pos_calc.template pbpm_data.substitutions pbpm_pos_calc.substitutions
 DB += pos_calc.template pos_calc_adc.template pos_calc_rate.template pos_calc.substitutions
 DB += rtmlamp.template rtmlamp_channel.template rtmlamp_data.template rtmlamp.substitutions
 DB += si57x_ctrl.template

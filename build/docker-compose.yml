@@ -6,7 +6,7 @@ services:
         source: ../
         target: /opt/afc-epics-ioc
     working_dir: /opt/afc-epics-ioc
-    command: bash -c "build/uhal.sh && lnls-build-static-ioc afc-epics-ioc"
+    command: bash -c "apk add eigen-dev && build/uhal.sh && lnls-build-static-ioc afc-epics-ioc"
     environment:
       SKIP_CLEAN: 1
       UHAL_VERSION: v0.10.1
