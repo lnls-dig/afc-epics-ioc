@@ -10,4 +10,4 @@ services:
     environment:
       SKIP_CLEAN: 1
       SKIP_TESTS: 0
-      UHAL_VERSION: v0.10.1
+      UHAL_VERSION: v0.10.2
