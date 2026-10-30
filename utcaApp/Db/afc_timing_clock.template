@@ -178,3 +178,88 @@ record(calcout, "$(P)$(R)$(CLOCK)ClkRstCalc"){
     field(DOPT, "Use OCAL")
     field(OUT, "$(P)$(R)$(CLOCK)Freq-SP PP")
 }
+
+record(longin, "$(P)$(R)$(CLOCK)PhasePropEffort-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Proportional phase effort")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))PHASE_EFF_PRO")
+}
+record(longin, "$(P)$(R)$(CLOCK)PhaseIntgEffort-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Integral phase effort")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))PHASE_EFF_INT")
+}
+record(longin, "$(P)$(R)$(CLOCK)FreqPropEffort-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Proportional frequency effort")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))FREQ_EFF_PRO")
+}
+record(longin, "$(P)$(R)$(CLOCK)FreqIntgEffort-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Integral frequency effort")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))FREQ_EFF_INT")
+}
+record(longin, "$(P)$(R)$(CLOCK)PhasePropError-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Proportional phase error")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))MUL_ERR_PHASE")
+}
+record(longin, "$(P)$(R)$(CLOCK)PhaseIntgError-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Integral phase error")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))MUL_AVG_PHASE")
+}
+record(longin, "$(P)$(R)$(CLOCK)FreqError-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Frequency error")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))MUL_ERR_FREQ")
+}
+record(longin, "$(P)$(R)$(CLOCK)PhaseAvgError-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Phase average error")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))PHASE_AVG")
+}
+record(longin, "$(P)$(R)$(CLOCK)PhaseEffort-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Phase control effort")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))CONTROL_PHASE")
+}
+record(longin, "$(P)$(R)$(CLOCK)DAC-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Phase control effort via DAC")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))DAC_VALUE")
+}
+record(longin, "$(P)$(R)$(CLOCK)FreqEffort-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Frequency control effort")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))CONTROL_FREQ")
+}
+record(longin, "$(P)$(R)$(CLOCK)CurrRFreqMSB-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Current RFREQ value MSB")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))CURR_RFREQ_MSB")
+}
+record(longin, "$(P)$(R)$(CLOCK)CurrRFreqLSB-Mon"){
+    field(DTYP, "asynInt32")
+    field(DESC, "Current RFREQ value LSB")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))CURR_RFREQ_LSB")
+}
+record(ai, "$(P)$(R)$(CLOCK)CurrRFreq-Mon"){
+    field(DTYP, "asynFloat64")
+    field(DESC, "Current RFREQ value")
+    field(SCAN,"I/O Intr")
+    field(INP,"@asyn($(PORT),$(ADDR))CURR_RFREQ")
+}
